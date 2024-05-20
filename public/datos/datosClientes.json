@@ -1,0 +1,77 @@
+[
+    {
+        "nombre": "Juan Romero Torres",
+        "telefono": "605458694",
+        "email": "juanromero@gmail.com"
+    },
+    {
+        "nombre": "María García Pérez",
+        "telefono": "601234567",
+        "email": "mariagarcia@gmail.com"
+    },
+    {
+        "nombre": "Pedro Martínez López",
+        "telefono": "609876543",
+        "email": "pedromartinez@gmail.com"
+    },
+    {
+        "nombre": "Laura Sánchez Ruiz",
+        "telefono": "603214569",
+        "email": "laurasanchez@gmail.com"
+    },
+    {
+        "nombre": "Carlos González Hernández",
+        "telefono": "607894123",
+        "email": "carlosgonzalez@gmail.com"
+    },
+    {
+        "nombre": "Sofía Díaz Fernández",
+        "telefono": "600987654",
+        "email": "sofiadiaz@gmail.com"
+    },
+    {
+        "nombre": "Daniel Rodríguez García",
+        "telefono": "609876543",
+        "email": "danielrodriguez@gmail.com"
+    },
+    {
+        "nombre": "Lucía López Sánchez",
+        "telefono": "605432189",
+        "email": "lucialopez@gmail.com"
+    },
+    {
+        "nombre": "Pablo Pérez Rodríguez",
+        "telefono": "602345678",
+        "email": "pabloperez@gmail.com"
+    },
+    {
+        "nombre": "Elena Martínez García",
+        "telefono": "601234567",
+        "email": "elenamartinez@gmail.com"
+    },
+    {
+        "nombre": "Diego Sánchez Pérez",
+        "telefono": "609876543",
+        "email": "diegosanchez@gmail.com"
+    },
+    {
+        "nombre": "Marina González Rodríguez",
+        "telefono": "603214569",
+        "email": "marinagonzalez@gmail.com"
+    },
+    {
+        "nombre": "Javier Ruiz Martínez",
+        "telefono": "607894123",
+        "email": "javierruiz@gmail.com"
+    },
+    {
+        "nombre": "Marta Hernández Díaz",
+        "telefono": "600987654",
+        "email": "martahernandez@gmail.com"
+    },
+    {
+        "nombre": "Ángela Fernández Sánchez",
+        "telefono": "609876543",
+        "email": "angelafdez@gmail.com"
+    }
+]

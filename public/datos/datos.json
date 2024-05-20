@@ -1,0 +1,157 @@
+[
+    {
+        "tarea": "Sesión de retrato de familia",
+        "tipo_de_servicio": "Retrato familiar",
+        "fecha": "10/03/2024 09:00:00"
+    },
+    {
+        "tarea": "Reportaje de boda de Ana y Pedro",
+        "tipo_de_servicio": "Reportaje de boda",
+        "fecha": "12/03/2024 14:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de producto para tienda online",
+        "tipo_de_servicio": "Fotografía de productos",
+        "fecha": "15/03/2024 11:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de embarazo",
+        "tipo_de_servicio": "Fotografía de embarazo",
+        "fecha": "18/03/2024 10:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de recién nacido",
+        "tipo_de_servicio": "Fotografía de recién nacido",
+        "fecha": "20/03/2024 13:00:00"
+    },
+    {
+        "tarea": "Fotos para catálogo de moda",
+        "tipo_de_servicio": "Fotografía de moda",
+        "fecha": "22/03/2024 15:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de aniversario de bodas",
+        "tipo_de_servicio": "Sesión de fotos de aniversario",
+        "fecha": "25/03/2024 12:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de mascotas",
+        "tipo_de_servicio": "Fotografía de mascotas",
+        "fecha": "27/03/2024 11:00:00"
+    },
+    {
+        "tarea": "Reportaje de evento corporativo",
+        "tipo_de_servicio": "Reportaje de eventos",
+        "fecha": "30/03/2024 14:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de pareja",
+        "tipo_de_servicio": "Sesión de fotos de pareja",
+        "fecha": "02/04/2024 09:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de comunión",
+        "tipo_de_servicio": "Fotografía de comunión",
+        "fecha": "05/04/2024 10:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de producto para catálogo",
+        "tipo_de_servicio": "Fotografía de productos",
+        "fecha": "08/04/2024 11:00:00"
+    },
+    {
+        "tarea": "Reportaje de boda de Laura y David",
+        "tipo_de_servicio": "Reportaje de boda",
+        "fecha": "10/04/2024 14:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de embarazo",
+        "tipo_de_servicio": "Fotografía de embarazo",
+        "fecha": "13/04/2024 09:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de producto para redes sociales",
+        "tipo_de_servicio": "Fotografía de productos",
+        "fecha": "16/04/2024 12:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de recién nacido",
+        "tipo_de_servicio": "Fotografía de recién nacido",
+        "fecha": "18/04/2024 15:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de familia en exteriores",
+        "tipo_de_servicio": "Fotografía de familia",
+        "fecha": "21/04/2024 10:00:00"
+    },
+    {
+        "tarea": "Reportaje de evento cultural",
+        "tipo_de_servicio": "Reportaje de eventos",
+        "fecha": "24/04/2024 14:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de bautizo",
+        "tipo_de_servicio": "Fotografía de bautizo",
+        "fecha": "26/04/2024 11:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de pareja en la playa",
+        "tipo_de_servicio": "Sesión de fotos de pareja",
+        "fecha": "29/04/2024 13:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de productos de belleza",
+        "tipo_de_servicio": "Fotografía de productos",
+        "fecha": "02/05/2024 15:00:00"
+    },
+    {
+        "tarea": "Sesión de retrato empresarial",
+        "tipo_de_servicio": "Retrato empresarial",
+        "fecha": "05/05/2024 09:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de producto para catálogo",
+        "tipo_de_servicio": "Fotografía de productos",
+        "fecha": "08/05/2024 11:00:00"
+    },
+    {
+        "tarea": "Reportaje de boda de María y Carlos",
+        "tipo_de_servicio": "Reportaje de boda",
+        "fecha": "10/05/2024 14:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de maternidad",
+        "tipo_de_servicio": "Fotografía de maternidad",
+        "fecha": "13/05/2024 10:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de producto para redes sociales",
+        "tipo_de_servicio": "Fotografía de productos",
+        "fecha": "16/05/2024 12:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de recién nacido en estudio",
+        "tipo_de_servicio": "Fotografía de recién nacido",
+        "fecha": "18/05/2024 15:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de moda urbana",
+        "tipo_de_servicio": "Fotografía de moda",
+        "fecha": "21/05/2024 09:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de pareja en el campo",
+        "tipo_de_servicio": "Sesión de fotos de pareja",
+        "fecha": "24/05/2024 11:00:00"
+    },
+    {
+        "tarea": "Sesión de fotos de producto para catálogo",
+        "tipo_de_servicio": "Fotografía de productos",
+        "fecha": "26/05/2024 14:00:00"
+    },
+    {
+        "tarea": "Sesión de retrato corporativo para empresa",
+        "tipo_de_servicio": "Retrato corporativo",
+        "fecha": "29/05/2024 10:00:00"
+    }
+]

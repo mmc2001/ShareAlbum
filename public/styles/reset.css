@@ -1,0 +1,49 @@
+/* Resetear estilos generales */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* Ajuste para listas */
+ol, ul {
+    list-style: none;
+}
+
+/* Ajuste para enlaces */
+a {
+    text-decoration: none;
+}
+
+/* Ajustes para tablas */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Ajustes generales */
+body {
+    line-height: 1;
+}
+
+/* Eliminar margen adicional en algunos navegadores */
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+/* Corregir caja de modelo en Internet Explorer 6/7 (si estás soportando estos navegadores) */
+/* box-sizing: border-box; */
+
+/* Otros ajustes específicos según tus necesidades */

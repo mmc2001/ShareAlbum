@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Clientes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/sessions.css') }}">
+
+    <!-- Estilos de datatables -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap4.css">
+    <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.bootstrap4.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div style="width: 100vw;">
+        <div class="cabecera">
+            <h2 class="titulo">Clientes disponibles</h2>
+            <div>
+                <button class="boton" id="nuevaCliente">Nuevo</button>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row contenedor-dataTable">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="table-responsive">
+                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>DNI</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Opciones</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Crear Cliente -->
+    <div class="modalSesion" id="modalSesion">
+        <div class="modalSesion-content">
+            <h1>Nueva sesión</h1>
+            <div class="contenedorFormularioSesion" id="contenedorFormularioSesion">
+                <form method="post" id="formEvent">
+                    {#  {{ form_errors(formEvent) }} #}
+                    {{ form_start(formSession) }}
+                    <label class="label">Nombre</label>
+                    {{ form_widget(formSession.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                    <label class="label">Servicio</label>
+                    {{ form_widget(formSession.service, {'attr': {'class': 'padding', 'placeholder': 'Servicio'}}) }}
+                    <label class="label">Fecha</label>
+                    {{ form_widget(formSession.date, {'attr': {'class': 'padding', 'placeholder': 'Fecha'}}) }}
+                    <label class="label">Precio</label>
+                    {{ form_widget(formSession.priceSession, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
+                    <label class="label">Descripción</label>
+                    {{ form_widget(formSession.descriptionSession, {'attr': {'class': 'padding', 'placeholder': 'Descripción'}}) }}
+                    <label class="label">Usuario</label>
+                    <div class="desplegable">
+                        {{ form_widget(formSession.users, {'attr': {'class': 'padding'}}) }}
+                    </div>
+                    <label class="label">Extras</label>
+                    <div class="desplegable">
+                        {{ form_widget(formSession.extras, {'attr': {'class': 'padding'}}) }}
+                    </div>
+                    <div class="camposParalelos">
+                        <button id="CerrarSesion">Cerrar</button>
+                        <button type="submit">Crear</button>
+                    </div>
+                    {{ form_end(formSession) }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal Editar Cliente -->
+    <div class="modalEditarSesion" id="modalEditarSesion">
+        <div class="modalEditarSesion-content">
+            <h1>Editar sesión</h1>
+            <div class="contenedorFormularioEditarSesion" id="contenedorFormularioEditarSesion">
+                <form method="post">
+                    <label class="label">Álbum</label>
+                    <label class="label">Fotógrafo</label>
+                    <input type="text" name="album" />
+                    <input type="text" name="photographer" />
+                    <label class="label">Cliente</label>
+                    <label class="label">Ticket</label>
+                    <input type="text" name="client" />
+                    <input type="text" name="ticket" />
+                    <button id="cerrarEditarSesion" class="button">Cerrar</button>
+                    <button id="guardarEditarSesion">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/sessions.js') }}"></script>
+        <script type="module" src="{{ asset('js/dataTable.js') }}"></script>
+
+
+        <!-- Script para dataTable -->
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap4.js"></script>
+
+        <!-- Scripts para añadir botones -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.bootstrap4.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js"></script>
+
+        <script src="https://kit.fontawesome.com/77aa5e27b8.js" crossorigin="anonymous"></script>
+
+        <script>
+            new DataTable('#example');
+        </script>
+    {% endblock %}
+{% endblock %}
+

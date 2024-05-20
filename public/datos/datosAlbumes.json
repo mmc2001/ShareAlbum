@@ -1,0 +1,53 @@
+[
+    {
+      "nombre": "Boda de Juan y Marta",
+      "fecha": "2024-04-10",
+      "clientes": ["Juan Romero Torres", "Marta Gómez Rodríguez"]
+    },
+    {
+      "nombre": "Sesión de Retratos Familiares",
+      "fecha": "2024-05-15",
+      "clientes": ["Luis Pérez García", "María Martínez López", "Pedro Pérez Martínez"]
+    },
+    {
+      "nombre": "Evento Corporativo de Empresa XYZ",
+      "fecha": "2024-06-20",
+      "clientes": ["Empresa XYZ"]
+    },
+    {
+      "nombre": "Fiesta de Cumpleaños de Sofía",
+      "fecha": "2024-07-05",
+      "clientes": ["Sofía López Rodríguez"]
+    },
+    {
+      "nombre": "Sesión de Modelaje para Catálogo de Moda",
+      "fecha": "2024-08-12",
+      "clientes": ["Modelo 1", "Modelo 2", "Modelo 3"]
+    },
+    {
+      "nombre": "Fotografía de Productos para Tienda Online",
+      "fecha": "2024-09-25",
+      "clientes": ["Tienda Online ABC"]
+    },
+    {
+      "nombre": "Sesión de Fotografía de Arquitectura",
+      "fecha": "2024-10-15",
+      "clientes": ["Empresa de Arquitectura XYZ"]
+    },
+    {
+      "nombre": "Reportaje de Naturaleza en Bosque Encantado",
+      "fecha": "2024-11-02",
+      "clientes": ["Turismo S.A."]
+    },
+    {
+      "nombre": "Cobertura Fotográfica de Competición Deportiva",
+      "fecha": "2024-12-10",
+      "clientes": ["Federación de Deportes"]
+    },
+    {
+      "nombre": "Sesión de Fotografía de Producto para Campaña Publicitaria",
+      "fecha": "2025-01-20",
+      "clientes": ["Empresa de Publicidad XYZ"]
+    }
+  ]
+  
