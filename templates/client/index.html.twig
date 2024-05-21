@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('styles/sessions.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/clients.css') }}">
 
     <!-- Estilos de datatables -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -20,7 +20,7 @@
         <div class="cabecera">
             <h2 class="titulo">Clientes disponibles</h2>
             <div>
-                <button class="boton" id="nuevaCliente">Nuevo</button>
+                <button class="boton" id="nuevoCliente">Nuevo</button>
             </div>
         </div>
         <div class="container">
@@ -48,47 +48,45 @@
 
 
     <!-- Modal Crear Cliente -->
-    <div class="modalSesion" id="modalSesion">
-        <div class="modalSesion-content">
-            <h1>Nueva sesión</h1>
-            <div class="contenedorFormularioSesion" id="contenedorFormularioSesion">
-                <form method="post" id="formEvent">
-                    {#  {{ form_errors(formEvent) }} #}
-                    {{ form_start(formSession) }}
-                    <label class="label">Nombre</label>
-                    {{ form_widget(formSession.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
-                    <label class="label">Servicio</label>
-                    {{ form_widget(formSession.service, {'attr': {'class': 'padding', 'placeholder': 'Servicio'}}) }}
-                    <label class="label">Fecha</label>
-                    {{ form_widget(formSession.date, {'attr': {'class': 'padding', 'placeholder': 'Fecha'}}) }}
-                    <label class="label">Precio</label>
-                    {{ form_widget(formSession.priceSession, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
-                    <label class="label">Descripción</label>
-                    {{ form_widget(formSession.descriptionSession, {'attr': {'class': 'padding', 'placeholder': 'Descripción'}}) }}
-                    <label class="label">Usuario</label>
-                    <div class="desplegable">
-                        {{ form_widget(formSession.users, {'attr': {'class': 'padding'}}) }}
-                    </div>
-                    <label class="label">Extras</label>
-                    <div class="desplegable">
-                        {{ form_widget(formSession.extras, {'attr': {'class': 'padding'}}) }}
+    <div class="modalCliente" id="modalCliente">
+        <div class="modalCliente-content">
+            <h1>Nuevo cliente</h1>
+            <div class="contenedorFormularioCliente" id="contenedorFormularioCliente">
+                <form method="post" id="formClient">
+                    {#  {{ form_errors(formClient) }} #}
+                    {{ form_start(formClient) }}
+                    <div class="camposClient">
+                        <label class="label">Nombre</label>
+                        <label class="label">Apellidos</label>
+                        {{ form_widget(formClient.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                        {{ form_widget(formClient.surnames, {'attr': {'class': 'padding', 'placeholder': 'Apellidos'}}) }}
+                        <label class="label">DNI</label>
+                        <label class="label">Teléfono</label>
+                        {{ form_widget(formClient.dni, {'attr': {'class': 'padding', 'placeholder': 'DNI'}}) }}
+                        {{ form_widget(formClient.telephone, {'attr': {'class': 'padding', 'placeholder': 'Teléfono'}}) }}
+                        <label class="label">Correo</label>
+                        <label class="label">Password</label>
+                        {{ form_widget(formClient.email, {'attr': {'class': 'padding', 'placeholder': 'Correo'}}) }}
+                        {{ form_widget(formClient.plainPassword, {'attr': {'class': 'padding', 'placeholder': 'Contraseña'}}) }}
+                        <label class="label">Rol</label>
+                        {{ form_widget(formClient.roles, {'attr': {'class': 'form-control', 'placeholder': 'Rol'}}) }}
                     </div>
                     <div class="camposParalelos">
-                        <button id="CerrarSesion">Cerrar</button>
+                        <button id="CerrarCliente">Cerrar</button>
                         <button type="submit">Crear</button>
                     </div>
-                    {{ form_end(formSession) }}
+                    {{ form_end(formClient) }}
                 </form>
             </div>
         </div>
     </div>
 
 
-    <!-- Modal Editar Cliente -->
-    <div class="modalEditarSesion" id="modalEditarSesion">
-        <div class="modalEditarSesion-content">
+    <!-- Modal Editar Cliente
+    <div class="modalEditarCliente" id="modalEditarCliente">
+        <div class="modalEditarCliente-content">
             <h1>Editar sesión</h1>
-            <div class="contenedorFormularioEditarSesion" id="contenedorFormularioEditarSesion">
+            <div class="contenedorFormularioEditarCliente" id="contenedorFormularioEditarCliente">
                 <form method="post">
                     <label class="label">Álbum</label>
                     <label class="label">Fotógrafo</label>
@@ -98,19 +96,19 @@
                     <label class="label">Ticket</label>
                     <input type="text" name="client" />
                     <input type="text" name="ticket" />
-                    <button id="cerrarEditarSesion" class="button">Cerrar</button>
-                    <button id="guardarEditarSesion">Guardar</button>
+                    <button id="cerrarEditarCliente" class="button">Cerrar</button>
+                    <button id="guardarEditarCliente">Guardar</button>
                 </form>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <script
 
     {% block javascripts %}
         {{ parent() }}
-        <script src="{{ asset('js/sessions.js') }}"></script>
-        <script type="module" src="{{ asset('js/dataTable.js') }}"></script>
+        <script src="{{ asset('js/clients.js') }}"></script>
+        <script type="module" src="{{ asset('js/dataTableClient.js') }}"></script>
 
 
         <!-- Script para dataTable -->

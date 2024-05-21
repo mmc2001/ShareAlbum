@@ -3,3 +3,54 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+dashboard:
+    path: /template/dashboard/index.html.twig
+    defaults: { _controller: 'App\Controller\DashboardController::index' }
+
+session:
+    path: /template/session/index.html.twig
+    defaults: { _controller: 'App\Controller\SessionController::index' }
+
+app_logout:
+    path: /logout
+
+app_obtener_sessions:
+    path: /obtener/sessions
+    controller: App\Controller\ObtenerSessionsController::getSessions
+    methods: ['GET']
+
+app_obtener_events:
+    path: /obtener/events
+    controller: App\Controller\ObtenerEventsController::getEvents
+    methods: ['GET']
+
+app_delete_events:
+    path: /delete/evento/{id}
+    controller: App\Controller\DeleteEventsController::deleteEvento
+    methods: ['DELETE']
+
+app_delete_session:
+    path: /delete/session/{id}
+    controller: App\Controller\DeleteSessionController::deleteSession
+    methods: [ 'DELETE' ]
+
+app_obtener_services:
+    path: /obtener/services/{id}
+    controller: App\Controller\ObtenerServicesController::getServices
+    methods: ['GET']
+
+app_update_event:
+    path: /update/event/{id}
+    controller: App\Controller\UpdateEventController::updateEvent
+    methods: ['GET']
+
+app_obtener_clients:
+    path: /obtener/clients
+    controller: App\Controller\ObtenerClientsController::getClients
+    methods: [ 'GET' ]
+
+app_session_data:
+    path: /session/data
+    controller: App\Controller\SessionController::data
+    methods: [ 'GET', 'POST' ]

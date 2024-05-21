@@ -1,0 +1,63 @@
+{% extends 'baseLoginRegister.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/register.css') }}">
+{% endblock %}
+
+{% block title %}{{ parent() }} - Registro{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <div class="modalCliente" id="modalCliente">
+        <div class="modalCliente-content">
+            <h1>Nuevo usuario</h1>
+            <div class="contenedorFormularioCliente" id="contenedorFormularioCliente">
+                <form method="post" id="modalCliente">
+                    {{ form_errors(registrationForm) }}
+
+                    {{ form_start(registrationForm) }}
+
+                    <label for="registrationForm_name">Nombre</label>
+                    {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Nombre'}}) }}
+
+                    <label for="registrationForm_surnames">Apellidos</label>
+                    {{ form_widget(registrationForm.surnames, {'attr': {'class': 'form-control', 'placeholder': 'Apellidos'}}) }}
+
+                    <label for="registrationForm_dni">DNI</label>
+                    {{ form_widget(registrationForm.dni, {'attr': {'class': 'form-control', 'placeholder': 'DNI'}}) }}
+
+                    <label for="registrationForm_telephone">Teléfono</label>
+                    {{ form_widget(registrationForm.telephone, {'attr': {'class': 'form-control', 'placeholder': 'Teléfono'}}) }}
+
+                    <label for="registrationForm_email">Correo</label>
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Correo'}}) }}
+
+                    <label for="registrationForm_password">Contraseña</label>
+                    <div class="container2">
+                        {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Contraseña', 'id': 'passwordInput'}}) }}
+                        <!--
+                            <button type="button" id="generatePasswordButton">
+                                <img src="img/password.png" alt="Generar contraseña">
+                            </button>
+                        -->
+                    </div>
+
+                    <label for="registrationForm_rol">Rol</label>
+                    {{ form_widget(registrationForm.roles, {'attr': {'class': 'form-control', 'placeholder': 'Rol'}}) }}
+
+                    <button type="button" class="btn" id="limpiarCampos">Limpiar</button>
+                    <button type="submit" class="btn">Registrar</button>
+                    {{ form_end(registrationForm) }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/register.js') }}"></script>
+    {% endblock %}
+{% endblock %}
+

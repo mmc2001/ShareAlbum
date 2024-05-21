@@ -1,0 +1,214 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} - Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="panelControl">
+        <div class="contadorCalendario">
+            <div class="contador">
+                <div class="mensajeBienvenida">
+                    <h2 id="mensaje"></h2>
+                    <h2> {{ user.name }} </h2>
+                </div>
+                <div class="contadores">
+                    <div class="contadorIndividual">
+                        <h3 class="number">{{ nAlbum }}</h3>
+                        <div style="margin-top: 5px;">
+                            <p class="titulosContadores">ÁLBUMES</p>
+                        </div>
+                    </div>
+                    <div class="contadorIndividual">
+                        <h3 class="number">{{ nClient }}</h3>
+                        <div style="margin-top: 5px;">
+                            <p class="titulosContadores">CLIENTES</p>
+                        </div>
+                    </div>
+                    <div class="contadorIndividual">
+                        <h3 class="number">{{ nPhotos }}</h3>
+                        <div style="margin-top: 5px;">
+                            <p class="titulosContadores">FOTOS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="header">
+                    <p class="current-date"></p>
+                    <div class="icons">
+                    <span id="prev" class="material-symbols-rounded">
+                        <img src="/img/flecha-izquierda.png" height="20px" style="opacity: 0.6;" alt="After">
+                    </span>
+                        <span id="next" class="material-symbols-rounded">
+                        <img src="/img/flecha-izquierda.png" height="20px" style="rotate: 180deg; opacity: 0.6;" alt="Before">
+                    </span>
+                    </div>
+                </div>
+                <div class="calendar">
+                    <ul class="weeks">
+                        <li>Lun</li>
+                        <li>Mar</li>
+                        <li>Miérc</li>
+                        <li>Juev</li>
+                        <li>Vier</li>
+                        <li>Sáb</li>
+                        <li>Dom</li>
+                    </ul>
+                    <ul class="days"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="tareasDiarias">
+            <div class="cabecera">
+                <h2 class="tituloCabecera">Tareas diarias</h2>
+                <div class="icons">
+                    <p id="fecha"></p>
+                </div>
+            </div>
+            <div id="contenedorScroll1">
+                <div id="listadoTareasDiarias" class="lista1"></div>
+            </div>
+            <div class="boton">
+                <button class="new" id="abrirModalTarea">Nueva</button>
+            </div>
+        </div>
+
+        <div class="tareasMensuales">
+            <div class="cabecera">
+                <h2 class="tituloCabecera">Tareas mensuales</h2>
+                <div class="icons">
+                    <p id="fechaMes"></p>
+                </div>
+            </div>
+            <div id="contenedorScroll2">
+                <div id="listadoTareasMensuales" class="lista2"></div>
+            </div>
+        </div>
+
+        <div class="albumesDisponibles">
+            <div class="cabecera">
+                <h2 class="tituloCabecera">Sesiones</h2>
+            </div>
+            <div id="contenedorScroll1">
+                <div id="listadoSesionesDisponibles" class="lista1"></div>
+            </div>
+            <div class="boton">
+                <a href="{{ path('app_session') }}">Más info</a>
+            </div>
+        </div>
+
+        <div class="clientesDisponibles">
+            <div class="cabecera">
+                <h2 class="tituloCabecera">Clientes</h2>
+            </div>
+            <div id="contenedorScroll1">
+                <div id="listadoClientesDisponibles"  class="lista1"></div>
+            </div>
+            <div class="boton">
+                <a href="/ClientesDisponibles/index.html">Más info</a>
+            </div>
+        </div>
+
+        <div class="clientesDisponibles">
+            <div class="cabecera">
+                <h2 class="tituloCabecera">Mensajes</h2>
+            </div>
+            <form method="post" id="formMessage">
+                {{ form_errors(formMessage) }}
+                {{ form_start(formMessage) }}
+                <div class="campos">
+                    {{ form_widget(formMessage.recipient, {'attr': {'class': 'padding', 'placeholder': 'Cliente'}}) }}
+                    {{ form_widget(formMessage.subject, {'attr': {'class': 'padding', 'placeholder': 'Asunto'}}) }}
+                    <div class="file-upload">
+                        <div class="file-select">
+                            <div class="file-select-button" id="fileName">Ficheros</div>
+                            <div class="file-select-name" id="noFile">No hay ficheros</div>
+                            {{ form_widget(formMessage.file, {'attr': {'class': 'padding form-control', 'id': 'chooseFile'}}) }}
+                        </div>
+                    </div>
+                    {{ form_widget(formMessage.textMessage, {'attr': {'class': 'padding', 'placeholder': 'Mensaje'}}) }}
+                </div>
+
+                <div class="botonSubmit">
+                    <button class="submit" id="send">Enviar</button>
+                    {{ form_end(formMessage) }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modal Nueva Tarea -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h1 class="tituloModal">Nuevo Evento</h1>
+            <div class="contenedorFormulario" id="contenedorFormulario">
+                <form method="post" id="formEvent">
+                    {#  {{ form_errors(formEvent) }} #}
+                    {{ form_start(formEvent) }}
+                    <div class="camposParalelos" style="margin-bottom: 40px;">
+                        {{ form_widget(formEvent.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                        {{ form_widget(formEvent.date, {'attr': {'class': 'padding', 'placeholder': 'Fecha'}}) }}
+                        {{ form_widget(formEvent.user, {'attr': {'class': 'padding form-control', 'id': 'Fotógrafo'}}) }}
+                        {{ form_widget(formEvent.services, {'attr': {'class': 'padding', 'placeholder': 'Servicio'}}) }}
+                        {{ form_widget(formEvent.session, {'attr': {'class': 'padding', 'placeholder': 'Sesión'}}) }}
+                        {{ form_widget(formEvent.comment, {'attr': {'class': 'padding', 'placeholder': 'Comentario'}}) }}
+                    </div>
+                    <!-- <div class="campoUnico"> -->
+                    <!-- </div> -->
+                    <div class="camposParalelos">
+                        <button id="Cerrar" class="botonesTareas">Cerrar</button>
+                        <button type="submit" class="botonesTareas">Crear</button>
+                    </div>
+                        {{ form_end(formEvent) }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Correo -->
+    <div class="modalEnvio" id="modalEnvio">
+        <div class="modalEnvio-content">
+            <div class="aviso">
+                <h1>Confirmar Envío</h1>
+                <div class="contenedorFormulario">
+                    <form id="formModalEnvio"> <!-- Agregamos un ID al formulario -->
+                        <div class="contenido">
+                            <h2 style="margin-top: 15px;">Vas a enviar el siguiente mensaje a <h3 id="clienteModal"></h3></h2>
+                            <div class="filas">
+                                <span>Asunto  </span>
+                                <p id="asuntoModal"></p>
+                            </div>
+                            <div class="filas">
+                                <span>Fichero  </span>
+                                <p id="ficheroModal"></p>
+                            </div>
+                            <div class="filas">
+                                <span>Mensaje  </span>
+                                <p id="mensajeModal" class="textarea"><p/>
+                            </div>
+                            <h2>¿Estas seguro?</h2>
+                        </div>
+                        <div class="camposParalelos">
+                            <button id="cancel" class="botonesEnvio">Cancelar</button>
+                            <button type="submit" class="botonesEnvio" id="sendModal">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/dashboard.js') }}"></script>
+        <script src="https://kit.fontawesome.com/77aa5e27b8.js" crossorigin="anonymous"></script>
+    {% endblock %}
+{% endblock %}

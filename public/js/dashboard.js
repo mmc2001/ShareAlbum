@@ -1,0 +1,613 @@
+
+/* CALENDARIO, TAREAS DIARIAS Y TAREAS MENSUALES */
+document.addEventListener('DOMContentLoaded', function() {
+    // Función para aplicar estilos de tachado al hacer clic en los checkboxes
+    function aplicarEstilosTachado() {
+        const checkboxes = document.querySelectorAll('.listado input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const tareaId = this.id; // Obtener el identificador único de la tarea
+                const label = this.parentNode.querySelector('label');
+                const span = label.querySelector('span');
+
+                // Aplicar estilos de tachado
+                if (this.checked) {
+                    label.classList.add('tachado');
+                    span.classList.add('tachado');
+                } else {
+                    label.classList.remove('tachado');
+                    span.classList.remove('tachado');
+                }
+
+                // Buscar y marcar/desmarcar el checkbox correspondiente en la otra lista
+                const otroCheckbox = document.querySelector(`#listadoTareasMensuales input[type="checkbox"][id="${tareaId}"]`);
+                if (otroCheckbox) {
+                    otroCheckbox.checked = this.checked;
+                    const otroLabel = otroCheckbox.parentNode.querySelector('label');
+                    const otroSpan = otroLabel.querySelector('span');
+                    if (this.checked) {
+                        otroLabel.classList.add('tachado');
+                        otroSpan.classList.add('tachado');
+                    } else {
+                        otroLabel.classList.remove('tachado');
+                        otroSpan.classList.remove('tachado');
+                    }
+                }
+
+                // Buscar y marcar/desmarcar el checkbox correspondiente en la otra lista
+                const otroCheckboxDiarias = document.querySelector(`#listadoTareasDiarias input[type="checkbox"][id="${tareaId}"]`);
+                if (otroCheckboxDiarias) {
+                    otroCheckboxDiarias.checked = this.checked;
+                    const otroLabelDiarias = otroCheckboxDiarias.parentNode.querySelector('label');
+                    const otroSpanDiarias = otroLabelDiarias.querySelector('span');
+                    if (this.checked) {
+                        otroLabelDiarias.classList.add('tachado');
+                        otroSpanDiarias.classList.add('tachado');
+                    } else {
+                        otroLabelDiarias.classList.remove('tachado');
+                        otroSpanDiarias.classList.remove('tachado');
+                    }
+                }
+            });
+        });
+    }
+
+
+    document.querySelector('.menu-icon').addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.toggle('active');
+        document.querySelector('.dropdown-content').classList.toggle('active');
+        document.querySelector('.menu-icon').classList.toggle('active');
+    });
+
+    const daysTag = document.querySelector(".days"),
+        currentDateElement = document.querySelector(".current-date"),
+        prevNextIcon = document.querySelectorAll(".icons span");
+
+    // Referencia al elemento de fecha en el componente de tareas diarias
+    const fechaTareas = document.getElementById("fecha");
+    // Referencia al elemento de mes en el componente de tareas mensuales
+    const fechaTareasMes = document.getElementById("fechaMes");
+
+    // getting new date, current year and month
+    let currentDate = new Date(),
+        selectedDate = new Date(), // Variable para almacenar la fecha seleccionada
+        currYear = currentDate.getFullYear(),
+        currMonth = currentDate.getMonth(),
+        selectedDay = currentDate.getDate();
+
+    // storing full name of all months in array
+    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+        "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    const renderCalendar = () => {
+        let firstDayOfMonth = new Date(currYear, currMonth, 1).getDay(),
+            lastDateOfMonth = new Date(currYear, currMonth + 1, 0).getDate(),
+            lastDayOfMonth = new Date(currYear, currMonth, lastDateOfMonth).getDay(),
+            lastDateOfLastMonth = new Date(currYear, currMonth, 0).getDate();
+        let liTag = "";
+
+        for (let i = firstDayOfMonth; i > 0; i--) {
+            liTag += `<li class="inactive" style="pointer-events: none;">${lastDateOfLastMonth - i + 1}</li>`;
+        }
+
+        for (let i = 1; i <= lastDateOfMonth; i++) {
+            let isToday = i === currentDate.getDate() && currMonth === currentDate.getMonth()
+            && currYear === currentDate.getFullYear() ? "active" : "";
+            let isSelected = i === selectedDate.getDate() && currMonth === selectedDate.getMonth()
+            && currYear === selectedDate.getFullYear() ? "selected" : "";
+            liTag += `<li class="${isToday} ${selectedDate.getDate()}" data-day="${i}">${i}</li>`;
+            // liTag += `<li class="${isToday} ${isSelected}" data-day="${i}">${i}</li>`;
+        }
+        // console.log("Fecha seleccionada teórica:", selectedDate.getDate());
+
+        for (let i = lastDayOfMonth; i < 6; i++) {
+            liTag += `<li class="inactive" style="pointer-events: none;">${i - lastDayOfMonth + 1}</li>`
+        }
+        currentDateElement.innerText = `${months[currMonth]} ${currYear}`;
+        daysTag.innerHTML = liTag;
+    }
+    renderCalendar();
+
+    prevNextIcon.forEach(icon => { // getting prev and next icons
+        icon.addEventListener("click", () => {
+            currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
+
+            if (currMonth < 0 || currMonth > 11) {
+                currYear += currMonth < 0 ? -1 : 1;
+                currMonth = (currMonth + 12) % 12;
+            }
+            selectedDate.setFullYear(currYear, currMonth);
+            renderCalendar();
+        });
+    });
+
+    // Función para actualizar la fecha en el componente de tareas diarias y mensuales
+    function actualizarFechaTareas() {
+        let day = selectedDate.getDate().toString().padStart(2, '0');
+        let month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
+        let year = selectedDate.getFullYear();
+
+        let formattedDate = `${day}/${month}/${year}`;
+        fechaTareas.textContent = formattedDate;
+        fechaTareasMes.textContent = months[selectedDate.getMonth()];
+    }
+
+    // Actualizar fecha en el componente de tareas diarias y mensuales
+    actualizarFechaTareas();
+
+    // Escuchar clics en los días del calendario
+    daysTag.addEventListener("click", (event) => {
+        if (event.target.tagName === 'LI') {
+            // Obtener el día seleccionado
+            selectedDay = parseInt(event.target.textContent);
+
+            // Limpiar la clase 'active' de todos los elementos de día
+            daysTag.querySelectorAll('li').forEach(day => {
+                day.classList.remove('active');
+            });
+
+            // Agregar la clase 'active' al nuevo día seleccionado
+            event.target.classList.add('active');
+
+            // Obtener el mes y año actual
+            let selectedMonth = selectedDate.getMonth();
+            let selectedYear = selectedDate.getFullYear();
+
+            // Actualizar la fecha actual del objeto 'selectedDate' al día seleccionado
+            selectedDate = new Date(selectedYear, selectedMonth, selectedDay);
+
+            // Actualizar fecha en el componente de tareas diarias
+            actualizarFechaTareas(selectedDay, selectedMonth, selectedYear);
+        }
+    });
+
+    document.querySelector(".calendar").addEventListener("click", (event) => {
+        let selectedDate = new Date(); // Declaración de la variable selectedDate
+        if (!event.target.matches("li")) {
+            // No se ha seleccionado un día específico, mantener el último día seleccionado
+            selectedDate.setDate(selectedDay);
+        }
+    });
+
+    // Referencia al elemento de fecha en el componente de tareas diarias
+    const fechaElement = document.getElementById("fecha");
+
+    // Referencia al elemento donde se listarán las tareas diarias
+    const listadoTareasDiarias = document.getElementById("listadoTareasDiarias");
+
+    // Referencia al elemento donde se listarán las tareas mensuales
+    const listadoTareasMensuales = document.getElementById("listadoTareasMensuales");
+
+    // Función para cargar y mostrar las tareas diarias
+
+    function formatearFecha(fecha, opcion) {
+        // Dividir la fecha en fecha y hora
+        const partes = fecha.split(' ');
+        const fechaParte = partes[0];
+        const horaParte = partes[1];
+
+        // Dividir la hora en horas y minutos
+        const horaMinutos = horaParte.split(':')[0] + ':' + horaParte.split(':')[1];
+
+        // Formar la fecha y la hora en el formato deseado
+        const fechaFormateada = fechaParte + ' ' + horaMinutos;
+
+        if (opcion === "a") {
+            return horaMinutos;
+        } else if (opcion === "b") {
+            return fechaFormateada;
+        }
+
+    }
+
+    function cargarTareasDiarias() {
+
+        fetch('/obtener/events')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener las tareas');
+                }
+                return response.text(); // Convertir la respuesta a texto
+            })
+            .then(data => {
+                const jsonData = JSON.parse(data);
+                const jsonArray = JSON.parse(jsonData);
+
+                const tareasDiarias = jsonArray.filter(tarea => {
+                    const tareaDate = new Date(tarea.date.date);
+                    return tareaDate.getDate() === selectedDate.getDate() &&
+                        tareaDate.getMonth() === selectedDate.getMonth() &&
+                        tareaDate.getFullYear() === selectedDate.getFullYear();
+                });
+
+                if (Array.isArray(tareasDiarias)) {
+                    const htmlTareas = tareasDiarias.map(tarea => `
+                        <div class="listado ${tarea.hasbeenmade === true ? 'tachado' : ''}">
+                            <input type="checkbox" id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? 'checked' : ''}>
+                            <label for="${tarea.name}">
+                                <div class="checkbox"></div>
+                                ${tarea.name} - ${formatearFecha(tarea.date.date, "a")} <br/> 
+                                <span class="tipoServicio ${tarea.hasbeenmade === true ? 'tachado' : ''}">${tarea.services}</span>
+                            </label>
+                            <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
+                        </div>
+                    `).join('');
+
+                    listadoTareasDiarias.innerHTML = htmlTareas;
+
+                    // Añadir event listener para los botones de eliminación
+                    const botonesEliminar = document.querySelectorAll('.deleteButton');
+                    botonesEliminar.forEach(boton => {
+                        boton.addEventListener('click', function () {
+                            const idEvento = this.dataset.id;
+                            deleteEvento(idEvento);
+                        });
+                    });
+                } else {
+                    console.error('Error al cargar las tareas disponibles: Los datos recibidos no son un array o están vacíos');
+                }
+
+                // Llamar a la función para aplicar estilos de tachado
+                aplicarEstilosTachado();
+            })
+            .catch(error => console.error('Error al cargar las tareas:', error));
+    }
+
+    // Función para cargar y mostrar las tareas mensuales
+
+    function cargarTareasMensuales() {
+        const today = new Date();
+        const mesActual = today.getMonth();
+
+        fetch('/obtener/events')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener las tareas');
+                }
+                return response.text(); // Convertir la respuesta a texto
+            })
+            .then(data => {
+                const jsonData = JSON.parse(data);
+                const jsonArray = JSON.parse(jsonData);
+
+                const tareasMensuales = jsonArray.filter(tarea => {
+                    const tareaDate = new Date(tarea.date.date);
+                    return tareaDate.getMonth() === selectedDate.getMonth();
+                });
+
+
+                // Verificar si tiene elementos
+                if (Array.isArray(tareasMensuales)) {
+                    const htmlTareas = tareasMensuales.map(tarea => `
+                        <div class="listado">
+                            <input type="checkbox" id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? 'checked' : ''}>
+                            <label for="${tarea.name}">
+                                <div class="checkbox"></div>
+                                ${tarea.name} - ${formatearFecha(tarea.date.date, "b")} <br/> 
+                                <span class="tipoServicio">${tarea.services}</span>
+                            </label>
+                            <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
+                        </div>
+                    `).join('');
+
+                    listadoTareasMensuales.innerHTML = htmlTareas;
+
+                    // Añadir event listener para los botones de eliminación
+                    const botonesEliminar = document.querySelectorAll('.deleteButton');
+                    botonesEliminar.forEach(boton => {
+                        boton.addEventListener('click', function () {
+                            const idEvento = this.dataset.id;
+                            deleteEvento(idEvento);
+                        });
+                    });
+                } else {
+                    console.error('Error al cargar las tareas disponibles: Los datos recibidos no son un array o están vacíos');
+                }
+
+                // Llamar a la función para aplicar estilos de tachado
+                aplicarEstilosTachado();
+            })
+            .catch(error => console.error('Error al cargar las tareas:', error));
+    }
+
+    function deleteEvento(idEvento) {
+        // Enviar solicitud para eliminar el evento con el ID especificado
+        fetch(`/delete/evento/${idEvento}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el evento');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Actualizar la lista de tareas después de eliminar el evento
+                cargarTareasDiarias()
+                cargarTareasMensuales();
+            })
+            .catch(error => console.error('Error al eliminar el evento:', error));
+    }
+
+
+    // Escuchar clics en los días del calendario para actualizar las tareas diarias y mensuales
+    document.querySelector(".calendar").addEventListener("click", handleCalendarClick);
+
+    // Función para manejar el evento de clic en los días del calendario
+    function handleCalendarClick(event) {
+        if (event.target.tagName === 'LI') {
+            const selectedDay = parseInt(event.target.textContent);
+            const selectedMonth = parseInt(fechaElement.textContent.split('/')[1]) - 1;
+            const selectedYear = fechaElement.textContent.split('/')[2];
+
+            const nuevaFecha = new Date(selectedYear, selectedMonth, selectedDay);
+            const day = nuevaFecha.getDate().toString().padStart(2, '0');
+            const month = (nuevaFecha.getMonth() + 1).toString().padStart(2, '0');
+            const year = nuevaFecha.getFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+            fechaElement.textContent = formattedDate;
+
+            cargarTareasDiarias();
+            cargarTareasMensuales();
+        }
+    }
+
+    // Cargar las tareas diarias y mensuales inicialmente
+    cargarTareasDiarias();
+    cargarTareasMensuales();
+});
+
+
+
+/* SESIONES DISPONIBLES */
+document.addEventListener("DOMContentLoaded", function () {
+    const listadoSesionesDisponibles = document.getElementById("listadoSesionesDisponibles");
+
+    function cargarSesionesDisponibles() {
+        fetch('/obtener/sessions')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener las sesiones');
+                }
+                return response.text(); // Convertir la respuesta a texto
+            })
+            .then(data => {
+                const jsonData = JSON.parse(data);
+                const jsonArray = JSON.parse(jsonData);
+
+                // Verificar si tiene elementos
+                if (Array.isArray(jsonArray) && jsonArray.length > 0) {
+                    const htmlSesiones = jsonArray.map(sesion => {
+                        // Formatear la fecha
+                        const fechaOriginal = sesion.date.date;
+                        const fecha = new Date(fechaOriginal);
+                        const dia = fecha.getDate();
+                        const mes = fecha.getMonth() + 1;
+                        const anio = fecha.getFullYear();
+                        const fechaFormateada = `${anio}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`;
+
+                        // Concatenar el contenido del objeto clientes
+                        const clientes = Object.values(sesion.clients).join(', ');
+
+                        // Construir la estructura HTML para la sesión
+                        return `
+                        <div class="tarjeta">
+                            <img src="/img/portadaSession.png" alt="Descripción de la imagen" />
+                            <div class="contenido-texto">
+                                <h3 class="tituloTarjeta">${sesion.name}</h3>
+                                <p><span>Fecha:</span> ${fechaFormateada}</p>
+                                <p><span>Cliente:</span> ${clientes}</p>
+                            </div>
+                        </div>
+                    `;
+                    }).join('');
+
+                    // Insertar las sesiones en el contenedor HTML
+                    listadoSesionesDisponibles.innerHTML = htmlSesiones;
+                } else {
+                    console.error('Error al cargar las sesiones disponibles: Los datos recibidos no son un array o están vacíos');
+                }
+            })
+            .catch(error => console.error('Error al cargar las sesiones disponibles:', error.message));
+    }
+
+    cargarSesionesDisponibles();
+});
+
+
+
+
+
+
+/* CLIENTES DISPONIBLES
+document.addEventListener("DOMContentLoaded", function() {
+    const listadoClientesDisponibles = document.getElementById("listadoClientesDisponibles");
+
+    function cargarClientesDisponibles() {
+        fetch('datosClientes.json')
+            .then(response => response.json())
+            .then(data => {
+                const htmlClientes = data.map(cliente => `
+                    <div class="tarjeta">
+                        <img src="/img/usuario.png" alt="Descripción de la imagen" style="padding: 8px;">
+                        <div class="contenido-texto">
+                            <h2>${cliente.nombre}</h2>
+                            <p><span>Teléfono:</span> ${cliente.telefono}</p>
+                            <p><span>Email:</span> ${cliente.email}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                listadoClientesDisponibles.innerHTML = htmlClientes;
+            })
+            .catch(error => console.error('Error al cargar los clientes disponibles:', error));
+    }
+
+    cargarClientesDisponibles()
+});*/
+
+
+
+/* MODAL TAREA */
+/*document.addEventListener("DOMContentLoaded", function() {
+    // Array de tipos de servicio de fotografía
+    const tiposServicio = [
+        "Bodas",
+        "Retratos",
+        "Eventos",
+        "Familiares",
+        "Productos",
+        "Moda",
+        "Comercial",
+        "Arquitectura",
+        "Naturaleza",
+        "Deportes"
+    ];
+    const clientes = [
+        "Bodas",
+        "Retratos",
+        "Eventos",
+        "Familiares",
+        "Productos",
+        "Moda",
+        "Comercial",
+        "Arquitectura",
+        "Naturaleza",
+        "Deportes"
+    ];
+
+    // Obtener el select
+    const selectTipoServicio = document.getElementById("tipoServicio");
+    const selectClientes = document.getElementById("clientes");
+
+    // Llenar el select con las opciones
+    tiposServicio.forEach(function(tipo) {
+        let option = document.createElement("option");
+        option.text = tipo;
+        option.value = tipo;
+        selectTipoServicio.appendChild(option);
+    });
+    clientes.forEach(function(tipo) {
+        let option = document.createElement("option");
+        option.text = tipo;
+        option.value = tipo;
+        selectClientes.appendChild(option);
+    });
+});*/
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("message_file").addEventListener("change", function () {
+        var fileInput = document.querySelector("#message_file");
+        var filename = fileInput.value;
+        var noFileDisplay = document.querySelector("#noFile");
+
+        if (/^\s*$/.test(filename)) {
+            document.querySelector(".file-upload").classList.remove("active");
+            noFileDisplay.textContent = "No hay ficheros";
+        } else {
+            // Limitar la longitud del nombre del archivo
+            var maxLength = 30; // Ajusta el valor según sea necesario
+            var displayFileName = filename.replace("C:\\fakepath\\", "");
+            if (displayFileName.length > maxLength) {
+                displayFileName = displayFileName.substring(0, maxLength) + '...';
+            }
+
+            noFileDisplay.textContent = displayFileName;
+            document.querySelector(".file-upload").classList.add("active");
+        }
+    });
+});
+
+
+/* Modal Confirmar Envio Correo */
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("send").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        const aux = document.getElementById("message_recipient").value;
+        const cliente = document.querySelector("#message_recipient option[value='" + aux + "']").innerHTML;
+        const asunto = document.getElementById("message_subject").value;
+        const rutaCompleta = document.getElementById("message_file").value;
+        const partesRuta = rutaCompleta.split("\\");
+        const fichero = partesRuta[partesRuta.length - 1];
+        const mensaje = document.getElementById("message_textMessage").value;
+
+        document.getElementById("modalEnvio").style.display = "grid";
+        document.getElementById("clienteModal").textContent = cliente;
+        document.getElementById("asuntoModal").textContent = asunto;
+        document.getElementById("ficheroModal").innerHTML = fichero;
+        document.getElementById("mensajeModal").textContent = mensaje;
+    });
+
+    document.getElementById("cancel").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("modalEnvio").style.display = "none";
+    });
+
+    document.getElementById("formModalEnvio").addEventListener("submit", function(event) {
+        event.preventDefault(); // Evita que se envíe el formulario automáticamente
+        document.getElementById("formMessage").submit(); // Envía el formulario formMessage
+        document.getElementById("modalEnvio").style.display = "none"; // Cierra el modalEnvio después de enviar el formulario
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const horaActual = new Date().getHours();
+    let saludo;
+    if (horaActual >= 6 && horaActual <= 12) {
+        saludo = "Buenos días";
+    } else if (horaActual > 12 && horaActual < 20) {
+        saludo = "Buenas tardes";
+    } else {
+        saludo = "Buenas noches";
+    }
+    let mensaje = document.getElementById("mensaje");
+    mensaje.textContent = saludo + ' ';
+
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("abrirModalTarea").addEventListener("click", function (event) {
+        document.getElementById("modal").style.display = "grid";
+    });
+
+    document.getElementById("Cerrar").addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("modal").style.display = "none";
+    });
+});
+
+/* Datos del usuario logueado */
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Obtener el div de campos y el botón para mostrarlo
+    const camposDiv = document.querySelector('.camposPassword');
+    const mostrar = document.querySelector('#mostrar');
+    const formPassword = document.getElementById('formPassword');
+
+    // Estado inicial: ocultar el div de campos
+    let mostrando = false;
+
+    // Función para alternar entre mostrar y ocultar el div de campos
+    const alternarMostrar = function() {
+        mostrando = !mostrando;
+        if (mostrando) {
+            camposDiv.style.display = 'block';
+        } else {
+            camposDiv.style.display = 'none';
+        }
+    };
+
+    // Mostrar u ocultar el div de campos al hacer clic en el botón
+    mostrar.addEventListener('click', function(event) {
+        event.preventDefault();
+        alternarMostrar();
+    });
+
+    formPassword.addEventListener('submit', function(event) {
+        /*if (!confirm('¿Seguro que quieres actualizar la contraseña?')) {
+            //event.preventDefault();
+        }*/
+    });
+});
+

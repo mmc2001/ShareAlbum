@@ -41,7 +41,7 @@ const dataTableOptions = {
     ],
     lengthMenu: [5, 10, 15, 20, 100],
     columnDefs: [
-        { className: "centered", targets: [0, 4, 5] },
+        { className: "centered", targets: [0, 4, 5, 6] },
         { orderable: false, targets: [4, 5] },
         { searchable: false, targets: [1] }
     ],
@@ -78,41 +78,26 @@ const initDataTable = async () => {
 
 const listUsers = async () => {
     try {
-        const response = await fetch("/obtener/sessions");
+        const response = await fetch("/obtener/clients");
         const jsonArray = await response.json();
         const jsonData = JSON.parse(jsonArray);
 
 // Verificar si jsonData es un array
         if (Array.isArray(jsonData)) {
             let content = ``;
-            jsonData.forEach((session, index) => {
-
-                // Formatear la fecha
-                const fechaOriginal = session.date.date;
-                const fecha = new Date(fechaOriginal);
-                const dia = fecha.getDate();
-                const mes = fecha.getMonth() + 1;
-                const anio = fecha.getFullYear();
-                const fechaFormateada = `${anio}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`;
+            jsonData.forEach((client, index) => {
 
                 content += `
             <tr>
                 <td>${index+1}</td>
-                <td><a href="/Albumes/index.html?id=${session.id}" class="album">${session.name}</a></td>
-                <td>${session.name}</td>
-                <td>${fechaFormateada}</td>
-                <td class="bloque">
-                    <div style="display: none;">
-                        ${session.name}
-                    </div>
-                    <div">
-                        <button class="btn btn-sm btn-primary verTicket" id="verTicket"><i class="fa-solid fa-eye"></i></button>
-                        <!-- <button class="btn btn-sm btn-primary crearTicket" data-row="${session.id}"><i class="fa-solid fa-pencil"></i></button> -->
-                    </div>
-                </td>
+                <td><a href="/Albumes/index.html?id=${client.id}" class="album">${client.name}</a></td>
+                <td>${client.surnames}</td>
+                <td>${client.dni}</td>
+                <td>${client.telephone}</td>
+                <td>${client.email}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary editarSesion" data-row="${session.id}"><i class="fa-solid fa-pencil"></i></button>
-                    <button class="btn btn-sm btn-danger" data-id="${session.id}"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="btn btn-sm btn-primary editarCliente" data-row="${client.id}"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="btn btn-sm btn-danger" data-id="${client.id}"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             </tr>`;
             });
@@ -122,27 +107,27 @@ const listUsers = async () => {
             console.error("El objeto recibido no es un array:", jsonData);
         }
 
-        /* Modal Editar Sesion */
-        $('.editarSesion').click(function(event) {
+        /* Modal Editar Cliente */
+        $('.editarCliente').click(function(event) {
             event.preventDefault();
-            const userId = $(this).closest('tr').find('td:first').text();
-            const userAlbum = $(this).closest('tr').find('td:eq(1)').text();
-            const userPhotographer = $(this).closest('tr').find('td:eq(2)').text();
-            const userClient = $(this).closest('tr').find('td:eq(3)').text();
-            const userTicket = $(this).closest('tr').find('td:eq(4)').text().trim();
+            const userName = $(this).closest('tr').find('td:eq(1)').text();
+            const userSurnames = $(this).closest('tr').find('td:eq(2)').text();
+            const userDni = $(this).closest('tr').find('td:eq(3)').text();
+            const userTelephone = $(this).closest('tr').find('td:eq(4)').text();
+            const userEmail = $(this).closest('tr').find('td:eq(5)').text();
 
-            $('#modalEditarSesion input[name="session_name"]').val(userId);
-            $('#modalEditarSesion input[name="album"]').val(userAlbum);
-            $('#modalEditarSesion input[name="photographer"]').val(userPhotographer);
-            $('#modalEditarSesion input[name="client"]').val(userClient);
-            $('#modalEditarSesion input[name="ticket"]').val(userTicket);
+            $('#modalEditarCliente input[name="client_name"]').val(userName);
+            $('#modalEditarCliente input[name="client_surnames"]').val(userSurnames);
+            $('#modalEditarCliente input[name="client_dni"]').val(userDni);
+            $('#modalEditarCliente input[name="client_telephone"]').val(userTelephone);
+            $('#modalEditarCliente input[name="client_email"]').val(userEmail);
 
-            $('#modalEditarSesion').css('display', 'grid');
+            $('#modalEditarCliente').css('display', 'grid');
         });
 
-        $('#cerrarEditarSesion').click(function(event) {
+        $('#cerrarEditarCliente').click(function(event) {
             event.preventDefault();
-            $('#modalEditarSesion').css('display', 'none');
+            $('#modalEditarCliente').css('display', 'none');
         });
 
         /* Modal Ver Ticket */
@@ -153,7 +138,7 @@ const listUsers = async () => {
             const userId = $(this).closest('tr').find('td:eq(0)').text().trim();
 
             // Realizar una solicitud AJAX para obtener los datos del usuario del archivo JSON
-            $.getJSON("/obtener/sessions", function(jsonData) {
+            $.getJSON("/obtener/clients", function(jsonData) {
 
                 const data = JSON.parse(jsonData);
 
@@ -326,11 +311,11 @@ const listUsers = async () => {
 
         $(".btn-danger").click(async function() {
 
-            const idSession = $(this).data("id");
-            console.log("ID en el botón: " + idSession);
+            const idClient = $(this).data("id");
+            console.log("ID en el botón: " + idClient);
 
             if (confirm("¿Estás seguro de que deseas eliminar esta sesión?")) {
-                await deleteSession(idSession);
+                await deleteClient(idClient);
                 location.reload();
             }
         });
@@ -339,10 +324,10 @@ const listUsers = async () => {
     }
 };
 
-function deleteSession(idSession) {
-    console.log("ID en la función delete: " + idSession);
+function deleteClient(idClient) {
+    console.log("ID en la función delete: " + idClient);
     // Enviar solicitud para eliminar el evento con el ID especificado
-    fetch(`/delete/session/${idSession}`, {
+    fetch(`/delete/Client/${idClient}`, {
         method: 'DELETE'
     })
         .then(response => {

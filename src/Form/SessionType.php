@@ -25,19 +25,20 @@ class SessionType extends AbstractType
             ->add('descriptionSession')
             ->add('service', EntityType::class, [
                 'class' => Services::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
             ->add('users', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'getFullName',
+                'expanded' => true,
                 'multiple' => true,
             ])
             ->add('extras', EntityType::class, [
                 'class' => Extras::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
+                'expanded' => true,
                 'multiple' => true,
             ])
-            ->add('submit', SubmitType::class)
         ;
     }
 

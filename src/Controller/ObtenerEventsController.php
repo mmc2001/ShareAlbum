@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ObtenerEventosController extends AbstractController
+class ObtenerEventsController extends AbstractController
 {
     private $eventRepository;
 
@@ -28,11 +28,12 @@ class ObtenerEventosController extends AbstractController
         foreach ($events as $event) {
             $eventsArray[] = [
                 'id' => $event->getId(),
-                'session' => $event->getSession(),
+                'services_id' => $event->getServices(),
                 'user' => $event->getUser(),
                 'name' => $event->getName(),
                 'date' => $event->getDate(),
                 'comment' => $event->getComment(),
+                'hasbeenmade' => $event->getHasbeenmade()
             ];
         }
 

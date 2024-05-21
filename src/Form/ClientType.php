@@ -15,17 +15,11 @@ class ClientType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('roles')
             ->add('password')
             ->add('name')
             ->add('surnames')
             ->add('dni')
             ->add('telephone')
-            ->add('session', EntityType::class, [
-                'class' => Session::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
         ;
     }
 
