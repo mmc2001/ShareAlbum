@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Álbumes{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/albums.css') }}">
+    <link rel="stylesheet" href="{{ asset('lightbox/lightgallery.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="ordenacion" style="margin-top: 160px;">
+        <div class="contenedorAlbum">
+            <div class="contain">
+                <h1 id="albumCompleto">Fotos sin seleccionar</h1>
+                <a id="download1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
+                </a>
+                <!-- <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M352 224H305.5c-45 0-81.5 36.5-81.5 81.5c0 22.3 10.3 34.3 19.2 40.5c6.8 4.7 12.8 12 12.8 20.3c0 9.8-8 17.8-17.8 17.8h-2.5c-2.4 0-4.8-.4-7.1-1.4C210.8 374.8 128 333.4 128 240c0-79.5 64.5-144 144-144h80V34.7C352 15.5 367.5 0 386.7 0c8.6 0 16.8 3.2 23.2 8.9L548.1 133.3c7.6 6.8 11.9 16.5 11.9 26.7s-4.3 19.9-11.9 26.7l-139 125.1c-5.9 5.3-13.5 8.2-21.4 8.2H384c-17.7 0-32-14.3-32-32V224zM80 96c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16H400c8.8 0 16-7.2 16-16V384c0-17.7 14.3-32 32-32s32 14.3 32 32v48c0 44.2-35.8 80-80 80H80c-44.2 0-80-35.8-80-80V112C0 67.8 35.8 32 80 32h48c17.7 0 32 14.3 32 32s-14.3 32-32 32H80z"/></svg>
+                </span> -->
+            </div>
+            <button class="boton" id="editar1">Editar</button>
+        </div>
+        <div class="contenedorImagenes" id="contenedorImagenes">
+            <div id="container1"></div>
+        </div>
+    </div>
+
+    <div class="ordenacion">
+        <div class="contenedorAlbum">
+            <div class="contain">
+                <h1 id="albumCompleto">Fotos seleccionadas</h1>
+                <a id="download2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
+                </a>
+            </div>
+            <button class="boton" id="editar2">Editar</button>
+        </div>
+        <div class="contenedorImagenes" id="contenedorImagenes">
+            <div id="container2"></div>
+        </div>
+    </div>
+
+    <div class="ordenacion" style="padding-bottom: 100px;">
+        <div class="contenedorAlbum">
+            <div class="contain">
+                <h1 id="albumTerminado">Fotos editadas</h1>
+                <a id="download3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
+                </a>
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M352 224H305.5c-45 0-81.5 36.5-81.5 81.5c0 22.3 10.3 34.3 19.2 40.5c6.8 4.7 12.8 12 12.8 20.3c0 9.8-8 17.8-17.8 17.8h-2.5c-2.4 0-4.8-.4-7.1-1.4C210.8 374.8 128 333.4 128 240c0-79.5 64.5-144 144-144h80V34.7C352 15.5 367.5 0 386.7 0c8.6 0 16.8 3.2 23.2 8.9L548.1 133.3c7.6 6.8 11.9 16.5 11.9 26.7s-4.3 19.9-11.9 26.7l-139 125.1c-5.9 5.3-13.5 8.2-21.4 8.2H384c-17.7 0-32-14.3-32-32V224zM80 96c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16H400c8.8 0 16-7.2 16-16V384c0-17.7 14.3-32 32-32s32 14.3 32 32v48c0 44.2-35.8 80-80 80H80c-44.2 0-80-35.8-80-80V112C0 67.8 35.8 32 80 32h48c17.7 0 32 14.3 32 32s-14.3 32-32 32H80z"/></svg>
+                </span>
+            </div>
+            <button class="boton" id="editar3">Editar</button>
+        </div>
+        <div class="contenedorImagenes" id="contenedorImagenes">
+            <div id="container3"></div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Album -->
+    <div class="modalEditarAlbum" id="modalEditarAlbum">
+        <div class="modalEditarAlbum-content" id="modalEditarAlbum-content">
+            <h1>Listado de fotos <i class="fas fa-trash-alt fa-xs" style="cursor: pointer;"></i></h1>
+            <h1>Upload Image</h1>
+            <form id="my-form" method="POST" enctype="multipart/form-data">
+                <input type="file" id="image-input" name="image">
+                <button type="submit">Submit</button>
+            </form>
+            <div id="result"></div>
+            <div id="image-preview"></div>
+            <div class="contenedorImagenesModal" id="contenedorImagenesModal">
+                <div class="galleryModal" id="galleryModal"></div>
+            </div>
+            <div class="botonesModal">
+                <button class="botonModal" id="CerrarModal">Cerrar</button>
+                <div class="separacion">
+                    <input type="file" id="uploadedimage" accept="image/*" style="display: none;" multiple>
+                    <!-- <label for="inputImagenes" id="Añadir">Añadir</button> -->
+                    <button class="botonModal" id="Añadir">Añadir</button>
+                    <button class="botonModal" id="GuardarModal">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/albums.js') }}"></script>
+        <script src="{{ asset('lightbox/lightgallery.js') }}"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
+        <script src="https://kit.fontawesome.com/77aa5e27b8.js" crossorigin="anonymous"></script>
+    {% endblock %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('my-form');
+            const input = document.getElementById('image-input');
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData();
+                formData.append('image', input.files[0]);
+
+                try {
+                    const response = await fetch('/upload/image', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'An error occurred while uploading the image.');
+                    }
+
+                    const data = await response.json();
+                    console.log('Image uploaded successfully:', data);
+                    console.log('Image URL:', data.url);
+
+                } catch (error) {
+                    console.error('Error uploading image:', error);
+                    alert('Error uploading image: ' + error.message);
+                }
+            });
+        });
+    </script>
+{% endblock %}

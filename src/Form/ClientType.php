@@ -6,6 +6,7 @@ use App\Entity\Session;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,7 +16,6 @@ class ClientType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('password')
             ->add('name')
             ->add('surnames')
             ->add('dni')

@@ -41,7 +41,7 @@ const dataTableOptions = {
     ],
     lengthMenu: [5, 10, 15, 20, 100],
     columnDefs: [
-        { className: "centered", targets: [0, 4, 5, 6] },
+        { className: "centered", targets: [0, 3, 4, 5, 6] },
         { orderable: false, targets: [4, 5] },
         { searchable: false, targets: [1] }
     ],
@@ -90,7 +90,7 @@ const listUsers = async () => {
                 content += `
             <tr>
                 <td>${index+1}</td>
-                <td><a href="/Albumes/index.html?id=${client.id}" class="album">${client.name}</a></td>
+                <td class="cliente">${client.name}</td>
                 <td>${client.surnames}</td>
                 <td>${client.dni}</td>
                 <td>${client.telephone}</td>
@@ -108,205 +108,25 @@ const listUsers = async () => {
         }
 
         /* Modal Editar Cliente */
-        $('.editarCliente').click(function(event) {
-            event.preventDefault();
+        $('.editarCliente').click(function(client) {
+            client.preventDefault();
             const userName = $(this).closest('tr').find('td:eq(1)').text();
             const userSurnames = $(this).closest('tr').find('td:eq(2)').text();
             const userDni = $(this).closest('tr').find('td:eq(3)').text();
             const userTelephone = $(this).closest('tr').find('td:eq(4)').text();
             const userEmail = $(this).closest('tr').find('td:eq(5)').text();
 
-            $('#modalEditarCliente input[name="client_name"]').val(userName);
-            $('#modalEditarCliente input[name="client_surnames"]').val(userSurnames);
-            $('#modalEditarCliente input[name="client_dni"]').val(userDni);
-            $('#modalEditarCliente input[name="client_telephone"]').val(userTelephone);
-            $('#modalEditarCliente input[name="client_email"]').val(userEmail);
-
+            $('#modalEditarCliente input[name="client[name]"]').val(userName);
+            $('#modalEditarCliente input[name="client[surnames]"]').val(userSurnames);
+            $('#modalEditarCliente input[name="client[dni]"]').val(userDni);
+            $('#modalEditarCliente input[name="client[telephone]"]').val(userTelephone);
+            $('#modalEditarCliente input[name="client[email]"]').val(userEmail);
             $('#modalEditarCliente').css('display', 'grid');
         });
 
-        $('#cerrarEditarCliente').click(function(event) {
-            event.preventDefault();
+        $('#cerrarEditarCliente').click(function(client) {
+            client.preventDefault();
             $('#modalEditarCliente').css('display', 'none');
-        });
-
-        /* Modal Ver Ticket */
-        $("#verTicket").click(function(event) {
-            event.preventDefault();
-
-            // Obtener el ID del usuario de la fila
-            const userId = $(this).closest('tr').find('td:eq(0)').text().trim();
-
-            // Realizar una solicitud AJAX para obtener los datos del usuario del archivo JSON
-            $.getJSON("/obtener/clients", function(jsonData) {
-
-                const data = JSON.parse(jsonData);
-
-                const fecha = new Date();
-                // Buscar el usuario en los datos cargados del JSON
-                const userData = data.find(user => user.id == userId);
-
-                if (userData) {
-                    // Rellenar los campos del modal con los datos del usuario
-                    $('#modalVerTicket input[name="album"]').val(userData.álbum);
-
-                    // Acceder a los datos del ticket del usuario
-                    const userTicket = userData.ticket;
-
-                    // Insertar los datos del ticket en el modal
-                    $('#modalVerTicket input[name="nombre"]').val(userTicket.nombre);
-                    $('#modalVerTicket input[name="precioTotal"]').val(userTicket.precioTotal);
-                    $('#modalVerTicket textarea[name="descripcion"]').val(userTicket.descripcion);
-                    $('#modalVerTicket input[name="nExtras"]').val(userTicket.nExtras);
-
-                    // Insertar campos para cada extra
-                    const extrasContainer = $('#modalVerTicket #extrasContainer');
-                    extrasContainer.empty(); // Limpiar contenedor antes de agregar nuevos campos
-
-                    for (let i = 1; i <= userTicket.nExtras; i++) {
-                        const extra = userTicket.extras[`extra${i}`];
-                        const label = $('<label>').text(`Extra ${i}: ${extra.nombre}`);
-                        const input = $('<input>').attr({
-                            type: 'text',
-                            name: `extra${i}Precio`,
-                            value: extra.precio,
-                            class: "botonesExtras",
-                            style: "margin-top: 10px; margin-bottom: 10px;"
-                        });
-                        extrasContainer.append(label);
-                        extrasContainer.append(input);
-                    }
-
-                    // Descargar ticket
-                    $("#descargarVerTicket").click(function(event) {
-                        var ticketHTML = `
-                            <div class="container" id="template_invoice">
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <div class="invoice-title">
-                                            <h2>Ticket</h2>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <p class="lead">Álbum # ${userData.id}</p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <address>
-                                            <strong>Fotógrafo:</strong><br>
-                                            ${userData.fotógrafo}<br>
-                                        </address>
-                                    </div>
-                                    <div class="col-xs-6 text-right">
-                                        <address>
-                                            <strong>Cliente:</strong><br>
-                                            ${userData.cliente}<br>
-                                        </address>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-6 text-right">
-                                        <address>
-                                            <strong>Fecha de Sesión:</strong><br>
-                                            ${fecha}<br><br>
-                                        </address>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title"><strong>Lista de Servicios</strong></h3>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-condensed">
-                                                        <thead>
-                                                            <tr>
-                                                                <td><strong>Servicios</strong></td>
-                                                                <td class="text-center"><strong>Cantidad</strong></td>
-                                                                <td class="text-center"><strong>Precio</strong></td>
-                                                                <td class="text-right"><strong>Total</strong></td>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="servicios-body">
-                                                            <!-- Filas de la tabla -->
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="panel-heading">
-                                                <div id="precioCompleto">
-                                                    <!-- Precio Total -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-
-                        var filasHTML = "";
-                        for (var i = 0; i < userTicket.length; i++) {
-                            filasHTML += "<tr>";
-                            filasHTML += "<td>" + userTicket[i].nombre + "</td>";
-                            filasHTML += "<td class='text-center'>" + userTicket[i].precioTotal + " €" + "</td>";
-                            filasHTML += "<td class='text-right'>" + userTicket[i].nExtras + " €" + "</td>";
-                            filasHTML += "</tr>";
-                        }
-
-                        ticketHTML = ticketHTML.replace("<!-- Filas de la tabla -->", filasHTML);
-
-                        var precioCompleto = 0;
-                        for (var i = 0; i < userTicket.length; i++) {
-                            precioCompleto = precioCompleto + userTicket[i].precioTotal;
-                        }
-
-                        var precioCompletoHTML = `
-                            <h3>Precio Total:  €</h3>
-                        `;
-
-                        ticketHTML = ticketHTML.replace("<!-- Precio Total -->", precioCompletoHTML);
-
-                        var doc = new jsPDF("p", "pt", "letter"),
-                            source = ticketHTML,
-                            margins = {
-                                top: 40,
-                                bottom: 60,
-                                left: 40,
-                                width: 522
-                            };
-
-                        doc.addFont('Arial', 'Arial', 'UTF-8');
-
-                        doc.fromHTML(
-                            source,
-                            margins.left,
-                            margins.top,
-                            {
-                                width: margins.width
-                            },
-                            function(dispose) {
-                                var nombreArchivo = "Ticket_" + userData.id + ".pdf";
-                                doc.save(nombreArchivo);
-                            },
-                            margins
-                        );
-                    });
-
-                    // Mostrar el modal
-                    $('#modalVerTicket').css('display', 'grid');
-                } else {
-                    console.error("No se encontraron datos para el usuario con ID: " + userId);
-                }
-            });
-        });
-
-        $('#cerrarVerTicket').click(function(event) {
-            event.preventDefault();
-            $('#modalVerTicket').css('display', 'none');
         });
 
         $(".btn-danger").click(async function() {
@@ -327,12 +147,12 @@ const listUsers = async () => {
 function deleteClient(idClient) {
     console.log("ID en la función delete: " + idClient);
     // Enviar solicitud para eliminar el evento con el ID especificado
-    fetch(`/delete/Client/${idClient}`, {
+    fetch(`/delete/client/${idClient}`, {
         method: 'DELETE'
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al eliminar la sesión');
+                throw new Error('Error al eliminar la cliente');
             }
             return response.json();
         })
@@ -340,7 +160,7 @@ function deleteClient(idClient) {
             // Actualizar la lista de tareas después de eliminar el evento
             listUsers();
         })
-        .catch(error => console.error('Error al eliminar la sesión:', error));
+        .catch(error => console.error('Error al eliminar la cliente:', error));
 }
 
 window.addEventListener("load", async () => {

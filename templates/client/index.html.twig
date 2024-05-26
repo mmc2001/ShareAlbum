@@ -82,26 +82,33 @@
     </div>
 
 
-    <!-- Modal Editar Cliente
+    <!-- Modal Editar Cliente -->
     <div class="modalEditarCliente" id="modalEditarCliente">
         <div class="modalEditarCliente-content">
             <h1>Editar sesión</h1>
             <div class="contenedorFormularioEditarCliente" id="contenedorFormularioEditarCliente">
-                <form method="post">
-                    <label class="label">Álbum</label>
-                    <label class="label">Fotógrafo</label>
-                    <input type="text" name="album" />
-                    <input type="text" name="photographer" />
-                    <label class="label">Cliente</label>
-                    <label class="label">Ticket</label>
-                    <input type="text" name="client" />
-                    <input type="text" name="ticket" />
-                    <button id="cerrarEditarCliente" class="button">Cerrar</button>
-                    <button id="guardarEditarCliente">Guardar</button>
+                <form method="post" id="formClientUpdate">
+                    {{ form_errors(formClientUpdate) }}
+                    {{ form_start(formClientUpdate) }}
+                    <label class="label">Nombre</label>
+                    {{ form_widget(formClientUpdate.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                    <label class="label">Apellidos</label>
+                    {{ form_widget(formClientUpdate.surnames, {'attr': {'class': 'padding', 'placeholder': 'Apellidos'}}) }}
+                    <label class="label">DNI</label>
+                    {{ form_widget(formClientUpdate.dni, {'attr': {'class': 'padding', 'placeholder': 'DNI', 'name': 'dni'}}) }}
+                    <label class="label">Telephone</label>
+                    {{ form_widget(formClientUpdate.telephone, {'attr': {'class': 'padding', 'placeholder': 'Teléfono'}}) }}
+                    <label class="label">Email</label>
+                    {{ form_widget(formClientUpdate.email, {'attr': {'class': 'padding', 'placeholder': 'Email'}}) }}
+                    <div class="botonesEditarCliente">
+                        <button id="cerrarEditarCliente" class="button">Cerrar</button>
+                        <button type="submit" id="guardarEditarCliente">Guardar</button>
+                    </div>
+                    {{ form_end(formClientUpdate) }}
                 </form>
             </div>
         </div>
-    </div>-->
+    </div>
 
     <script
 

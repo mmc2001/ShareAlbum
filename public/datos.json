@@ -1,0 +1,212 @@
+[
+  {
+      "id": 1,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 2,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 3,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true }
+      ]
+  },
+  {
+      "id": 4,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 5,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 6,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true }
+      ]
+  },
+  {
+      "id": 7,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true }
+      ]
+  },
+  {
+      "id": 8,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 9,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true }
+      ]
+  },
+  {
+      "id": 10,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 11,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true }
+      ]
+  },
+  {
+      "id": 12,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true }
+      ]
+  },
+  {
+      "id": 13,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },   
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 14,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": false },
+          { "url": "/img/portadaSession.png", "elegida": true }
+      ]
+  },
+  {
+      "id": 15,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 16,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 17,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 18,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 19,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 20,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 21,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 22,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 23,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 24,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  },
+  {
+      "id": 25,
+      "imagenes": [
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": true },
+          { "url": "/img/portadaSession.png", "elegida": false }
+      ]
+  }
+]
+  

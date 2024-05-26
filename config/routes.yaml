@@ -35,6 +35,11 @@ app_delete_session:
     controller: App\Controller\DeleteSessionController::deleteSession
     methods: [ 'DELETE' ]
 
+app_delete_client:
+    path: /delete/client/{id}
+    controller: App\Controller\DeleteClientController::deleteClient
+    methods: [ 'DELETE' ]
+
 app_obtener_services:
     path: /obtener/services/{id}
     controller: App\Controller\ObtenerServicesController::getServices
@@ -54,3 +59,12 @@ app_session_data:
     path: /session/data
     controller: App\Controller\SessionController::data
     methods: [ 'GET', 'POST' ]
+
+app_albums:
+    path: /albums/{id}
+    defaults: { _controller: 'App\Controller\AlbumsController::index' }
+
+upload_image:
+    path: /upload/image
+    controller: App\Controller\UploadImageController::uploadImage
+    methods: ['POST']

@@ -40,8 +40,10 @@ class ClientController extends AbstractController
         $formClient = $this->createForm(RegistrationFormType::class, $client);
         $formClient->handleRequest($request);
 
-        $clientUpdate = new User();
-        $formClientUpdate = $this->createForm(ClientType::class, $clientUpdate);
+        $clientUpdate = $this->getUser();
+        $formClientUpdate = $this->createForm(ClientType::class, $clientUpdate, [
+            'allow_extra_fields' => false,
+        ]);
         $formClientUpdate->handleRequest($request);
 
         $session = new Session();
@@ -93,8 +95,22 @@ class ClientController extends AbstractController
         }
 
         if ($formClientUpdate->isSubmitted() && $formClientUpdate->isValid()) {
-            $this->em->persist($clientUpdate);
-            $this->em->flush();
+
+            $email = $formClientUpdate->get('email')->getData();
+            $clientUpdate = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
+            if (!$clientUpdate) {
+                throw $this->createNotFoundException('No se encontró el cliente actual en la base de datos');
+            }
+
+            $clientUpdate->setName($formClientUpdate->get('name')->getData());
+            $clientUpdate->setSurnames($formClientUpdate->get('surnames')->getData());
+            $clientUpdate->setDni($formClientUpdate->get('dni')->getData());
+            $clientUpdate->setTelephone($formClientUpdate->get('telephone')->getData());
+            $clientUpdate->setEmail($formClientUpdate->get('email')->getData());
+
+            $entityManager->flush();
+
             return $this->redirectToRoute('app_client');
         }
 

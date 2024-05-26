@@ -98,7 +98,7 @@ const listUsers = async () => {
                 content += `
             <tr>
                 <td>${index+1}</td>
-                <td><a href="/Albumes/index.html?id=${session.id}" class="album">${session.name}</a></td>
+                <td><a href="/albums/${session.id}" class="album">${session.name}</a></td>
                 <td>${session.name}</td>
                 <td>${fechaFormateada}</td>
                 <td class="bloque">

@@ -237,6 +237,18 @@ input {
     width: 100%;
     font-size: large;
 }
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > #registration_form_plainPassword {
+    padding: 10px;
+    background-color: #eee;
+    border: none;
+    border-radius: 5px;
+}
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > #registration_form_roles {
+    padding: 10px;
+    background-color: #eee;
+    border: none;
+    border-radius: 5px;
+}
 .contenedorFormularioCliente > form > .camposClient > input[type="text"],
 .contenedorFormularioCliente > form > .camposClient > input[type="number"],
 .contenedorFormularioCliente > form > .camposClient > div > select {
@@ -553,6 +565,10 @@ h1, .label {
     text-decoration: none;
     color: #777777;
 }
+.cliente {
+    font-weight: 600;
+    color: #222;
+}
 /* .bloque {
     display: flex;
     align-items: center;
@@ -867,7 +883,7 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
 
 
 
-/* MODAL EDITAR SESIÓN */
+/* MODAL EDITAR CLIENTE*/
 .modalEditarCliente {
     display: none;
     justify-content: center;
@@ -892,7 +908,7 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
     position: relative;
     overflow: hidden;
     width: fit-content;
-    min-height: 550px;
+    min-height: 450px;
     padding-left: 60px;
     padding-right: 60px;
     padding: 0px 80px 0px 80px;
@@ -915,13 +931,15 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
     display: grid;
     justify-content: center;
     align-items: center;
-    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     padding: 0 50px;
     height: 100%;
 }
 .modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .label {
     text-align: left;
+}
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > label {
+    margin-bottom: 0rem;
 }
 .modalEditarCliente-content > .contenedorFormularioEditarCliente > form > input {
     background-color: #eee;
@@ -935,7 +953,7 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
     color: #5e5e5e;
     cursor:auto;
 }
-.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > button {
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .botonesEditarCliente > button {
     border-radius: 30px;
     border: 2px solid var(--color-primario);
     background-color: var(--color-primario);
@@ -945,10 +963,18 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
     padding: 12px 15px;
     transition: transform 80ms ease-in;
     cursor: pointer;
-    margin: 20px;
+    width: 100%;
 }
 
-.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > button:hover {
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .botonesEditarCliente > button:hover {
     background-color: rgb(6, 47, 90);
+}
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .botonesEditarCliente {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
