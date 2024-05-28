@@ -5,13 +5,10 @@ namespace App\Controller;
 use App\Form\NewPasswordType;
 use App\Form\UserDataType;
 use Cloudinary\Cloudinary;
-use Cloudinary\Transformation\Transformation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -41,6 +38,8 @@ class AlbumsController extends AbstractController
         $userData2 = $this->security->getUser();
         $formNewPassword = $this->createForm(NewPasswordType::class, $userData2);
         $formNewPassword->handleRequest($request);
+
+        $cloudName = $_ENV['CLOUDINARY_CLOUD_NAME'];
 
         if ($formUserData->isSubmitted() && $formUserData->isValid()) {
 
@@ -75,6 +74,7 @@ class AlbumsController extends AbstractController
 
         return $this->render('albums/index.html.twig', [
             'controller_name' => 'AlbumsController',
+            'cloudName' => json_encode($cloudName),
             'formUserData' => $formUserData->createView(),
             'formNewPassword' => $formNewPassword->createView()
         ]);

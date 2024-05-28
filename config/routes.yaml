@@ -64,7 +64,17 @@ app_albums:
     path: /albums/{id}
     defaults: { _controller: 'App\Controller\AlbumsController::index' }
 
-upload_image:
+app_upload_image:
     path: /upload/image
     controller: App\Controller\UploadImageController::uploadImage
-    methods: ['POST']
+    methods: [ 'GET', 'POST' ]
+
+app_save_photos:
+    path: /save/photos
+    controller: App\Controller\SavePhotosController::savePhotos
+    methods: [ 'GET', 'POST' ]
+
+app_obtener_photos:
+    path: /obtener/photos
+    controller: App\Controller\ObtenerPhotosController::getPhotos
+    methods: [ 'GET' ]

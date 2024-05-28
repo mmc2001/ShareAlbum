@@ -66,13 +66,6 @@
     <div class="modalEditarAlbum" id="modalEditarAlbum">
         <div class="modalEditarAlbum-content" id="modalEditarAlbum-content">
             <h1>Listado de fotos <i class="fas fa-trash-alt fa-xs" style="cursor: pointer;"></i></h1>
-            <h1>Upload Image</h1>
-            <form id="my-form" method="POST" enctype="multipart/form-data">
-                <input type="file" id="image-input" name="image">
-                <button type="submit">Submit</button>
-            </form>
-            <div id="result"></div>
-            <div id="image-preview"></div>
             <div class="contenedorImagenesModal" id="contenedorImagenesModal">
                 <div class="galleryModal" id="galleryModal"></div>
             </div>
@@ -81,8 +74,9 @@
                 <div class="separacion">
                     <input type="file" id="uploadedimage" accept="image/*" style="display: none;" multiple>
                     <!-- <label for="inputImagenes" id="Añadir">Añadir</button> -->
-                    <button class="botonModal" id="Añadir">Añadir</button>
+                    <button type="button" class="botonModal" id="comprobar-button">Añadir</button>
                     <button class="botonModal" id="GuardarModal">Guardar</button>
+                    <button class="botonModal" id="Prueba">PRUEBA</button>
                 </div>
             </div>
         </div>
@@ -90,44 +84,36 @@
 
     {% block javascripts %}
         {{ parent() }}
-        <script src="{{ asset('js/albums.js') }}"></script>
         <script src="{{ asset('lightbox/lightgallery.js') }}"></script>
+        <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
         <script src="https://kit.fontawesome.com/77aa5e27b8.js" crossorigin="anonymous"></script>
+        <script src="{{ asset('js/albums.js') }}"></script>
     {% endblock %}
 
+    <!--
     <script>
+
         document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('my-form');
-            const input = document.getElementById('image-input');
+            const button = document.getElementById('comprobar-button');
+            const imagen = document.getElementById('prueba-photo');
 
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
-
-                const formData = new FormData();
-                formData.append('image', input.files[0]);
-
-                try {
-                    const response = await fetch('/upload/image', {
-                        method: 'POST',
-                        body: formData,
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error || 'An error occurred while uploading the image.');
-                    }
-
-                    const data = await response.json();
-                    console.log('Image uploaded successfully:', data);
-                    console.log('Image URL:', data.url);
-
-                } catch (error) {
-                    console.error('Error uploading image:', error);
-                    alert('Error uploading image: ' + error.message);
+            let widget_cloudinary = cloudinary.createUploadWidget({
+                cloud_name: JSON.parse('{{ cloudName|raw }}'),
+                upload_preset: 'preset_ShareAlbum'
+            }, (err, result) => {
+                if(!err && result && result.event ==='success'){
+                    console.log('Imagen subida con éxito', result.info);
+                    imagen.src = result.info.secure_url;
                 }
             });
+
+            button.addEventListener('click', () => {
+                widget_cloudinary.open();
+            }, false);
         });
     </script>
+    -->
+
 {% endblock %}

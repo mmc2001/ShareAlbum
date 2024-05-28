@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+//require './vendor/autoload.php';
+
 use Cloudinary\Cloudinary;
+use Cloudinary\Api\Upload\UploadApi;
+use Cloudinary\Configuration\Configuration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,40 +17,61 @@ class UploadImageController extends AbstractController
     #[Route('/upload/image', name: 'app_upload_image', methods: ['POST'])]
     public function uploadImage(Request $request): Response
     {
-        $file = $request->files->get('image');
-
+        $file = 'https://upload.wikimedia.org/wikipedia/commons/0/01/Charvet_shirt.jpg';
+        //$file = $request->files->get('image');
+        /*
         if (!$file) {
-            return $this->json(['error' => 'No file uploaded.'], 400);
+            return new Response('No file uploaded.');
         }
-
+        */
         $cloudinary = new Cloudinary([
             'cloud' => [
                 'cloud_name' => $_ENV['CLOUDINARY_CLOUD_NAME'],
                 'api_key' => $_ENV['CLOUDINARY_API_KEY'],
                 'api_secret' => $_ENV['CLOUDINARY_API_SECRET'],
             ],
+            'url' => [
+                'scheme' => 'https',
+                'secure' => true,
+            ],
         ]);
-
+        /*
+        Configuration::instance([
+            'cloud' => [
+                'cloud_name' => $_ENV['CLOUDINARY_CLOUD_NAME'],
+                'api_key' => $_ENV['CLOUDINARY_API_KEY'],
+                'api_secret' => $_ENV['CLOUDINARY_API_SECRET'],
+            ],
+            'url' => [
+                'scheme' => 'https',
+                'secure' => true,
+            ]
+        ]);
+        */
         try {
-            // Desactivar la verificación del certificado SSL con cURL
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $result = $cloudinary->uploadApi()->upload($file->getRealPath(), [
-                'public_id' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
+            //$result = $cloudinary->uploadApi()->upload($file, [
+            $result = $cloudinary->uploadApi()->upload($file, [
+                'public_id' => 'Charvet_shirt',
                 'folder' => 'ShareAlbum',
+                'preset' => 'ml_default',
             ]);
+            print_r($result);
 
-            curl_close($ch);
-
-            return $this->json([
+            $response = new Response();
+            $response->setContent(json_encode([
                 'message' => 'Image uploaded successfully.',
                 'url' => $result['secure_url'],
-            ]);
+            ]));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
 
         } catch (\Exception $exception) {
-            return $this->json(['error' => $exception->getMessage()], 500);
+            $response = new Response();
+            $response->setContent(json_encode(['error' => $exception->getMessage()]));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
         }
     }
 }

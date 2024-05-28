@@ -1,13 +1,22 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Función para obtener las imágenes según el id y la propiedad elegida
-    async function obtenerImagenes(id, elegida) {
+    //async function obtenerImagenes(id, elegida) {
+    async function obtenerImagenes(elegida) {
         try {
-            const response = await fetch("/datos.json");
-            const data = await response.json();
-            const registro = data.find(item => item.id === id);
-            if (!registro) return [];
-            const imagenes = elegida ? registro.imagenes.filter(img => img.elegida) : registro.imagenes;
-            return imagenes.map(img => img.url);
+            const response = await fetch("/obtener/photos");
+            const jsonData = await response.json();
+            const data = JSON.parse(jsonData);
+
+            if (!Array.isArray(data)) {
+                throw new Error("La respuesta no es un array");
+            }
+
+            //const registro = data.find(item => item.id === id);
+            //console.log(registro);
+            //if (!registro) return [];
+
+            const imagenes = data.filter(img => img.has_been_selected === elegida);
+            return imagenes.map(img => img.photo_url);
         } catch (error) {
             console.error("Error al obtener las imágenes:", error);
             return [];
@@ -55,12 +64,12 @@ document.addEventListener("DOMContentLoaded", function() {
             const url = URL.createObjectURL(content);
             const a = document.createElement('a');
             a.href = url;
-            if (containerId == "container1") {
-                a.download = `albumCompleto.zip`;
-            } else if (containerId == "container2") {
-                a.download = `albumParcial.zip`;
-            } else if (containerId == "container3") {
-                a.download = `albumTerminado.zip`;
+            if (containerId === "container1") {
+                a.download = `fotosSinSeleccionar.zip`;
+            } else if (containerId === "container2") {
+                a.download = `fotosSeleccionadas.zip`;
+            } else if (containerId === "container3") {
+                a.download = `fotosEditadas.zip`;
             }
             a.style.display = 'none';
             document.body.appendChild(a);
@@ -72,8 +81,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Obtener el ID de la URL
     function obtenerIdDeURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        return parseInt(urlParams.get('id'));
+        const path = window.location.pathname;
+        const pathSegments = path.split('/');
+        const id = pathSegments[pathSegments.length - 1];
+        return parseInt(id);
     }
 
     // IDs y contenedores correspondientes
@@ -85,32 +96,42 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Iterar sobre los contenedores y generar las galerías
     contenedores.forEach(({ containerId, jsonId, elegida }) => {
-        obtenerImagenes(jsonId, elegida).then(imagenes => {
+        //obtenerImagenes(jsonId, elegida).then(imagenes => {
+        obtenerImagenes(elegida).then(imagenes => {
             generarGaleria(containerId, imagenes);
             handleDownloadClick(containerId);
         });
     });
 
-    function inicializarModal(id, elegida) {
+    let imagenes = [];
+    //function inicializarModal(id, elegida) {
+    function inicializarModal(elegida) {
         const galleryModal = document.getElementById("galleryModal");
         const trashIcon = document.querySelector("h1 i.fas.fa-trash-alt");
-        const fileInput = document.getElementById("uploadedimage");
+        //const fileInput = document.getElementById("uploadedimage");
 
-        async function obtenerImagenesModal(id, elegida) {
+        //async function obtenerImagenesModal(id, elegida) {
+        async function obtenerImagenesModal(elegida) {
             try {
-                const response = await fetch("/datos.json");
-                const data = await response.json();
-                const registro = data.find(item => item.id === id);
-                if (!registro) return [];
-                const imagenes = elegida ? registro.imagenes.filter(img => img.elegida) : registro.imagenes;
-                return imagenes.map(img => img.url);
+                const response = await fetch("/obtener/photos");
+                const jsonData = await response.json();
+                const data = JSON.parse(jsonData);
+
+                if (!Array.isArray(data)) {
+                    throw new Error("La respuesta no es un array");
+                }
+
+                //const registro = data.find(item => item.id === id);
+                //console.log(registro);
+                //if (!registro) return [];
+
+                imagenes = data.filter(img => img.has_been_selected === elegida);
+                return imagenes.map(img => img.photo_url);
             } catch (error) {
                 console.error("Error al obtener las imágenes:", error);
                 return [];
             }
         }
-
-        let imagenes = [];
 
         trashIcon.addEventListener("click", function() {
             imagenes.length = 0;
@@ -120,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Mostrar la galería de imágenes
         function mostrarGaleria() {
             galleryModal.innerHTML = "";
+            console.log(imagenes);
             imagenes.forEach((imagen, index) => {
                 const img = document.createElement("img");
                 img.src = imagen;
@@ -147,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
         function actualizarGaleria() {
             mostrarGaleria();
         }
-
+        /*
         function handleFileSelect(event) {
             const files = event.target.files;
 
@@ -165,10 +187,12 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
 
+
         fileInput.removeEventListener("change", handleFileSelect);
         fileInput.addEventListener("change", handleFileSelect);
-
-        obtenerImagenesModal(id, elegida).then(imgs => {
+        */
+        //obtenerImagenesModal(id, elegida).then(imgs => {
+        obtenerImagenesModal(elegida).then(imgs => {
             imagenes = imgs;
             mostrarGaleria();
         });
@@ -177,19 +201,22 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("editar1").addEventListener("click", function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
-        inicializarModal(obtenerIdDeURL(), false);
+        //inicializarModal(obtenerIdDeURL(), false);
+        inicializarModal(false);
     });
 
     document.getElementById("editar2").addEventListener("click", function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
         inicializarModal(obtenerIdDeURL(), true);
+        inicializarModal(true);
     });
 
     document.getElementById("editar3").addEventListener("click", function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
         inicializarModal(obtenerIdDeURL(), false);
+        inicializarModal(false);
     });
 
     document.getElementById("CerrarModal").addEventListener("click", function(event) {
@@ -200,27 +227,52 @@ document.addEventListener("DOMContentLoaded", function() {
     const addButton = document.getElementById('Añadir');
     const fileInput = document.getElementById('uploadedimage');
 
-    function openFileInput() {
-        fileInput.click();
-    }
-
-    // Eliminamos cualquier evento click previo y añadimos solo uno
-    addButton.removeEventListener('click', openFileInput);
-    addButton.addEventListener('click', openFileInput);
-
-    fileInput.addEventListener('change', function(event) {
-        const files = event.target.files;
-        console.log(files);
-    });
-
-    document.getElementById("GuardarModal").addEventListener("click", function(event) {
-        event.preventDefault();
-        console.log("GUARDADO");
-    });
-
-
-    //PRUEBA
-
-
+    document.getElementById("comprobar-button").addEventListener("click", widgetCloudinary);
 });
+
+function widgetCloudinary() {
+    let imagenesSubidas = [];
+    //const imagen = document.getElementById('prueba-photo');
+
+    cloudinary.createUploadWidget({
+        cloud_name: 'ddaq4my3n',
+        upload_preset: 'preset_ShareAlbum'
+    }, (err, result) => {
+        if (err) {
+            console.error('Error al subir la imagen', err);
+            return;
+        }
+
+        if (result && result.event === 'success') {
+            console.log('Imagen subida con éxito', result.info);
+            //imagen.src = result.info.secure_url;
+            imagenesSubidas.push(result.info.secure_url);
+
+            const datosParaEnviar = {
+                imagenes: imagenesSubidas
+            };
+
+            fetch('/save/photos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datosParaEnviar)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Respuesta del servidor:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }).open();
+
+}
 
