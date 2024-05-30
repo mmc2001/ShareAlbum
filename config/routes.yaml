@@ -78,3 +78,18 @@ app_obtener_photos:
     path: /obtener/photos
     controller: App\Controller\ObtenerPhotosController::getPhotos
     methods: [ 'GET' ]
+
+app_delete_photos:
+    path: /delete/photos/{id}
+    controller: App\Controller\DeletePhotosController::deletePhotos
+    methods: [ 'DELETE' ]
+
+app_update_photo:
+    path: /update/photo/{id}
+    controller: App\Controller\UpdatePhotoController::updatePhotos
+    methods: [ 'PUT' ]
+
+app_generate_token:
+    path: /generate/token/{id}
+    controller: App\Controller\GenerateTokenController::generateToken
+    methods: [ 'POST' ]

@@ -11,12 +11,22 @@ document.addEventListener("DOMContentLoaded", function() {
                 throw new Error("La respuesta no es un array");
             }
 
-            //const registro = data.find(item => item.id === id);
-            //console.log(registro);
-            //if (!registro) return [];
+            if (elegida === false){
+                const imagenes = data;
+                return imagenes.map(img => ({
+                    url: img.photo_url,
+                    has_been_selected: img.has_been_selected,
+                    id: img.id
+                }));
+            } else {
+                const imagenes = data.filter(img => img.has_been_selected === elegida);
+                return imagenes.map(img => ({
+                    url: img.photo_url,
+                    has_been_selected: img.has_been_selected,
+                    id: img.id
+                }));
+            }
 
-            const imagenes = data.filter(img => img.has_been_selected === elegida);
-            return imagenes.map(img => img.photo_url);
         } catch (error) {
             console.error("Error al obtener las imágenes:", error);
             return [];
@@ -24,25 +34,115 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Función para generar la galería de imágenes en el contenedor dado
+    // Define la función generarGaleria en el ámbito global
     function generarGaleria(containerId, imagenes) {
+
         var htmlCode = `<div class="container" id="${containerId}_lightgallery">`;
-        for (var i = 0; i < imagenes.length; i++) {
-            htmlCode += `<a href="${imagenes[i]}"`;
-            if (i % 2 === 0) {
-                htmlCode += ' class="vertical"';
-            } else if (i % 3 === 0) {
-                htmlCode += ' class="horizontal"';
-            } else if (i % 5 === 0) {
-                htmlCode += ' class="big"';
-            } else {
-                htmlCode += ' class=""';
+        if (containerId === 'container1') {
+            for (let i = 0; i < imagenes.length; i++) {
+                htmlCode += `<a href="${imagenes[i].url}"`;
+                if (i % 2 === 0) {
+                    htmlCode += ' class="vertical"';
+                } else if (i % 3 === 0) {
+                    htmlCode += ' class="horizontal"';
+                } else if (i % 5 === 0) {
+                    htmlCode += ' class="big"';
+                } else {
+                    htmlCode += ' class=""';
+                }
+                htmlCode += `><img src="${imagenes[i].url}" />`;
+
+                const heartIconClass = imagenes[i].has_been_selected ? 'fa-solid heart-icon2' : 'fa-regular heart-icon';
+                htmlCode += `<i class="${heartIconClass} fa-heart" data-id="${imagenes[i].id}"></i>`;
+
+                htmlCode += `</a>`;
             }
-            htmlCode += `><img src="${imagenes[i]}" /></a>`;
+            htmlCode += '</div>';
+        } else if(containerId === 'container2') {
+            for (let i = 0; i < imagenes.length; i++) {
+                htmlCode += `<a href="${imagenes[i].url}"`;
+                if (i % 2 === 0) {
+                    htmlCode += ' class="vertical"';
+                } else if (i % 3 === 0) {
+                    htmlCode += ' class="horizontal"';
+                } else if (i % 5 === 0) {
+                    htmlCode += ' class="big"';
+                } else {
+                    htmlCode += ' class=""';
+                }
+                htmlCode += `><img src="${imagenes[i].url}" />`;
+
+                const heartIconClass = imagenes[i].has_been_selected ? 'fa-solid heart-icon2' : 'fa-regular heart-icon';
+                htmlCode += `<i class="${heartIconClass} fa-heart" data-id="${imagenes[i].id}"></i>`;
+
+                htmlCode += `</a>`;
+            }
+            htmlCode += '</div>';
+        } else {
+            for (var i = 0; i < imagenes.length; i++) {
+                htmlCode += `<a href="${imagenes[i].url}"`;
+                if (i % 2 === 0) {
+                    htmlCode += ' class="vertical"';
+                } else if (i % 3 === 0) {
+                    htmlCode += ' class="horizontal"';
+                } else if (i % 5 === 0) {
+                    htmlCode += ' class="big"';
+                } else {
+                    htmlCode += ' class=""';
+                }
+                htmlCode += `><img src="${imagenes[i].url}" /></a>`;
+            }
+            htmlCode += '</div>';
         }
-        htmlCode += '</div>';
         document.getElementById(containerId).innerHTML = htmlCode;
+
+        // Obtener todos los <i> dentro del contenedor y adjuntar el event listener
+        var heartIcons = document.querySelectorAll(`#${containerId}_lightgallery i.fa-heart`);
+        heartIcons.forEach(icon => {
+            icon.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const id = event.target.dataset.id;
+                selectPhoto(id, event.target);
+            });
+        });
+
         var imagPop = document.getElementById(`${containerId}_lightgallery`);
         lightGallery(imagPop);
+    }
+
+    // Define la función selectPhoto en el ámbito global
+    async function selectPhoto(id, element) {
+
+        // Alternar el icono de corazón
+        if (element.classList.contains("fa-regular")) {
+            element.classList.remove("fa-regular");
+            element.classList.remove("heart-icon");
+            element.classList.add("fa-solid");
+            element.classList.add("heart-icon2");
+        } else {
+            element.classList.remove("fa-solid");
+            element.classList.remove("heart-icon2");
+            element.classList.add("fa-regular");
+            element.classList.add("heart-icon");
+        }
+        // Realizar la petición al servidor para actualizar el estado
+        try {
+            const response = await fetch(`/update/photo/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ has_been_selected: element.classList.contains("fa-solid") })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al actualizar la imagen: ' + response.status);
+            }
+        } catch (error) {
+            console.error('Error al actualizar el estado de la imagen:', error);
+        }
+        location.reload();
     }
 
     // Función para manejar la descarga de las imágenes del contenedor especificado
@@ -104,6 +204,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     let imagenes = [];
+    let deletePhotos = [];
     //function inicializarModal(id, elegida) {
     function inicializarModal(elegida) {
         const galleryModal = document.getElementById("galleryModal");
@@ -125,8 +226,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 //console.log(registro);
                 //if (!registro) return [];
 
-                imagenes = data.filter(img => img.has_been_selected === elegida);
-                return imagenes.map(img => img.photo_url);
+                imagenes = data.filter(img => img.has_been_selected === elegida).map(img => ({
+                    id: img.id,
+                    url: img.photo_url
+                }));
+
+                return imagenes;
             } catch (error) {
                 console.error("Error al obtener las imágenes:", error);
                 return [];
@@ -141,16 +246,16 @@ document.addEventListener("DOMContentLoaded", function() {
         // Mostrar la galería de imágenes
         function mostrarGaleria() {
             galleryModal.innerHTML = "";
-            console.log(imagenes);
             imagenes.forEach((imagen, index) => {
                 const img = document.createElement("img");
-                img.src = imagen;
+                img.src = imagen.url;
                 img.alt = "Imagen";
 
                 const closeButton = document.createElement("button");
                 closeButton.textContent = "x";
                 closeButton.classList.add("close-button");
                 closeButton.addEventListener("click", () => {
+                    deletePhotos.push(imagen.id);
                     imagenes.splice(index, 1);
                     actualizarGaleria();
                 });
@@ -208,14 +313,14 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("editar2").addEventListener("click", function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
-        inicializarModal(obtenerIdDeURL(), true);
+        //inicializarModal(obtenerIdDeURL(), true);
         inicializarModal(true);
     });
 
     document.getElementById("editar3").addEventListener("click", function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
-        inicializarModal(obtenerIdDeURL(), false);
+        //inicializarModal(obtenerIdDeURL(), false);
         inicializarModal(false);
     });
 
@@ -224,12 +329,71 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("modalEditarAlbum").style.display = "none";
     });
 
-    const addButton = document.getElementById('Añadir');
-    const fileInput = document.getElementById('uploadedimage');
+    //const addButton = document.getElementById('Añadir');
+    //const fileInput = document.getElementById('uploadedimage');
 
-    document.getElementById("comprobar-button").addEventListener("click", widgetCloudinary);
+    //document.getElementById("comprobar-button").addEventListener("click", widgetCloudinary);
+
+    document.getElementById("GuardarModal").addEventListener("click", eliminarImagenes);
+    async function eliminarImagenes() {
+        console.log(deletePhotos);
+        // Enviar imágenes para eliminar al controlador
+        if (deletePhotos.length > 0) {
+            deletePhotos.map(id => {
+                return fetch(`/delete/photos/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('HTTP error ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(`Imagen ${id} eliminada correctamente:`, data);
+                    })
+                    .catch(error => {
+                        console.error(`Error al eliminar la imagen ${id}:`, error);
+                    });
+            });
+            location.reload();
+        }
+    }
+
+    document.getElementById('generateToken').addEventListener('click',  () => {
+        generateToken();
+    });
+
 });
 
+    async function generateToken(){
+        try {
+            const response = await fetch('/generate/token/{id}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ access: 'guest' })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                console.log('Token generado:', result.token);
+                // Aquí puedes mostrar el token al usuario o hacer cualquier otra cosa que necesites
+            } else {
+                console.error('Error al generar el token:', result.message);
+            }
+        } catch (error) {
+            console.error('Error al generar el token:', error);
+        }
+    }
+
+
+/*
 function widgetCloudinary() {
     let imagenesSubidas = [];
     //const imagen = document.getElementById('prueba-photo');
@@ -273,6 +437,7 @@ function widgetCloudinary() {
                 });
         }
     }).open();
-
+    //location.reload();
 }
+*/
 
