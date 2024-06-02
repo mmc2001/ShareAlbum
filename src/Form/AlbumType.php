@@ -2,32 +2,36 @@
 
 namespace App\Form;
 
+use App\Entity\Album;
+use App\Entity\Photos;
 use App\Entity\Session;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserDataType extends AbstractType
+class AlbumType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
             ->add('name')
-            ->add('surnames')
-            ->add('dni')
-            ->add('telephone')
+            ->add('session', EntityType::class, [
+                'class' => Session::class,
+                'choice_label' => 'id',
+            ])
+            ->add('photos', EntityType::class, [
+                'class' => Photos::class,
+                'choice_label' => 'id',
+                'multiple' => true,
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Album::class,
         ]);
     }
 }

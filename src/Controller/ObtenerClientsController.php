@@ -30,7 +30,8 @@ class ObtenerClientsController extends AbstractController
                 'surnames' => $client->getSurnames(),
                 'dni' => $client->getDni(),
                 'telephone' => $client->getTelephone(),
-                'email' => $client->getEmail()
+                'email' => $client->getEmail(),
+                'rol' => $client->getRoles()
             ];
         }
 

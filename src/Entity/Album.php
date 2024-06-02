@@ -18,9 +18,6 @@ class Album
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $coverUrl = null;
-
     #[ORM\ManyToOne(inversedBy: 'album')]
     private ?Session $session = null;
 
@@ -55,18 +52,6 @@ class Album
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getCoverUrl(): ?string
-    {
-        return $this->coverUrl;
-    }
-
-    public function setCoverUrl(string $coverUrl): static
-    {
-        $this->coverUrl = $coverUrl;
 
         return $this;
     }

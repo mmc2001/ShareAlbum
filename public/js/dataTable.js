@@ -41,8 +41,8 @@ const dataTableOptions = {
     ],
     lengthMenu: [5, 10, 15, 20, 100],
     columnDefs: [
-        { className: "centered", targets: [0, 4, 5] },
-        { orderable: false, targets: [4, 5] },
+        { className: "centered", targets: [0, 2, 3, 4, 6, 7, 8, 9] },
+        { orderable: false, targets: [4, 7, 8] },
         { searchable: false, targets: [1] }
     ],
     destroy: true,
@@ -99,8 +99,12 @@ const listUsers = async () => {
             <tr>
                 <td>${index+1}</td>
                 <td><a href="/albums/${session.id}" class="album">${session.name}</a></td>
-                <td>${session.name}</td>
+                <td>${session.service}</td>
                 <td>${fechaFormateada}</td>
+                <td>${session.price}€</td>
+                <td>${session.description}</td>
+                <td>Moisés Moyano Cejudo</td>
+                <td>Juan Pérez González</td>
                 <td class="bloque">
                     <div style="display: none;">
                         ${session.name}
@@ -126,16 +130,22 @@ const listUsers = async () => {
         $('.editarSesion').click(function(event) {
             event.preventDefault();
             const userId = $(this).closest('tr').find('td:first').text();
-            const userAlbum = $(this).closest('tr').find('td:eq(1)').text();
-            const userPhotographer = $(this).closest('tr').find('td:eq(2)').text();
-            const userClient = $(this).closest('tr').find('td:eq(3)').text();
-            const userTicket = $(this).closest('tr').find('td:eq(4)').text().trim();
+            const userSession = $(this).closest('tr').find('td:eq(1)').text();
+            const userService = $(this).closest('tr').find('td:eq(2)').text();
+            const userDate = $(this).closest('tr').find('td:eq(3)').text();
+            const userPrice = $(this).closest('tr').find('td:eq(4)').text();
+            const userDescription = $(this).closest('tr').find('td:eq(5)').text();
+            const userPhotographer = $(this).closest('tr').find('td:eq(6)').text();
+            const userClient = $(this).closest('tr').find('td:eq(7)').text();
 
-            $('#modalEditarSesion input[name="session_name"]').val(userId);
-            $('#modalEditarSesion input[name="album"]').val(userAlbum);
+            $('#modalEditarSesion input[name="id"]').val(userId);
+            $('#modalEditarSesion input[name="session"]').val(userSession);
+            $('#modalEditarSesion input[name="service"]').val(userService);
+            $('#modalEditarSesion input[name="date"]').val(userDate);
+            $('#modalEditarSesion input[name="price"]').val(userPrice);
+            $('#modalEditarSesion input[name="description"]').val(userDescription);
             $('#modalEditarSesion input[name="photographer"]').val(userPhotographer);
             $('#modalEditarSesion input[name="client"]').val(userClient);
-            $('#modalEditarSesion input[name="ticket"]').val(userTicket);
 
             $('#modalEditarSesion').css('display', 'grid');
         });
@@ -203,7 +213,7 @@ const listUsers = async () => {
                                         </div>
                                     </div>
                                     <div class="col-xs-4">
-                                        <p class="lead">Álbum # ${userData.id}</p>
+                                        <p class="lead">Sesión # ${userData.id}</p>
                                     </div>
                                 </div>
                                 <hr>

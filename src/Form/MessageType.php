@@ -42,9 +42,8 @@ class MessageType extends AbstractType
                 'placeholder' => 'Cliente',
             ])
             ->add('subject')
-            ->add('file', FileType::class, [
-                'label' => 'Choose a file',
-                'mapped' => false, // Si no estás guardando el archivo en la entidad Message
+            ->add('fileUrl', FileType::class, [
+                'label' => 'Elige un fichero',
                 'required' => false, // Si no es obligatorio subir un archivo
             ])
             ->add('textMessage', TextareaType::class, [

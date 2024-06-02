@@ -90,6 +90,16 @@ app_update_photo:
     methods: [ 'PUT' ]
 
 app_generate_token:
-    path: /generate/token/{id}
+    path: /generate/token
     controller: App\Controller\GenerateTokenController::generateToken
     methods: [ 'POST' ]
+
+app_public_album:
+    path: /public/album
+    controller: App\Controller\PublicAlbumController::publicAlbum
+    methods: [ 'GET' ]
+
+app_obtener_albums:
+    path: /obtener/albums
+    controller: App\Controller\ObtenerAlbumsController::getAlbums
+    methods: [ 'GET' ]

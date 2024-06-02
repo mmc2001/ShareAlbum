@@ -19,10 +19,11 @@
     <div style="width: 100vw;">
         <div class="cabecera">
             <h2 class="titulo">Sesiones disponibles</h2>
-            <div>
+            <div style="display: flex; align-items: center; gap: 6px">
                 <button class="boton" id="nuevaSesion">Sesión</button>
-                <button class="boton" id="nuevoExtra">Extra</button>
+                <div class="divider"></div>
                 <button class="boton" id="nuevoServicio">Servicio</button>
+                <button class="boton" id="nuevoExtra">Extra</button>
             </div>
         </div>
         <div class="container">
@@ -33,7 +34,11 @@
                             <thead>
                             <tr>
                                 <th>Nº</th>
-                                <th>Álbum</th>
+                                <th>Sesión</th>
+                                <th>Servicio</th>
+                                <th>Fecha</th>
+                                <th>Precio</th>
+                                <th>Descripción</th>
                                 <th>Fotógrafo</th>
                                 <th>Cliente</th>
                                 <th>Ticket</th>
@@ -172,14 +177,22 @@
             <h1>Editar sesión</h1>
             <div class="contenedorFormularioEditarSesion" id="contenedorFormularioEditarSesion">
                 <form method="post">
-                    <label class="label">Álbum</label>
+                    <label class="label">Id</label>
+                    <label class="label">Sesión</label>
+                    <input type="text" class="bloquear" name="id" disabled/>
+                    <input type="text" name="session" />
+                    <label class="label">Servicio</label>
+                    <label class="label">Fecha</label>
+                    <input type="text" name="service" />
+                    <input type="text" name="date" />
+                    <label class="label">Precio</label>
+                    <label class="label">Descripción</label>
+                    <input type="text" name="price" />
+                    <input type="text" name="description" />
                     <label class="label">Fotógrafo</label>
-                    <input type="text" name="album" />
-                    <input type="text" name="photographer" />
                     <label class="label">Cliente</label>
-                    <label class="label">Ticket</label>
+                    <input type="text" name="photographer" />
                     <input type="text" name="client" />
-                    <input type="text" name="ticket" />
                     <button id="cerrarEditarSesion" class="button">Cerrar</button>
                     <button id="guardarEditarSesion">Guardar</button>
                 </form>

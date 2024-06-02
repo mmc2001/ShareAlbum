@@ -1,0 +1,6 @@
+POST https://127.0.0.1:8000/generate/token
+Content-Type: application/json
+
+{
+  "album" : { "id": 123 }
+}

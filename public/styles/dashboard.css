@@ -644,6 +644,34 @@ textarea {
     font-size: small;
 }
 
+/* Quitar los estilos predeterminados del enlace */
+.no-style-link {
+    color: inherit; /* Mantiene el color del texto */
+    text-decoration: none; /* Quita el subrayado */
+}
+
+/* Asegurar que no haya cambios de estilo al hacer clic */
+.no-style-link:link,
+.no-style-link:visited,
+.no-style-link:hover,
+.no-style-link:active {
+    color: inherit; /* Mantiene el color del texto en todos los estados */
+    text-decoration: none; /* Quita el subrayado en todos los estados */
+}
+
+/* Opcional: Si quieres un efecto visual al pasar el ratón sobre el enlace */
+.no-style-link:hover .tarjeta {
+    /* Puedes agregar cualquier efecto visual deseado, como cambiar el fondo */
+    background-color: #f0f0f0; /* Por ejemplo, cambiar el fondo */
+}
+
+/* Para asegurar que los textos dentro del enlace no cambien de color */
+.no-style-link .tarjeta .contenido-texto h3,
+.no-style-link .tarjeta .contenido-texto p {
+    color: inherit;
+}
+
+
 
 /* MENSAJES */
 

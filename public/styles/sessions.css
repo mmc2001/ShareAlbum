@@ -291,7 +291,7 @@ input {
 /* Estilo para los checkboxes */
 .desplegable input[type="checkbox"] {
     display: inline-block; /* Mostrar los checkboxes en línea */
-    width: 60px; /* Ajustar el ancho al contenido */
+    width: 120px; /* Ajustar el ancho al contenido */
 }
 
 
@@ -490,7 +490,7 @@ h1, .label {
 }
 
 .cabecera {
-    margin: 120px 0px 0px 50px;
+    margin-top: 120px;
     height: 50px;
     display: flex;
     align-items: center;
@@ -662,6 +662,13 @@ h1, .label {
     text-align: center;
 }
 
+.divider {
+    height: 30px;
+    width: 1.5px;
+    background-color: #ccc;
+    margin: 0 10px;
+}
+
 .botones {
     display: flex;
     justify-content: center;
@@ -684,6 +691,11 @@ h1, .label {
     font-weight: bold;
     letter-spacing: 1px;
     transition: transform 80ms ease-in;
+}
+
+.boton:hover{
+    background-color: var(--color-primario);
+    color: var(--color-secundario);
 }
 
 .boton:active {
@@ -944,6 +956,11 @@ select {
 
 
 /* MODAL EDITAR SESIÓN */
+.bloquear{
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 1px solid #ced4da;
+}
 .modalEditarSesion {
     display: none;
     justify-content: center;

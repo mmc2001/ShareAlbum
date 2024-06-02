@@ -113,4 +113,19 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+// LOADING
+
+document.addEventListener("DOMContentLoaded", function() {
+    const loadingScreen = document.getElementById("loading-screen");
+
+    // Mostrar el loading screen cuando se está cargando la página
+    loadingScreen.style.display = "flex";
+
+    // Ocultar el loading screen cuando la página se ha cargado completamente
+    window.addEventListener("load", function() {
+        loadingScreen.style.display = "none";
+    });
+});
+
+
 

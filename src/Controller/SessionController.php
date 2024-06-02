@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Album;
 use App\Entity\Extras;
 use App\Entity\Services;
 use App\Entity\Session;
+use App\Entity\User;
 use App\Form\ExtrasType;
 use App\Form\NewPasswordType;
 use App\Form\ServicesType;
@@ -61,7 +63,29 @@ class SessionController extends AbstractController
         $formNewPassword->handleRequest($request);
 
         if ($formSession->isSubmitted() && $formSession->isValid()) {
+
+            $usersForm = $formSession->get('users')->getData();
+            foreach ($usersForm as $user) {
+                $user->addSession($session);
+                $this->em->persist($user);
+            }
+
+            $extrasForm = $formSession->get('extras')->getData();
+            foreach ($extrasForm as $extra) {
+                $extra->addSession($session);
+                $this->em->persist($extra);
+            }
+
             $this->em->persist($session);
+
+            $albumNames = ['Álbum FSS', 'Álbum FE'];
+            foreach ($albumNames as $albumName) {
+                $album = new Album();
+                $album->setName($albumName);
+                $album->setSession($session);
+                $this->em->persist($album);
+            }
+
             $this->em->flush();
             return $this->redirectToRoute('app_session');
         }

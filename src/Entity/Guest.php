@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use AllowDynamicProperties;
 use App\Repository\GuestRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: GuestRepository::class)]
+#[AllowDynamicProperties] #[ORM\Entity(repositoryClass: GuestRepository::class)]
 class Guest
 {
     #[ORM\Id]
@@ -16,11 +18,12 @@ class Guest
     #[ORM\Column(length: 255)]
     private ?string $token = null;
 
-    #[ORM\Column]
-    private ?bool $tokenHasBeenUsed = null;
-
     #[ORM\ManyToOne(inversedBy: 'guest')]
     private ?Album $album = null;
+
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $expirationDate = null;
 
     public function getId(): ?int
     {
@@ -39,14 +42,9 @@ class Guest
         return $this;
     }
 
-    public function isTokenHasBeenUsed(): ?bool
+    public function setExpirationDate(\DateTimeInterface $expirationDate): static
     {
-        return $this->tokenHasBeenUsed;
-    }
-
-    public function setTokenHasBeenUsed(bool $tokenHasBeenUsed): static
-    {
-        $this->tokenHasBeenUsed = $tokenHasBeenUsed;
+        $this->expirationDate = $expirationDate;
 
         return $this;
     }
@@ -61,5 +59,10 @@ class Guest
         $this->album = $album;
 
         return $this;
+    }
+
+    public function getExpirationDate(): ?\DateTimeInterface
+    {
+        return $this->expirationDate;
     }
 }

@@ -216,6 +216,12 @@ svg {
     align-items: center;
     gap: 50px;
 }
+.contain > a > svg:hover {
+    transform: scale(1.2);
+}
+.contain > span > svg:hover {
+    transform: scale(1.2);
+}
 
 
 .contenedorImagenes {

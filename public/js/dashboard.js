@@ -385,20 +385,22 @@ document.addEventListener("DOMContentLoaded", function () {
                         const mes = fecha.getMonth() + 1;
                         const anio = fecha.getFullYear();
                         const fechaFormateada = `${anio}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`;
-
+                        console.log(sesion);
                         // Concatenar el contenido del objeto clientes
                         const clientes = Object.values(sesion.clients).join(', ');
 
                         // Construir la estructura HTML para la sesión
                         return `
-                        <div class="tarjeta">
-                            <img src="/img/portadaSession.png" alt="Descripción de la imagen" />
-                            <div class="contenido-texto">
-                                <h3 class="tituloTarjeta">${sesion.name}</h3>
-                                <p><span>Fecha:</span> ${fechaFormateada}</p>
-                                <p><span>Cliente:</span> ${clientes}</p>
+                        <a href="/albums/${sesion.id}" class="no-style-link">
+                            <div class="tarjeta">
+                                <img src="/img/portadaSession.png" alt="Descripción de la imagen" />
+                                <div class="contenido-texto">
+                                        <h3 class="tituloTarjeta">${sesion.name}</h3>
+                                        <p><span>Fecha:</span> ${fechaFormateada}</p>
+                                        <p><span>Cliente:</span> ${sesion.clients}</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     `;
                     }).join('');
 
@@ -414,37 +416,54 @@ document.addEventListener("DOMContentLoaded", function () {
     cargarSesionesDisponibles();
 });
 
-
-
-
-
-
-/* CLIENTES DISPONIBLES
+/* CLIENTES DISPONIBLES */
 document.addEventListener("DOMContentLoaded", function() {
     const listadoClientesDisponibles = document.getElementById("listadoClientesDisponibles");
 
     function cargarClientesDisponibles() {
-        fetch('datosClientes.json')
-            .then(response => response.json())
-            .then(data => {
-                const htmlClientes = data.map(cliente => `
-                    <div class="tarjeta">
-                        <img src="/img/usuario.png" alt="Descripción de la imagen" style="padding: 8px;">
-                        <div class="contenido-texto">
-                            <h2>${cliente.nombre}</h2>
-                            <p><span>Teléfono:</span> ${cliente.telefono}</p>
-                            <p><span>Email:</span> ${cliente.email}</p>
-                        </div>
-                    </div>
-                `).join('');
-
-                listadoClientesDisponibles.innerHTML = htmlClientes;
+        fetch('/obtener/clients')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener los clientes');
+                }
+                return response.text(); // Convertir la respuesta a texto
             })
-            .catch(error => console.error('Error al cargar los clientes disponibles:', error));
+            .then(data => {
+                const jsonData = JSON.parse(data);
+                const jsonArray = JSON.parse(jsonData);
+
+                // Verificar si tiene elementos
+                if (Array.isArray(jsonArray) && jsonArray.length > 0) {
+                    const htmlClientes = jsonArray.map(cliente => {
+                        if (cliente.rol[0] === '%ROLE_USER%'){
+                            // Concatenar el contenido del objeto clientes
+                            const nombreCompleto = cliente.name + " " + cliente.surnames;
+
+                            // Construir la estructura HTML para la sesión
+                            return `
+                            <div class="tarjeta">
+                                <img src="/img/usuario.png" alt="Descripción de la imagen" style="padding: 8px;"/>
+                                <div class="contenido-texto">
+                                    <h3 class="tituloTarjeta">${nombreCompleto}</h3>
+                                    <p><span>Teléfono:</span> ${cliente.telephone}</p>
+                                    <p><span>Email:</span> ${cliente.email}</p>
+                                </div>
+                            </div>
+                            `;
+                        }
+                    }).join('');
+
+                    // Insertar las sesiones en el contenedor HTML
+                    listadoClientesDisponibles.innerHTML = htmlClientes;
+                } else {
+                    console.error('Error al cargar los clientes disponibles: Los datos recibidos no son un array o están vacíos');
+                }
+            })
+            .catch(error => console.error('Error al cargar los clientes disponibles:', error.message));
     }
 
-    cargarClientesDisponibles()
-});*/
+    cargarClientesDisponibles();
+});
 
 
 
@@ -496,8 +515,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });*/
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("message_file").addEventListener("change", function () {
-        var fileInput = document.querySelector("#message_file");
+    document.getElementById("message_fileUrl").addEventListener("change", function () {
+        var fileInput = document.querySelector("#message_fileUrl");
         var filename = fileInput.value;
         var noFileDisplay = document.querySelector("#noFile");
 
@@ -527,7 +546,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const aux = document.getElementById("message_recipient").value;
         const cliente = document.querySelector("#message_recipient option[value='" + aux + "']").innerHTML;
         const asunto = document.getElementById("message_subject").value;
-        const rutaCompleta = document.getElementById("message_file").value;
+        const rutaCompleta = document.getElementById("message_fileUrl").value;
         const partesRuta = rutaCompleta.split("\\");
         const fichero = partesRuta[partesRuta.length - 1];
         const mensaje = document.getElementById("message_textMessage").value;

@@ -2,14 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Message;
 use App\Form\EventType;
 use App\Form\MessageType;
 use App\Form\NewPasswordType;
 use App\Form\UserDataType;
-use App\Repository\AlbumRepository;
 use App\Repository\PhotosRepository;
 use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
@@ -17,11 +15,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class DashboardController extends AbstractController
 {
@@ -42,7 +42,7 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(UserRepository $userRepository, AlbumRepository $albumRepository, PhotosRepository $photosRepository, Request $request, Security $security, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    public function index(UserRepository $userRepository, SessionRepository $sessionRepository, PhotosRepository $photosRepository, Request $request, Security $security, EntityManagerInterface $entityManager, MailerInterface $mailer, SluggerInterface $slugger): Response
     {
         $nClient = $userRepository->createQueryBuilder('u')
             ->select('COUNT(u)')
@@ -50,7 +50,7 @@ class DashboardController extends AbstractController
             ->setParameter('role', '["%ROLE_USER%"]')
             ->getQuery()
             ->getSingleScalarResult();
-        $nAlbum = $albumRepository->count([]);
+        $nSession = $sessionRepository->count([]);
         $nPhotos = $photosRepository->count([]);
 
         $message = new Message();
@@ -75,7 +75,23 @@ class DashboardController extends AbstractController
 
             $message->setRecipient($formMessage->get('recipient')->getData());
             $message->setSubject($formMessage->get('subject')->getData());
-            $message->setFileUrl($formMessage->get('file')->getData());
+
+            $file = $formMessage->get('fileUrl')->getData();
+            if ($file) {
+                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+                try {
+                    $file->move(
+                        $this->getParameter('files_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    throw new \Exception('Ha habido un problema al subir el archivo.');
+                }
+                $message->setFileUrl($newFilename);
+            }
+
             $message->setTextMessage($formMessage->get('textMessage')->getData());
             $message->setSender($user);
 
@@ -91,6 +107,7 @@ class DashboardController extends AbstractController
                 ->context([
                     'subject' => $message->getSubject(),
                     'message' => $message->getTextMessage(),
+
                 ]);
 
             $mailer->send($email);
@@ -153,7 +170,7 @@ class DashboardController extends AbstractController
 
         return $this->render('dashboard/index.html.twig', [
             'user' => $user,
-            'nAlbum' => $nAlbum,
+            'nSession' => $nSession,
             'nClient' => $nClient,
             'nPhotos' => $nPhotos,
             'formMessage' => $formMessage->createView(),

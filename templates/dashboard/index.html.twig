@@ -19,9 +19,9 @@
                 </div>
                 <div class="contadores">
                     <div class="contadorIndividual">
-                        <h3 class="number">{{ nAlbum }}</h3>
+                        <h3 class="number">{{ nSession }}</h3>
                         <div style="margin-top: 5px;">
-                            <p class="titulosContadores">ÁLBUMES</p>
+                            <p class="titulosContadores">SESIONES</p>
                         </div>
                     </div>
                     <div class="contadorIndividual">
@@ -112,7 +112,7 @@
                 <div id="listadoClientesDisponibles"  class="lista1"></div>
             </div>
             <div class="boton">
-                <a href="/ClientesDisponibles/index.html">Más info</a>
+                <a href="{{ path('app_client') }}">Más info</a>
             </div>
         </div>
 
@@ -130,7 +130,7 @@
                         <div class="file-select">
                             <div class="file-select-button" id="fileName">Ficheros</div>
                             <div class="file-select-name" id="noFile">No hay ficheros</div>
-                            {{ form_widget(formMessage.file, {'attr': {'class': 'padding form-control', 'id': 'chooseFile'}}) }}
+                            {{ form_widget(formMessage.fileUrl, {'attr': {'class': 'padding form-control', 'id': 'chooseFile'}}) }}
                         </div>
                     </div>
                     {{ form_widget(formMessage.textMessage, {'attr': {'class': 'padding', 'placeholder': 'Mensaje'}}) }}
@@ -148,7 +148,7 @@
     <!-- Modal Nueva Tarea -->
     <div class="modal" id="modal">
         <div class="modal-content">
-            <h1 class="tituloModal">Nuevo Evento</h1>
+            <h1 class="tituloModal">Nueva Tarea</h1>
             <div class="contenedorFormulario" id="contenedorFormulario">
                 <form method="post" id="formEvent">
                     {#  {{ form_errors(formEvent) }} #}

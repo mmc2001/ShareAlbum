@@ -10,6 +10,8 @@ parameters:
         api_secret: '%env(CLOUDINARY_API_SECRET)%'
         secure: '%env(CLOUDINARY_SECURE)%'
 
+    files_directory: '%kernel.project_dir%/public/uploads/files'
+
 services:
     # default configuration for services in *this* file
     _defaults:

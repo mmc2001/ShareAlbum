@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Función para obtener las imágenes según el id y la propiedad elegida
-    //async function obtenerImagenes(id, elegida) {
-    async function obtenerImagenes(elegida) {
+    async function obtenerImagenes(id, elegida) {
+    //async function obtenerImagenes(elegida) {
         try {
             const response = await fetch("/obtener/photos");
             const jsonData = await response.json();
@@ -196,8 +196,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Iterar sobre los contenedores y generar las galerías
     contenedores.forEach(({ containerId, jsonId, elegida }) => {
-        //obtenerImagenes(jsonId, elegida).then(imagenes => {
-        obtenerImagenes(elegida).then(imagenes => {
+        obtenerImagenes(jsonId, elegida).then(imagenes => {
+        //obtenerImagenes(elegida).then(imagenes => {
             generarGaleria(containerId, imagenes);
             handleDownloadClick(containerId);
         });
@@ -205,14 +205,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let imagenes = [];
     let deletePhotos = [];
-    //function inicializarModal(id, elegida) {
-    function inicializarModal(elegida) {
+    function inicializarModal(id, elegida) {
+    //function inicializarModal(elegida) {
         const galleryModal = document.getElementById("galleryModal");
         const trashIcon = document.querySelector("h1 i.fas.fa-trash-alt");
         //const fileInput = document.getElementById("uploadedimage");
 
-        //async function obtenerImagenesModal(id, elegida) {
-        async function obtenerImagenesModal(elegida) {
+        async function obtenerImagenesModal(id, elegida) {
+        //async function obtenerImagenesModal(elegida) {
             try {
                 const response = await fetch("/obtener/photos");
                 const jsonData = await response.json();
@@ -309,14 +309,14 @@ document.addEventListener("DOMContentLoaded", function() {
         //inicializarModal(obtenerIdDeURL(), false);
         inicializarModal(false);
     });
-
+    /*
     document.getElementById("editar2").addEventListener("click", function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
         //inicializarModal(obtenerIdDeURL(), true);
         inicializarModal(true);
     });
-
+    */
     document.getElementById("editar3").addEventListener("click", function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //const addButton = document.getElementById('Añadir');
     //const fileInput = document.getElementById('uploadedimage');
 
-    //document.getElementById("comprobar-button").addEventListener("click", widgetCloudinary);
+    document.getElementById("comprobar-button").addEventListener("click", widgetCloudinary);
 
     document.getElementById("GuardarModal").addEventListener("click", eliminarImagenes);
     async function eliminarImagenes() {
@@ -363,37 +363,43 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    document.getElementById('generateToken').addEventListener('click',  () => {
-        generateToken();
-    });
+    document.getElementById('generateToken').addEventListener('click', generateToken);
 
 });
 
-    async function generateToken(){
-        try {
-            const response = await fetch('/generate/token/{id}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ access: 'guest' })
-            });
+async function generateToken() {
+    const albumId = 123;
+    const album = { id: albumId };
 
-            const result = await response.json();
+    try {
+        const response = await fetch('/generate/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ album })
+        });
 
-            if (result.success) {
-                console.log('Token generado:', result.token);
-                // Aquí puedes mostrar el token al usuario o hacer cualquier otra cosa que necesites
-            } else {
-                console.error('Error al generar el token:', result.message);
-            }
-        } catch (error) {
-            console.error('Error al generar el token:', error);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+
+        const result = await response.json();
+
+        if (result.success) {
+            const token = result.token;
+            const url = `${window.location.origin}/public/album?token=${token}`;
+            await navigator.clipboard.writeText(url);
+            alert('URL copiada al portapapeles: ' + url);
+        } else {
+            alert('Error al generar el token: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al generar el token');
     }
+}
 
-
-/*
 function widgetCloudinary() {
     let imagenesSubidas = [];
     //const imagen = document.getElementById('prueba-photo');
@@ -413,7 +419,8 @@ function widgetCloudinary() {
             imagenesSubidas.push(result.info.secure_url);
 
             const datosParaEnviar = {
-                imagenes: imagenesSubidas
+                imagenes: imagenesSubidas,
+                albumId: ''
             };
 
             fetch('/save/photos', {
@@ -439,5 +446,4 @@ function widgetCloudinary() {
     }).open();
     //location.reload();
 }
-*/
 
