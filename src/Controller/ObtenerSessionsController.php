@@ -26,14 +26,19 @@ class ObtenerSessionsController extends AbstractController
         // Convertir las sesiones a un array asociativo
         $sessionsArray = [];
         foreach ($sessions as $session) {
+            $users = [];
+            foreach ($session->getUsers() as $user) {
+                $users[] = $user->getName() . ' ' . $user->getSurnames();
+            }
+            $usersString = implode(', ', $users);
             $sessionsArray[] = [
                 'id' => $session->getId(),
                 'name' => $session->getName(),
-                'service' => $session->getService(),
+                'service' => $session->getService()->getName(),
                 'date' => $session->getDate(),
                 'price' => $session->getPriceSession(),
                 'description' => $session->getDescriptionSession(),
-                'clients' => $session->getUsers(),
+                'clients' => $usersString,
             ];
         }
 

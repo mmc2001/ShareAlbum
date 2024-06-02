@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
+
+    // Obtener el ID de la URL
+    function obtenerIdDeURL() {
+        const path = window.location.pathname;
+        const pathSegments = path.split('/');
+        const id = pathSegments[pathSegments.length - 1];
+        return parseInt(id);
+    }
+
     // Función para obtener las imágenes según el id y la propiedad elegida
     async function obtenerImagenes(id, elegida) {
     //async function obtenerImagenes(elegida) {
@@ -177,14 +186,6 @@ document.addEventListener("DOMContentLoaded", function() {
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
         });
-    }
-
-    // Obtener el ID de la URL
-    function obtenerIdDeURL() {
-        const path = window.location.pathname;
-        const pathSegments = path.split('/');
-        const id = pathSegments[pathSegments.length - 1];
-        return parseInt(id);
     }
 
     // IDs y contenedores correspondientes
