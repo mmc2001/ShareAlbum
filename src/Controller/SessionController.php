@@ -42,9 +42,11 @@ class SessionController extends AbstractController
         $formSession = $this->createForm(SessionType::class, $session);
         $formSession->handleRequest($request);
 
-        $sessionUpdate = new Session();
-        $formSessionUpdate = $this->createForm(SessionType::class, $sessionUpdate);
+        /*
+        $sessionUpdate = null;
+        $formSessionUpdate = $this->createForm(SessionType::class, $session);
         $formSessionUpdate->handleRequest($request);
+        */
 
         $extras = new Extras();
         $formExtras = $this->createForm(ExtrasType::class, $extras);
@@ -89,13 +91,22 @@ class SessionController extends AbstractController
             $this->em->flush();
             return $this->redirectToRoute('app_session');
         }
-
+        /*
         if ($formSessionUpdate->isSubmitted() && $formSessionUpdate->isValid()) {
+
+            $sessionUpdate = $this->em->getRepository(Session::class)->find($session->getId());
+
+            $sessionUpdate->setName($session->getName());
+            $sessionUpdate->setService($session->getService());
+            $sessionUpdate->setDate($session->getDate());
+            $sessionUpdate->setPriceSession($session->getPriceSession());
+            $sessionUpdate->setDescriptionSession($session->getDescriptionSession());
+
             $this->em->persist($sessionUpdate);
             $this->em->flush();
             return $this->redirectToRoute('app_session');
         }
-
+        */
         if ($formExtras->isSubmitted() && $formExtras->isValid()) {
             $this->em->persist($extras);
             $this->em->flush();
@@ -141,7 +152,7 @@ class SessionController extends AbstractController
 
         return $this->render('/session/index.html.twig', [
             'formSession' => $formSession->createView(),
-            'formSessionUpdate' => $formSessionUpdate->createView(),
+            //'formSessionUpdate' => $formSessionUpdate->createView(),
             'formExtras' => $formExtras->createView(),
             'formServices' => $formServices->createView(),
             'formUserData' => $formUserData->createView(),
@@ -153,7 +164,7 @@ class SessionController extends AbstractController
     public function data(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sessions = $entityManager->getRepository(Session::class)->findAll();
-        
+
         $data = [];
         foreach ($sessions as $session) {
             $data[] = [

@@ -36,6 +36,7 @@
                                 <th>Nº</th>
                                 <th>Sesión</th>
                                 <th>Servicio</th>
+                                <th>Extras</th>
                                 <th>Fecha</th>
                                 <th>Precio</th>
                                 <th>Descripción</th>
@@ -71,7 +72,7 @@
                     {{ form_widget(formSession.priceSession, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
                     <label class="label">Descripción</label>
                     {{ form_widget(formSession.descriptionSession, {'attr': {'class': 'padding', 'placeholder': 'Descripción'}}) }}
-                    <label class="label">Usuario</label>
+                    <label class="label">Usuarios</label>
                     <div class="desplegable">
                         {{ form_widget(formSession.users, {'attr': {'class': 'padding'}}) }}
                     </div>
@@ -142,27 +143,30 @@
             <h1>Ticket</h1>
             <div class="contenedorFormularioVerTicket" id="contenedorFormularioVerTicket">
                 <form>
-                    <label class="label">Nombre</label>
-                    <input type="text" name="nombre"/>
+                    <label class="label">Sesión</label>
+                    <input type="text" name="session"/>
 
-                    <label class="label">Álbum</label>
-                    <input type="text" name="album"/>
+                    <label class="label">Fecha</label>
+                    <input type="datetime-local" name="date"/>
 
-                    <label class="label">Precio Total</label>
-                    <input type="text" name="precioTotal"/>
+                    <label class="label">Servicio</label>
+                    <!--<input type="text" name="service"/>-->
+                    <select name="service" class="padding">
+                        <option value=""></option>
+                    </select>
 
                     <label class="label">Descripción</label>
                     <textarea name="descripcion"></textarea>
 
-                    <label class="label">Nº de extras</label>
-                    <input type="text" name="nExtras"/>
+                    <label class="label">Precio Total</label>
+                    <input type="text" name="precioTotal"/>
 
                     <div class="botonesExtras" id="extrasContainer"></div>
                 </form>
                 <div class="botonesTicket" style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between;">
-                    <button id="cerrarVerTicket">Cerrar</button>
                     <div class="botonesGuardarDescargar">
-                        <button id="guardarVerTicket">Guardar</button>
+                        <button id="cerrarVerTicket">Cerrar</button>
+                        <!--<button id="guardarVerTicket">Guardar</button>-->
                         <button id="descargarVerTicket">Descargar</button>
                     </div>
                 </div>
@@ -176,25 +180,23 @@
         <div class="modalEditarSesion-content">
             <h1>Editar sesión</h1>
             <div class="contenedorFormularioEditarSesion" id="contenedorFormularioEditarSesion">
-                <form method="post">
+                <form method="post" id="formSessionUpdate">
                     <label class="label">Id</label>
                     <label class="label">Sesión</label>
                     <input type="text" class="bloquear" name="id" disabled/>
-                    <input type="text" name="session" />
+                    <input type="text" name="session[name]" class="padding"/>
                     <label class="label">Servicio</label>
                     <label class="label">Fecha</label>
-                    <input type="text" name="service" />
-                    <input type="text" name="date" />
+                    <select name="session[service]" id="service-select" class="padding">
+                        <option value=""></option>
+                    </select>
+                    <input type="datetime-local" name="session[date]" class="padding"/>
                     <label class="label">Precio</label>
                     <label class="label">Descripción</label>
-                    <input type="text" name="price" />
-                    <input type="text" name="description" />
-                    <label class="label">Fotógrafo</label>
-                    <label class="label">Cliente</label>
-                    <input type="text" name="photographer" />
-                    <input type="text" name="client" />
+                    <input type="number" name="session[priceSession]" class="padding"/>
+                    <input type="text" name="session[descriptionSession]" class="padding"/>
                     <button id="cerrarEditarSesion" class="button">Cerrar</button>
-                    <button id="guardarEditarSesion">Guardar</button>
+                    <button type="submit" id="guardarEditarSesion">Guardar</button>
                 </form>
             </div>
         </div>
@@ -204,9 +206,6 @@
 
     {% block javascripts %}
         {{ parent() }}
-        <script src="{{ asset('js/sessions.js') }}"></script>
-        <script type="module" src="{{ asset('js/dataTable.js') }}"></script>
-
 
         <!-- Script para dataTable -->
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -228,6 +227,10 @@
 
         <script src="https://kit.fontawesome.com/77aa5e27b8.js" crossorigin="anonymous"></script>
 
+        <script src="{{ asset('js/sessions.js') }}"></script>
+        <script type="module" src="{{ asset('js/dataTable.js') }}"></script>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.1.135/jspdf.min.js"></script>
         <script>
             new DataTable('#example');
         </script>

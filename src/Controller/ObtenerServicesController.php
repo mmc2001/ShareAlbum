@@ -34,4 +34,24 @@ class ObtenerServicesController extends AbstractController
 
         return new JsonResponse($servicesArray);
     }
+
+    #[Route('/obtener/services', name: 'app_obtener_all_servicio')]
+    public function getAllServices(): JsonResponse
+    {
+        $servicios = $this->servicesRepository->findAll();
+
+        if (!$servicios) {
+            return new JsonResponse(['error' => 'No se encontraron servicios.'], 404);
+        }
+
+        $servicesArray = [];
+        foreach ($servicios as $servicio) {
+            $servicesArray[] = [
+                'id' => $servicio->getId(),
+                'name' => $servicio->getName(),
+            ];
+        }
+
+        return new JsonResponse($servicesArray);
+    }
 }

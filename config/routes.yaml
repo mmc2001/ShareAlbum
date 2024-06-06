@@ -33,17 +33,22 @@ app_delete_events:
 app_delete_session:
     path: /delete/session/{id}
     controller: App\Controller\DeleteSessionController::deleteSession
-    methods: [ 'DELETE' ]
+    methods: [ 'DELETE','GET' ]
 
 app_delete_client:
     path: /delete/client/{id}
     controller: App\Controller\DeleteClientController::deleteClient
-    methods: [ 'DELETE' ]
+    methods: [ 'DELETE','GET' ]
 
 app_obtener_services:
     path: /obtener/services/{id}
     controller: App\Controller\ObtenerServicesController::getServices
     methods: ['GET']
+
+app_obtener_all_servicio:
+    path: /obtener/services
+    controller: App\Controller\ObtenerServicesController::getAllServices
+    methods: [ 'GET' ]
 
 app_update_event:
     path: /update/event/{id}
@@ -102,4 +107,14 @@ app_public_album:
 app_obtener_albums:
     path: /obtener/albums
     controller: App\Controller\ObtenerAlbumsController::getAlbums
+    methods: [ 'GET' ]
+
+app_update_session:
+    path: /update/session
+    controller: App\Controller\UpdateSessionController::updateSession
+    methods: [ 'GET', 'POST' ]
+
+app_obtener_extras:
+    path: /obtener/extras
+    controller: App\Controller\ObtenerExtrasController::getExtras
     methods: [ 'GET' ]

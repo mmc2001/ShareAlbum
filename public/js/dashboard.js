@@ -385,8 +385,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         const mes = fecha.getMonth() + 1;
                         const anio = fecha.getFullYear();
                         const fechaFormateada = `${anio}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`;
-                        // Concatenar el contenido del objeto clientes
-                        const clientes = Object.values(sesion.clients).join(', ');
 
                         // Construir la estructura HTML para la sesión
                         return `

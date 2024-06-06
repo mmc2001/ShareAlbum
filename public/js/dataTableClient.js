@@ -134,7 +134,7 @@ const listUsers = async () => {
             const idClient = $(this).data("id");
             console.log("ID en el botón: " + idClient);
 
-            if (confirm("¿Estás seguro de que deseas eliminar esta sesión?")) {
+            if (confirm("¿Estás seguro de que deseas eliminar esta sesión? Si lo haces se eliminarán todas las sessiones y álbumes asociados a este usuario")) {
                 await deleteClient(idClient);
                 location.reload();
             }
@@ -148,17 +148,23 @@ function deleteClient(idClient) {
     console.log("ID en la función delete: " + idClient);
     // Enviar solicitud para eliminar el evento con el ID especificado
     fetch(`/delete/client/${idClient}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al eliminar la cliente');
+                return response.json().then(err => {
+                    throw new Error(err.error || 'Error desconocido al eliminar al usuario');
+                });
             }
             return response.json();
         })
         .then(data => {
             // Actualizar la lista de tareas después de eliminar el evento
             listUsers();
+            location.reload();
         })
         .catch(error => console.error('Error al eliminar la cliente:', error));
 }
