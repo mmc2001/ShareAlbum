@@ -87,24 +87,31 @@
         <div class="modalEditarCliente-content">
             <h1>Editar cliente</h1>
             <div class="contenedorFormularioEditarCliente" id="contenedorFormularioEditarCliente">
-                <form method="post" id="formClientUpdate">
-                    {{ form_errors(formClientUpdate) }}
-                    {{ form_start(formClientUpdate) }}
+                <form id="formClientUpdate">
                     <label class="label">Nombre</label>
-                    {{ form_widget(formClientUpdate.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                    <input type="text" class="padding" id="userUpdate_name" name="userUpdate_name"/>
                     <label class="label">Apellidos</label>
-                    {{ form_widget(formClientUpdate.surnames, {'attr': {'class': 'padding', 'placeholder': 'Apellidos'}}) }}
+                    <input type="text" class="padding" id="userUpdate_surnames" name="userUpdate_surnames"/>
                     <label class="label">DNI</label>
-                    {{ form_widget(formClientUpdate.dni, {'attr': {'class': 'padding', 'placeholder': 'DNI', 'name': 'dni'}}) }}
-                    <label class="label">Telephone</label>
-                    {{ form_widget(formClientUpdate.telephone, {'attr': {'class': 'padding', 'placeholder': 'Teléfono'}}) }}
+                    <input type="text" class="padding" id="userUpdate_dni" name="userUpdate_dni"/>
+                    <label class="label">Teléfono</label>
+                    <input type="number" class="padding" id="userUpdate_telephone" name="userUpdate_telephone"/>
                     <label class="label">Email</label>
-                    {{ form_widget(formClientUpdate.email, {'attr': {'class': 'padding', 'placeholder': 'Email'}}) }}
-                    <div class="botonesEditarCliente">
-                        <button id="cerrarEditarCliente" class="button">Cerrar</button>
-                        <button type="submit" id="guardarEditarCliente">Guardar</button>
+                    <input type="text" class="padding" id="userUpdate_email" name="userUpdate_email"/>
+
+                    <button id="showPasswordFields">Actualizar contraseña</button>
+
+                    <div id="passwordFields" class="hidden">
+                        <label class="label">Nueva contraseña</label>
+                        <input type="text" class="padding" id="userUpdate_password1" name="userUpdate_password1"/>
+                        <label class="label">Repite la contraseña</label>
+                        <input type="text" class="padding" id="userUpdate_password2" name="userUpdate_password2"/>
                     </div>
-                    {{ form_end(formClientUpdate) }}
+
+                    <div class="botonesEditarCliente">
+                        <button id="cerrarEditarCliente">Cerrar</button>
+                        <button type="submit" id="guardarEditarUsuario">Guardar</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -170,7 +170,7 @@ const listUsers = async () => {
                     .then(response => response.json())
                     .then(data => {
                         // Vuelve a llenar el select con las nuevas opciones
-                        const select = $('#formSessionUpdate select[name="session[service]"]');
+                        const select = $('#formSessionUpdate select[name="sessionUpdate_service"]');
                         data.forEach(servicio => {
                             const option = $('<option>').val(servicio.id).text(servicio.name);
                             select.append(option);
@@ -187,7 +187,7 @@ const listUsers = async () => {
                     .catch(error => console.error('Error:', error));
 
                 // Restaura el valor seleccionado originalmente después de llenar el select
-                $('#formSessionUpdate select[name="session[service]"]').val(userServiceValue);
+                $('#formSessionUpdate select[name="sessionUpdate_service"]').val(userServiceValue);
 
                 event.preventDefault();
                 const userId = $(this).closest('tr').find('td:first').text();
@@ -209,7 +209,7 @@ const listUsers = async () => {
                 const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
 
                 $('#modalEditarSesion input[name="id"]').val(userId);
-                $('#modalEditarSesion input[name="session[name]"]').val(userSession);
+                $('#modalEditarSesion input[name="sessionUpdate_name"]').val(userSession);
                 //$('#modalEditarSesion select[name="session[service]"]').val(userService);
                 //const select = $('#formSessionUpdate select[name="session[service]"]');
 
@@ -223,22 +223,32 @@ const listUsers = async () => {
                     }
                 });
                 */
-                $('#modalEditarSesion input[name="session[date]"]').val(formattedDate);
-                $('#modalEditarSesion input[name="session[priceSession]"]').val(userPrice);
-                $('#modalEditarSesion input[name="session[descriptionSession]"]').val(userDescription);
+                $('#modalEditarSesion input[name="sessionUpdate_date"]').val(formattedDate);
+                $('#modalEditarSesion input[name="sessionUpdate_price"]').val(userPrice);
+                $('#modalEditarSesion input[name="sessionUpdate_description"]').val(userDescription);
                 $('#modalEditarSesion').css('display', 'grid');
             });
 
 
             $('#guardarEditarSesion').click(function (event) {
+                event.preventDefault(); // Evita el envío del formulario por defecto
 
-                const idSession = $(this).data('idSession');
-                console.log(idSession);
-
-                event.preventDefault();
+                const idSession = $(this).data('id-session');
+                console.log("ID de la sesión: ", idSession);
 
                 let formData = new FormData($('#formSessionUpdate')[0]);
                 formData.append('idSession', idSession);
+
+                // Validación antes de enviar el formulario usando ID en vez de name
+                if (!$('#sessionUpdate_name').val() || !$('#sessionUpdate_date').val() || !$('#sessionUpdate_price').val() || !$('#sessionUpdate_description').val() || !$('#sessionUpdate_service').val()) {
+                    console.error('Todos los campos son obligatorios.');
+                    return;
+                }
+
+                // Muestra el contenido de formData en la consola
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}: ${value}`);
+                }
 
                 fetch('/update/session', {
                     method: 'POST',
@@ -248,14 +258,18 @@ const listUsers = async () => {
                     .then(data => {
                         if (data.success) {
                             console.log('Sesión actualizada exitosamente');
+                            $('#modalEditarSesion').css('display', 'none');
+                            location.reload();
                         } else {
-                            console.error('Error al actualizar la sesión');
+                            console.error('Error al actualizar la sesión:', data.message);
                         }
                     })
                     .catch(error => {
                         console.error('Error en la petición:', error);
                     });
             });
+
+
 
             $('#cerrarEditarSesion').click(function (event) {
                 event.preventDefault();
@@ -339,16 +353,25 @@ const listUsers = async () => {
                                     for (let i = 1; i <= arrayExtras.length; i++) {
                                         const extra = arrayExtras[i - 1];
                                         const precio = arrayExtrasFetch.find(e => e.name === extra)?.price || 0;
-                                        const label = $('<label>').text(`Extra ${i}: ${extra}`);
-                                        const input = $('<input>').attr({
+                                        const divExtras = $('<div>').addClass('divExtras');
+                                        const labelPrice = $('<label>').text(`Extra ${i}: ${extra}`);
+                                        const inputPrice = $('<input>').attr({
                                             type: 'number',
                                             name: `extra${i}Precio`,
                                             value: precio,
                                             class: "botonesExtras",
+                                            'data-index': i,
                                             style: "margin-top: 10px; margin-bottom: 10px;"
                                         });
-                                        extrasContainer.append(label);
-                                        extrasContainer.append(input);
+                                        const labelCantidad = $('<label>').text("Cantidad");
+                                        const inputCantidad = $('<input>').attr({
+                                            type: 'number',
+                                            name: `cantidad${i}`,
+                                            'data-index': i,
+                                            style: "margin-top: 10px; margin-bottom: 10px;"
+                                        });
+                                        divExtras.append(labelPrice, inputPrice, labelCantidad, inputCantidad);
+                                        extrasContainer.append(divExtras);
                                     }
                                     $('#extrasContainer').css('display', 'block');
                                 })
@@ -359,8 +382,32 @@ const listUsers = async () => {
 
                         // Descargar ticket
                         $("#descargarVerTicket").click(function() {
-                            descargarTicket(sessionData, fechaTicket);
-                        });
+
+                            const modalData = {
+                                session: $('#modalVerTicket input[name="session"]').val(),
+                                date: $('#modalVerTicket input[name="date"]').val(),
+                                service: $('#modalVerTicket select[name="service"] option:selected').text(),
+                                precioTotal: $('#modalVerTicket input[name="precioTotal"]').val(),
+                                descripcion: $('#modalVerTicket textarea[name="descripcion"]').val(),
+                                extras: []
+                            };
+
+                            $('#extrasContainer .divExtras').each(function() {
+                                const index = $(this).find('input[type="number"][name^="extra"]').data('index');
+                                const extraName = $(this).find('label').first().text().replace(`Extra ${index}: `, '').trim();
+                                const extraPrice = $(this).find(`input[name="extra${index}Precio"]`).val();
+                                const extraCantidad = $(this).find(`input[name="cantidad${index}"]`).val();
+
+                                modalData.extras.push({
+                                    name: extraName,
+                                    price: extraPrice,
+                                    cantidad: extraCantidad
+                                });
+                            });
+
+
+                            descargarTicket(sessionData, fechaTicket, modalData);
+                        });+
 
                         // Mostrar el modal
                         $('#modalVerTicket').css('display', 'grid');
@@ -392,8 +439,61 @@ const listUsers = async () => {
     }
 };
 
-function descargarTicket(sessionData, fechaTicket) {
-    var ticketHTML = `
+async function descargarTicket(sessionData, fechaTicket, modalData) {
+    let photographer = "Prueba";
+    let clients = [];
+
+    try {
+        const clientsData = await obtenerClientes();
+        if (Array.isArray(clientsData)) {
+            const sessionClients = sessionData.clients.split(",").map(client => client.trim());
+
+            clientsData.forEach(client => {
+                const clientFullName = `${client.name} ${client.surnames}`;
+
+                if (sessionClients.includes(clientFullName)) {
+                    if (client.rol.includes("%ROLE_ADMIN_USER%")) {
+                        photographer = clientFullName;
+                    }
+                    if (client.rol.includes("%ROLE_USER%")) {
+                        clients.push(clientFullName);
+                    }
+                }
+            });
+        } else {
+            console.error('Unexpected response format:', clientsData);
+        }
+    } catch (error) {
+        console.error('Error fetching clients:', error);
+        return;
+    }
+
+    //console.log(photographer);
+    //console.log(clients);
+
+    if (clients.length === 0) {
+        clients = ["No especificado"];
+    }
+
+    let totalExtras = modalData.extras.reduce((sum, extra) => sum + (parseFloat(extra.price) * parseInt(extra.cantidad, 10)), 0);
+    let totalPrice = (parseFloat(modalData.precioTotal) + totalExtras).toFixed(2);
+
+    let filasHTML = "";
+    //console.log(modalData);
+
+    if (modalData.extras && Array.isArray(modalData.extras) && modalData.extras.length > 0) {
+        modalData.extras.forEach(extra => {
+            const total = extra.cantidad * extra.price;
+            filasHTML += "<tr>";
+            filasHTML += `<td>${extra.name}</td>`;
+            filasHTML += `<td>${extra.cantidad}</td>`;
+            filasHTML += `<td class='text-center'>${extra.price} €</td>`;
+            filasHTML += `<td class='text-right'>${total.toFixed(2)} €</td>`;
+            filasHTML += "</tr>";
+        });
+    }
+
+    let ticketHTML = `
         <div class="container" id="template_invoice">
             <div class="row">
                 <div class="col-xs-4">
@@ -402,24 +502,22 @@ function descargarTicket(sessionData, fechaTicket) {
                     </div>
                 </div>
                 <div class="col-xs-4">
-                    <p class="lead">Sesión # ${sessionData.id}</p>
+                    <p class="lead">Sesión #${sessionData.id}</p>
                 </div>
             </div>
             <hr>
+            
             <div class="row">
                 <div class="col-xs-6">
-                    <address>
-                        <strong>Fotógrafo:</strong><br>
-                        ${sessionData.clients}<br>
-                    </address>
+                    <strong>Fotógrafo:</strong><br><br>
+                    <p>${photographer}</p><br>
                 </div>
                 <div class="col-xs-6 text-right">
-                    <address>
-                        <strong>Cliente:</strong><br>
-                        ${sessionData.clients}<br>
-                    </address>
+                    <strong>Cliente:</strong><br><br>
+                    <p>${clients.join(", ")}</p><br>
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-xs-6 text-right">
                     <address>
@@ -428,86 +526,96 @@ function descargarTicket(sessionData, fechaTicket) {
                     </address>
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>Lista de Servicios</strong></h3>
+                            <h3 class="panel-title"><strong>Servicio</strong></h3>
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-condensed">
                                     <thead>
                                         <tr>
-                                            <td><strong>Servicios</strong></td>
+                                            <td><strong>Servicio</strong></td>
+                                            <td class="text-center"><strong>Precio</strong></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="servicios-body">
+                                        <td>${modalData.service}</td>
+                                        <td>${modalData.precioTotal} €</td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><strong>Lista de Extras</strong></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <td><strong>Extras</strong></td>
                                             <td class="text-center"><strong>Cantidad</strong></td>
                                             <td class="text-center"><strong>Precio</strong></td>
                                             <td class="text-right"><strong>Total</strong></td>
                                         </tr>
                                     </thead>
                                     <tbody id="servicios-body">
-                                        <!-- Filas de la tabla -->
+                                        ${filasHTML}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="panel-heading">
                             <div id="precioCompleto">
-                                <!-- Precio Total -->
-                            </div>
+                                <p>Precio Total: ${totalPrice} €</p>
+                            </div>  
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     `;
-    var filasHTML = "";
-    for (var i = 0; i < sessionData.length; i++) {
-        filasHTML += "<tr>";
-        filasHTML += "<td>" + sessionData[i].name + "</td>";
-        filasHTML += "<td class='text-center'>" + sessionData[i].price + " €" + "</td>";
-        filasHTML += "<td class='text-right'>" + sessionData[i].id + " €" + "</td>";
-        filasHTML += "</tr>";
+
+    //console.log(ticketHTML);
+
+    const doc = new jsPDF("p", "pt", "letter");
+    const margins = {
+        top: 40,
+        bottom: 60,
+        left: 40,
+        width: 522
+    };
+
+    try {
+        doc.fromHTML(
+            ticketHTML,
+            margins.left,
+            margins.top,
+            {
+                width: margins.width,
+                elementHandlers: {
+                    '#ignorePDF': function (element, renderer) {
+                        return true;
+                    }
+                }
+            },
+            function(dispose) {
+                const nombreArchivo = `Ticket_${sessionData.id}.pdf`;
+                doc.save(nombreArchivo);
+            },
+            margins
+        );
+    } catch (error) {
+        console.error('Error generating PDF:', error);
     }
-
-    ticketHTML = ticketHTML.replace("<!-- Filas de la tabla -->", filasHTML);
-
-    var precioCompleto = 0;
-    for (var i = 0; i < sessionData.length; i++) {
-        precioCompleto = precioCompleto + sessionData[i].price;
-    }
-
-    var precioCompletoHTML = `
-                                <h3>Precio Total:  €</h3>
-                            `;
-
-    ticketHTML = ticketHTML.replace("<!-- Precio Total -->", precioCompletoHTML);
-
-    var doc = new jsPDF("p", "pt", "letter"),
-        source = ticketHTML,
-        margins = {
-            top: 40,
-            bottom: 60,
-            left: 40,
-            width: 522
-        };
-
-    doc.addFont('Arial', 'Arial', 'UTF-8');
-
-    doc.fromHTML(
-        source,
-        margins.left,
-        margins.top,
-        {
-            width: margins.width
-        },
-        function(dispose) {
-            var nombreArchivo = "Ticket_" + sessionData.id + ".pdf";
-            doc.save(nombreArchivo);
-        },
-        margins
-    );
 }
+
+
+
 
 function deleteSession(idSession) {
     console.log("ID en la función delete: " + idSession);

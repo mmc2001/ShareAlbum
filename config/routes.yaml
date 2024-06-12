@@ -114,6 +114,11 @@ app_update_session:
     controller: App\Controller\UpdateSessionController::updateSession
     methods: [ 'GET', 'POST' ]
 
+app_update_user:
+    path: /update/user
+    controller: App\Controller\UpdateUserController::updateUser
+    methods: [ 'GET', 'POST' ]
+
 app_obtener_extras:
     path: /obtener/extras
     controller: App\Controller\ObtenerExtrasController::getExtras

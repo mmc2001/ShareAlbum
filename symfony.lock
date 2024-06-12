@@ -124,6 +124,15 @@
             "./config/routes.yaml"
         ]
     },
+    "symfony/scaleway-mailer": {
+        "version": "7.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.4",
+            "ref": "e6c1cd194f4c1ffda138785d827abb9f8dd04559"
+        }
+    },
     "symfony/security-bundle": {
         "version": "7.0",
         "recipe": {

@@ -96,7 +96,7 @@ const listUsers = async () => {
                 <td>${client.telephone}</td>
                 <td>${client.email}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary editarCliente" data-row="${client.id}"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="btn btn-sm btn-primary editarCliente" data-id="${client.id}"><i class="fa-solid fa-pencil"></i></button>
                     <button class="btn btn-sm btn-danger" data-id="${client.id}"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             </tr>`;
@@ -110,18 +110,79 @@ const listUsers = async () => {
         /* Modal Editar Cliente */
         $('.editarCliente').click(function(client) {
             client.preventDefault();
+
+            const idUser = $(this).data('id');
+            $('#guardarEditarUsuario').data('idUser', idUser);
+
             const userName = $(this).closest('tr').find('td:eq(1)').text();
             const userSurnames = $(this).closest('tr').find('td:eq(2)').text();
             const userDni = $(this).closest('tr').find('td:eq(3)').text();
             const userTelephone = $(this).closest('tr').find('td:eq(4)').text();
             const userEmail = $(this).closest('tr').find('td:eq(5)').text();
 
-            $('#modalEditarCliente input[name="client[name]"]').val(userName);
-            $('#modalEditarCliente input[name="client[surnames]"]').val(userSurnames);
-            $('#modalEditarCliente input[name="client[dni]"]').val(userDni);
-            $('#modalEditarCliente input[name="client[telephone]"]').val(userTelephone);
-            $('#modalEditarCliente input[name="client[email]"]').val(userEmail);
+            $('#modalEditarCliente input[name="userUpdate_name"]').val(userName);
+            $('#modalEditarCliente input[name="userUpdate_surnames"]').val(userSurnames);
+            $('#modalEditarCliente input[name="userUpdate_dni"]').val(userDni);
+            $('#modalEditarCliente input[name="userUpdate_telephone"]').val(userTelephone);
+            $('#modalEditarCliente input[name="userUpdate_email"]').val(userEmail);
             $('#modalEditarCliente').css('display', 'grid');
+        });
+
+        $('#showPasswordFields').click(function(event) {
+            event.preventDefault();
+            $('#passwordFields').toggleClass('hidden');
+        });
+
+        $('#guardarEditarUsuario').click(function (event) {
+            event.preventDefault();
+
+            const idUser = $(this).data('id-user');
+            console.log("ID del usuario: ", idUser);
+
+            let formData = new FormData($('#formClientUpdate')[0]);
+            formData.append('idUser', idUser);
+            /*
+            const password = $('#userUpdate_password').val();
+            formData.append('userUpdate_password', password);
+            */
+            const password1 = $('#userUpdate_password1').val();
+            const password2 = $('#userUpdate_password2').val();
+
+            if (password1 !== password2) {
+                alert('Las contraseñas no coinciden');
+            } else {
+                const password = $('#userUpdate_password1').val();
+                formData.append('userUpdate_password', password);
+            }
+
+            // Validación antes de enviar el formulario usando ID en vez de name
+            if (!$('#userUpdate_name').val() || !$('#userUpdate_surnames').val() || !$('#userUpdate_dni').val() || !$('#userUpdate_telephone').val() || !$('#userUpdate_email').val() || !$('#userUpdate_password1').val() || !$('#userUpdate_password2').val()) {
+                console.error('Todos los campos son obligatorios.');
+                return;
+            }
+
+            // Muestra el contenido de formData en la consola
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
+            fetch('/update/user', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Cliente actualizado exitosamente');
+                        $('#modalEditarCliente').css('display', 'none');
+                        location.reload();
+                    } else {
+                        console.error('Error al actualizar al cliente:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la petición:', error);
+                });
         });
 
         $('#cerrarEditarCliente').click(function(client) {

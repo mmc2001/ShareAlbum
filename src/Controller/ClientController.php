@@ -40,12 +40,6 @@ class ClientController extends AbstractController
         $formClient = $this->createForm(RegistrationFormType::class, $client);
         $formClient->handleRequest($request);
 
-        $clientUpdate = $this->getUser();
-        $formClientUpdate = $this->createForm(ClientType::class, $clientUpdate, [
-            'allow_extra_fields' => false,
-        ]);
-        $formClientUpdate->handleRequest($request);
-
         $session = new Session();
         $formSession = $this->createForm(SessionType::class, $session);
         $formSession->handleRequest($request);
@@ -94,26 +88,6 @@ class ClientController extends AbstractController
             return $this->redirectToRoute('app_client');
         }
 
-        if ($formClientUpdate->isSubmitted() && $formClientUpdate->isValid()) {
-
-            $email = $formClientUpdate->get('email')->getData();
-            $clientUpdate = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-
-            if (!$clientUpdate) {
-                throw $this->createNotFoundException('No se encontró el cliente actual en la base de datos');
-            }
-
-            $clientUpdate->setName($formClientUpdate->get('name')->getData());
-            $clientUpdate->setSurnames($formClientUpdate->get('surnames')->getData());
-            $clientUpdate->setDni($formClientUpdate->get('dni')->getData());
-            $clientUpdate->setTelephone($formClientUpdate->get('telephone')->getData());
-            $clientUpdate->setEmail($formClientUpdate->get('email')->getData());
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_client');
-        }
-
         if ($formSession->isSubmitted() && $formSession->isValid()) {
             $this->em->persist($session);
             $this->em->flush();
@@ -154,9 +128,8 @@ class ClientController extends AbstractController
         return $this->render('/client/index.html.twig', [
             'formSession' => $formSession->createView(),
             'formClient' => $formClient->createView(),
-            'formClientUpdate' => $formClientUpdate->createView(),
             'formUserData' => $formUserData->createView(),
-            'formNewPassword' => $formNewPassword->createView()
+            'formNewPassword' => $formNewPassword->createView(),
         ]);
     }
 }

@@ -27,6 +27,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Controller\UpdateUserController:
+        arguments:
+            $passwordHasher: '@security.password_hasher'
+
     Cloudinary\Cloudinary:
         arguments:
             $config: '%cloudinary%'

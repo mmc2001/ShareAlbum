@@ -978,3 +978,6 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
     margin-bottom: 20px;
 }
 
+.hidden {
+    display: none;
+}

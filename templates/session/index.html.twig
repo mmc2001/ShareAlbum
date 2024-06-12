@@ -180,21 +180,21 @@
         <div class="modalEditarSesion-content">
             <h1>Editar sesión</h1>
             <div class="contenedorFormularioEditarSesion" id="contenedorFormularioEditarSesion">
-                <form method="post" id="formSessionUpdate">
+                <form id="formSessionUpdate">
                     <label class="label">Id</label>
                     <label class="label">Sesión</label>
                     <input type="text" class="bloquear" name="id" disabled/>
-                    <input type="text" name="session[name]" class="padding"/>
+                    <input type="text" id="sessionUpdate_name" name="sessionUpdate_name" class="padding"/>
                     <label class="label">Servicio</label>
                     <label class="label">Fecha</label>
-                    <select name="session[service]" id="service-select" class="padding">
+                    <select id="sessionUpdate_service" name="sessionUpdate_service" class="padding">
                         <option value=""></option>
                     </select>
-                    <input type="datetime-local" name="session[date]" class="padding"/>
+                    <input type="datetime-local" id="sessionUpdate_date" name="sessionUpdate_date" class="padding"/>
                     <label class="label">Precio</label>
                     <label class="label">Descripción</label>
-                    <input type="number" name="session[priceSession]" class="padding"/>
-                    <input type="text" name="session[descriptionSession]" class="padding"/>
+                    <input type="number" id="sessionUpdate_price" name="sessionUpdate_price" class="padding"/>
+                    <input type="text" id="sessionUpdate_description" name="sessionUpdate_description" class="padding"/>
                     <button id="cerrarEditarSesion" class="button">Cerrar</button>
                     <button type="submit" id="guardarEditarSesion">Guardar</button>
                 </form>
@@ -206,6 +206,8 @@
 
     {% block javascripts %}
         {{ parent() }}
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.1.135/jspdf.min.js"></script>
 
         <!-- Script para dataTable -->
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -230,7 +232,6 @@
         <script src="{{ asset('js/sessions.js') }}"></script>
         <script type="module" src="{{ asset('js/dataTable.js') }}"></script>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.1.135/jspdf.min.js"></script>
         <script>
             new DataTable('#example');
         </script>

@@ -1070,7 +1070,7 @@ select {
     position: relative;
     overflow: hidden;
     height: fit-content;
-    max-height: 1200px;
+    max-height: 800px;
     width: 600px;
     padding: 0px 80px 0px 80px;
     overflow-y: auto;
@@ -1099,12 +1099,12 @@ select {
     height: 100%;
 }
 .modalVerTicket-content > .contenedorFormularioVerTicket > form > .label,
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .label {
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras > .label {
     text-align: left;
     margin-bottom: 0px !important;
 }
 .modalVerTicket-content > .contenedorFormularioVerTicket > form > input,
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > input {
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras> input {
     background-color: #eee;
     border: none;
     padding: 12px 15px;
@@ -1150,3 +1150,33 @@ select {
 }
 
 
+
+
+.container {
+    width: 21cm;
+    min-height: 29.7cm;
+}
+
+.invoice {
+    background: #fff;
+    width: 100%;
+    padding: 50px;
+}
+
+.logo {
+    width: 2.5cm;
+}
+
+.document-type {
+    text-align: right;
+    color: #444;
+}
+
+.conditions {
+    font-size: 0.7em;
+    color: #666;
+}
+
+.bottom-page {
+    font-size: 0.7em;
+}
