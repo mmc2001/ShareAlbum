@@ -123,3 +123,8 @@ app_obtener_extras:
     path: /obtener/extras
     controller: App\Controller\ObtenerExtrasController::getExtras
     methods: [ 'GET' ]
+
+app_send_message:
+    path: /send/message
+    controller: App\Controller\DashboardController::sendMessage
+    methods: [ 'GET', 'POST' ]

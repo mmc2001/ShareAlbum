@@ -462,55 +462,7 @@ document.addEventListener("DOMContentLoaded", function() {
     cargarClientesDisponibles();
 });
 
-
-
-/* MODAL TAREA */
-/*document.addEventListener("DOMContentLoaded", function() {
-    // Array de tipos de servicio de fotografía
-    const tiposServicio = [
-        "Bodas",
-        "Retratos",
-        "Eventos",
-        "Familiares",
-        "Productos",
-        "Moda",
-        "Comercial",
-        "Arquitectura",
-        "Naturaleza",
-        "Deportes"
-    ];
-    const clientes = [
-        "Bodas",
-        "Retratos",
-        "Eventos",
-        "Familiares",
-        "Productos",
-        "Moda",
-        "Comercial",
-        "Arquitectura",
-        "Naturaleza",
-        "Deportes"
-    ];
-
-    // Obtener el select
-    const selectTipoServicio = document.getElementById("tipoServicio");
-    const selectClientes = document.getElementById("clientes");
-
-    // Llenar el select con las opciones
-    tiposServicio.forEach(function(tipo) {
-        let option = document.createElement("option");
-        option.text = tipo;
-        option.value = tipo;
-        selectTipoServicio.appendChild(option);
-    });
-    clientes.forEach(function(tipo) {
-        let option = document.createElement("option");
-        option.text = tipo;
-        option.value = tipo;
-        selectClientes.appendChild(option);
-    });
-});*/
-
+/* PRUEBAS PARA ARREGLAR ADJUNTAR PDF
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("message_fileUrl").addEventListener("change", function () {
         var fileInput = document.querySelector("#message_fileUrl");
@@ -533,26 +485,73 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+*/
 
+function cargarClientes() {
+    const listadoClientes = document.getElementById("recipient");
+
+    fetch('/obtener/clients')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener los clientes');
+            }
+            return response.json();
+        })
+        .then(data => {
+            jsonArray = JSON.parse(data);
+            let clientesFiltrados = [];
+            jsonArray.forEach(cliente => {
+                if (cliente.rol.includes('%ROLE_USER%')) {
+                    clientesFiltrados.push(cliente);
+                }
+            });
+
+            const optionDefault = document.createElement('option');
+            optionDefault.value = '';
+            optionDefault.textContent = 'Selecciona un cliente';
+            listadoClientes.appendChild(optionDefault);
+
+            if (clientesFiltrados.length > 0) {
+                clientesFiltrados.forEach(cliente => {
+                    const option = document.createElement('option');
+                    option.value = cliente.id;
+                    option.textContent = `${cliente.name} ${cliente.surnames}`;
+                    listadoClientes.appendChild(option);
+                });
+            } else {
+                console.error('No se encontraron clientes con el rol %ROLE_USER%');
+            }
+        })
+        .catch(error => console.error('Error al cargar los clientes disponibles:', error.message));
+}
 
 /* Modal Confirmar Envio Correo */
 document.addEventListener("DOMContentLoaded", function() {
+
     document.getElementById("send").addEventListener("click", function(event) {
         event.preventDefault();
 
-        const aux = document.getElementById("message_recipient").value;
-        const cliente = document.querySelector("#message_recipient option[value='" + aux + "']").innerHTML;
-        const asunto = document.getElementById("message_subject").value;
-        const rutaCompleta = document.getElementById("message_fileUrl").value;
-        const partesRuta = rutaCompleta.split("\\");
-        const fichero = partesRuta[partesRuta.length - 1];
-        const mensaje = document.getElementById("message_textMessage").value;
+        const recipientSelect = document.getElementById("recipient");
+        const recipientId = recipientSelect.value;
+        const cliente = recipientSelect.options[recipientSelect.selectedIndex].textContent;
+        const asunto = document.getElementById("subject").value;
+        const fileInput = document.getElementById("fileUrl");
+        const file = fileInput.files[0];
+        const mensaje = document.getElementById("textMessage").value;
 
-        document.getElementById("modalEnvio").style.display = "grid";
+        if (!recipientId || !asunto || !file || !mensaje) {
+            console.error('Todos los campos son obligatorios.');
+            return;
+        }
+
+        // Cargar datos en el modal
         document.getElementById("clienteModal").textContent = cliente;
         document.getElementById("asuntoModal").textContent = asunto;
-        document.getElementById("ficheroModal").innerHTML = fichero;
+        document.getElementById("ficheroModal").textContent = file.name;
         document.getElementById("mensajeModal").textContent = mensaje;
+
+        // Mostrar el modal
+        document.getElementById("modalEnvio").style.display = "grid";
     });
 
     document.getElementById("cancel").addEventListener("click", function(event) {
@@ -560,11 +559,92 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("modalEnvio").style.display = "none";
     });
 
+
     document.getElementById("formModalEnvio").addEventListener("submit", function(event) {
-        event.preventDefault(); // Evita que se envíe el formulario automáticamente
-        document.getElementById("formMessage").submit(); // Envía el formulario formMessage
-        document.getElementById("modalEnvio").style.display = "none"; // Cierra el modalEnvio después de enviar el formulario
+        event.preventDefault();
+        document.getElementById("formMessage").submit();
+        console.log("Hola 1");
+        document.getElementById("modalEnvio").style.display = "none";
     });
+
+    function sendEmail() {
+        console.log("Hola 2");
+        const recipient = document.getElementById("recipient").value;
+        const subject = document.getElementById("subject").value;
+        const fileInput = document.getElementById("fileUrl");
+        const file = fileInput.files[0];
+        const textMessage = document.getElementById("textMessage").value;
+
+        if (!recipient || !subject || !file || !textMessage) {
+            console.error('Todos los campos son obligatorios.');
+            return;
+        }
+        console.log(recipient);
+        console.log(subject);
+        console.log(file);
+        console.log(textMessage);
+        const formData = new FormData();
+        formData.append('recipient', recipient);
+        formData.append('subject', subject);
+        formData.append('fileUrl', file);
+        formData.append('textMessage', textMessage);
+
+        fetch('/send/message', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Mensaje enviado exitosamente');
+                } else {
+                    console.error('Error al enviar el mensaje');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la petición:', error);
+            });
+    }
+
+});
+
+document.getElementById('sendModal').addEventListener('click', () => {
+    console.log("Hola 2");
+    const recipient = document.getElementById("recipient").value;
+    const subject = document.getElementById("subject").value;
+    const fileInput = document.getElementById("fileUrl");
+    const file = fileInput.files[0];
+    const textMessage = document.getElementById("textMessage").value;
+
+    if (!recipient || !subject || !file || !textMessage) {
+        console.error('Todos los campos son obligatorios.');
+        return;
+    }
+    console.log(recipient);
+    console.log(subject);
+    console.log(file);
+    console.log(textMessage);
+    const formData = new FormData();
+    formData.append('recipient', recipient);
+    formData.append('subject', subject);
+    formData.append('fileUrl', file);
+    formData.append('textMessage', textMessage);
+
+    fetch('/send/message', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Mensaje enviado exitosamente');
+            } else {
+                console.error('Error al enviar el mensaje');
+            }
+        })
+        .catch(error => {
+            console.error('Error en la petición:', error);
+        });
 });
 
 document.addEventListener('DOMContentLoaded', function() {

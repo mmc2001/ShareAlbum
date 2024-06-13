@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Message;
+use App\Entity\User;
 use App\Form\EventType;
 use App\Form\MessageType;
 use App\Form\NewPasswordType;
@@ -16,6 +17,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -23,7 +25,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class DashboardController extends AbstractController
+class  DashboardController extends AbstractController
 {
 
     private $security;
@@ -104,13 +106,13 @@ class DashboardController extends AbstractController
                 ->to($message->getRecipient()->getEmail())
                 ->subject($message->getSubject())
                 ->htmlTemplate('emails/mensaje.html.twig')
+                //->attach($newFilename)
                 ->context([
                     'subject' => $message->getSubject(),
                     'message' => $message->getTextMessage(),
-
                 ]);
-
-            $mailer->send($email);
+            //$email->attachFromPath($formMessage->get('fileUrl')->getData(), $formMessage->get('fileUrl')->getData()->getClientOriginalName());
+            //$mailer->send($email);
 
             return $this->redirectToRoute('app_dashboard');
         }
@@ -178,5 +180,66 @@ class DashboardController extends AbstractController
             'formUserData' => $formUserData->createView(),
             'formNewPassword' => $formNewPassword->createView()
         ]);
+    }
+
+    #[Route('/send/message', name: 'app_send_message', methods: ['POST'])]
+    public function sendMessage(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): JsonResponse
+    {
+        $recipientId = $request->request->get('recipient');
+        $subject = $request->request->get('subject');
+        $textMessage = $request->request->get('textMessage');
+
+        $file = $request->files->get('fileUrl');
+
+        if (!$recipientId || !$subject || !$textMessage || !$file) {
+            return new JsonResponse(['success' => false, 'message' => 'Todos los campos son obligatorios.'], 400);
+        }
+
+        $recipient = $entityManager->getRepository(User::class)->find($recipientId);
+        if (!$recipient) {
+            return new JsonResponse(['success' => false, 'message' => 'El destinatario no existe.'], 400);
+        }
+
+        $message = new Message();
+        $message->setRecipient($recipient);
+        $message->setSubject($subject);
+        $message->setTextMessage($textMessage);
+        $message->setSender($this->getUser());
+
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $newFilename = uniqid().'.'.$file->guessExtension();
+
+        try {
+            $file->move(
+                $this->getParameter('files_directory'),
+                $newFilename
+            );
+            $message->setFileUrl($newFilename);
+        } catch (FileException $e) {
+            return new JsonResponse(['success' => false, 'message' => 'Error al subir el archivo.'], 500);
+        }
+
+        $entityManager->persist($message);
+        $entityManager->flush();
+
+        // Enviar correo electrónico
+        $email = (new TemplatedEmail())
+            ->from(new Address('mmcfotografia01@gmail.com', 'Moyano Fotografia'))
+            ->to($recipient->getEmail())
+            ->subject($subject)
+            ->htmlTemplate('emails/mensaje.html.twig')
+            ->context([
+                'subject' => $subject,
+                'message' => $textMessage,
+            ]);
+
+        $email->attachFromPath(
+            $this->getParameter('files_directory').'/'.$newFilename,
+            $file->getClientOriginalName()
+        );
+
+        //$mailer->send($email);
+
+        return new JsonResponse(['success' => true, 'message' => 'Mensaje enviado exitosamente']);
     }
 }

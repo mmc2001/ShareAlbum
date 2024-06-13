@@ -430,7 +430,7 @@ const listUsers = async () => {
 
                 if (confirm("¿Estás seguro de que deseas eliminar esta sesión?")) {
                     await deleteSession(idSession);
-                    //location.reload();
+                    location.reload();
                 }
             });
         });
