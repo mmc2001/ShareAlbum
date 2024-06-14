@@ -8,15 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.addEventListener('change', function () {
                 const tareaId = this.id; // Obtener el identificador único de la tarea
                 const label = this.parentNode.querySelector('label');
-                const span = label.querySelector('span');
 
                 // Aplicar estilos de tachado
                 if (this.checked) {
                     label.classList.add('tachado');
-                    span.classList.add('tachado');
                 } else {
                     label.classList.remove('tachado');
-                    span.classList.remove('tachado');
                 }
 
                 // Buscar y marcar/desmarcar el checkbox correspondiente en la otra lista
@@ -24,13 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (otroCheckbox) {
                     otroCheckbox.checked = this.checked;
                     const otroLabel = otroCheckbox.parentNode.querySelector('label');
-                    const otroSpan = otroLabel.querySelector('span');
                     if (this.checked) {
                         otroLabel.classList.add('tachado');
-                        otroSpan.classList.add('tachado');
                     } else {
                         otroLabel.classList.remove('tachado');
-                        otroSpan.classList.remove('tachado');
                     }
                 }
 
@@ -39,13 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (otroCheckboxDiarias) {
                     otroCheckboxDiarias.checked = this.checked;
                     const otroLabelDiarias = otroCheckboxDiarias.parentNode.querySelector('label');
-                    const otroSpanDiarias = otroLabelDiarias.querySelector('span');
                     if (this.checked) {
                         otroLabelDiarias.classList.add('tachado');
-                        otroSpanDiarias.classList.add('tachado');
                     } else {
                         otroLabelDiarias.classList.remove('tachado');
-                        otroSpanDiarias.classList.remove('tachado');
                     }
                 }
             });
@@ -220,20 +211,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         tareaDate.getFullYear() === selectedDate.getFullYear();
                 });
 
+                console.log(tareasDiarias);
+
                 if (Array.isArray(tareasDiarias)) {
                     const htmlTareas = tareasDiarias.map(tarea => `
-                        <div class="listado ${tarea.hasbeenmade === true ? 'tachado' : ''}">
-                            <input type="checkbox" id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? 'checked' : ''}>
+                        <div class="listado ${tarea.hasbeenmade === true ? '' : 'tachado'}">
+                            <input type="checkbox" id="checkboxEvent${tarea.id}" data-id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? '' : 'checked'}>
                             <label for="${tarea.name}">
                                 <div class="checkbox"></div>
-                                ${tarea.name} - ${formatearFecha(tarea.date.date, "a")} <br/> 
-                                <span class="tipoServicio ${tarea.hasbeenmade === true ? 'tachado' : ''}">${tarea.services}</span>
+                                ${tarea.name} - ${formatearFecha(tarea.date.date, "a")}
                             </label>
                             <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
                         </div>
                     `).join('');
 
                     listadoTareasDiarias.innerHTML = htmlTareas;
+
+                    const botonesCheckbox = document.querySelectorAll('.listado input[type="checkbox"]');
+                    botonesCheckbox.forEach(boton => {
+                        boton.addEventListener('click', function () {
+                            const idEvento = this.dataset.id;
+                            updateEvento(idEvento);
+                        });
+                    });
 
                     // Añadir event listener para los botones de eliminación
                     const botonesEliminar = document.querySelectorAll('.deleteButton');
@@ -279,18 +279,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Verificar si tiene elementos
                 if (Array.isArray(tareasMensuales)) {
                     const htmlTareas = tareasMensuales.map(tarea => `
-                        <div class="listado">
-                            <input type="checkbox" id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? 'checked' : ''}>
+                        <div class="listado ${tarea.hasbeenmade === true ? '' : 'tachado'}">
+                            <input type="checkbox" id="checkboxEvent${tarea.id}" data-id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? '' : 'checked'}>
                             <label for="${tarea.name}">
                                 <div class="checkbox"></div>
-                                ${tarea.name} - ${formatearFecha(tarea.date.date, "b")} <br/> 
-                                <span class="tipoServicio">${tarea.services}</span>
+                                ${tarea.name} - ${formatearFecha(tarea.date.date, "b")}
                             </label>
                             <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
                         </div>
                     `).join('');
 
                     listadoTareasMensuales.innerHTML = htmlTareas;
+
+                    const botonesCheckbox = document.querySelectorAll('.listado input[type="checkbox"]');
+                    botonesCheckbox.forEach(boton => {
+                        boton.addEventListener('click', function () {
+                            const idEvento = this.dataset.id;
+                            updateEvento(idEvento);
+                        });
+                    });
 
                     // Añadir event listener para los botones de eliminación
                     const botonesEliminar = document.querySelectorAll('.deleteButton');
@@ -308,6 +315,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 aplicarEstilosTachado();
             })
             .catch(error => console.error('Error al cargar las tareas:', error));
+    }
+
+    function updateEvento(idEvento) {
+        fetch(`/update/event/${idEvento}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el evento');
+                }
+                return response.json();
+            })
+            .then(data => {
+                cargarTareasDiarias()
+                cargarTareasMensuales();
+            })
+            .catch(error => console.error('Error al actualizar el evento:', error));
     }
 
     function deleteEvento(idEvento) {
@@ -356,7 +380,6 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarTareasDiarias();
     cargarTareasMensuales();
 });
-
 
 
 /* SESIONES DISPONIBLES */
@@ -462,30 +485,25 @@ document.addEventListener("DOMContentLoaded", function() {
     cargarClientesDisponibles();
 });
 
-/* PRUEBAS PARA ARREGLAR ADJUNTAR PDF
+// PRUEBAS PARA ARREGLAR ADJUNTAR PDF
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("message_fileUrl").addEventListener("change", function () {
-        var fileInput = document.querySelector("#message_fileUrl");
+    document.getElementById("fileUrl").addEventListener("change", function () {
+        var fileInput = document.querySelector("#fileUrl");
         var filename = fileInput.value;
         var noFileDisplay = document.querySelector("#noFile");
 
-        if (/^\s*$/.test(filename)) {
-            document.querySelector(".file-upload").classList.remove("active");
-            noFileDisplay.textContent = "No hay ficheros";
-        } else {
-            // Limitar la longitud del nombre del archivo
-            var maxLength = 30; // Ajusta el valor según sea necesario
-            var displayFileName = filename.replace("C:\\fakepath\\", "");
-            if (displayFileName.length > maxLength) {
-                displayFileName = displayFileName.substring(0, maxLength) + '...';
-            }
-
-            noFileDisplay.textContent = displayFileName;
-            document.querySelector(".file-upload").classList.add("active");
+        // Limitar la longitud del nombre del archivo
+        var maxLength = 30; // Ajusta el valor según sea necesario
+        var displayFileName = filename.replace("C:\\fakepath\\", "");
+        if (displayFileName.length > maxLength) {
+            displayFileName = displayFileName.substring(0, maxLength) + '...';
         }
+
+        noFileDisplay.textContent = displayFileName;
+        document.querySelector(".file-upload").classList.add("active");
+
     });
 });
-*/
 
 function cargarClientes() {
     const listadoClientes = document.getElementById("recipient");

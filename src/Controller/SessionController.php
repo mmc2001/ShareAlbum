@@ -80,7 +80,7 @@ class SessionController extends AbstractController
 
             $this->em->persist($session);
 
-            $albumNames = ['Álbum FSS', 'Álbum FE'];
+            $albumNames = ['FSS', 'FE'];
             foreach ($albumNames as $albumName) {
                 $album = new Album();
                 $album->setName($albumName);

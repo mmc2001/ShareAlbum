@@ -128,3 +128,13 @@ app_send_message:
     path: /send/message
     controller: App\Controller\DashboardController::sendMessage
     methods: [ 'GET', 'POST' ]
+
+app_obtener_album:
+    path: /obtener/album/{id}
+    controller: App\Controller\ObtenerAlbumsController::getAlbum
+    methods: [ 'GET' ]
+
+app_obtener_photo:
+    path: /obtener/photo/{id}
+    controller: App\Controller\ObtenerPhotosController::getPhoto
+    methods: [ 'GET' ]

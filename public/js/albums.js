@@ -1,26 +1,25 @@
+// Obtener el ID de la URL
+function obtenerIdDeURL() {
+    const path = window.location.pathname;
+    const pathSegments = path.split('/');
+    const id = pathSegments[pathSegments.length - 1];
+    return parseInt(id);
+}
 document.addEventListener("DOMContentLoaded", function() {
-
-    // Obtener el ID de la URL
-    function obtenerIdDeURL() {
-        const path = window.location.pathname;
-        const pathSegments = path.split('/');
-        const id = pathSegments[pathSegments.length - 1];
-        return parseInt(id);
-    }
 
     // Función para obtener las imágenes según el id y la propiedad elegida
     async function obtenerImagenes(id, elegida) {
     //async function obtenerImagenes(elegida) {
+        console.log("ID: "+id+" "+"ELEGIDA: "+elegida);
         try {
-            const response = await fetch("/obtener/photos");
-            const jsonData = await response.json();
-            const data = JSON.parse(jsonData);
+            const response = await fetch(`/obtener/photo/${id}`);
+            const data = await response.json();
 
             if (!Array.isArray(data)) {
                 throw new Error("La respuesta no es un array");
             }
 
-            if (elegida === false){
+            if (elegida === false) {
                 const imagenes = data;
                 return imagenes.map(img => ({
                     url: img.photo_url,
@@ -188,21 +187,56 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // IDs y contenedores correspondientes
-    const contenedores = [
-        { containerId: 'container1', jsonId: obtenerIdDeURL(), elegida: false },
-        { containerId: 'container2', jsonId: obtenerIdDeURL(), elegida: true },
-        { containerId: 'container3', jsonId: obtenerIdDeURL(), elegida: false }
-    ];
+    async function obtenerIdAlbum(album) {
+        let idSession = obtenerIdDeURL(); // Suponiendo que obtenerIdDeURL() devuelve el ID de sesión
 
-    // Iterar sobre los contenedores y generar las galerías
-    contenedores.forEach(({ containerId, jsonId, elegida }) => {
-        obtenerImagenes(jsonId, elegida).then(imagenes => {
-        //obtenerImagenes(elegida).then(imagenes => {
-            generarGaleria(containerId, imagenes);
-            handleDownloadClick(containerId);
+        try {
+            const response = await fetch(`/obtener/album/${idSession}`);
+            if (!response.ok) {
+                throw new Error('Error al obtener los álbumes');
+            }
+
+            const data = await response.json();
+            const jsonArray = JSON.parse(data);
+            const albumEncontrado = jsonArray.find(a => a.name === album);
+
+            if (!albumEncontrado) {
+                console.error('Álbum no encontrado');
+                return 0; // Devuelve 0 si el álbum no es encontrado
+            }
+
+            return albumEncontrado.id;
+        } catch (error) {
+            console.error('Error al obtener el ID del álbum:', error);
+            return 0; // Devuelve 0 si ocurre un error
+        }
+    }
+
+    (async () => {
+        let idAlbumContainer1 = await obtenerIdAlbum("FSS");
+        console.log("ID del álbum FSS:", idAlbumContainer1);
+
+        let idAlbumContainer3 = await obtenerIdAlbum("FE");
+        console.log("ID del álbum FE:", idAlbumContainer3);
+
+        // IDs y contenedores correspondientes
+        const contenedores = [
+            { containerId: 'container1', jsonId: idAlbumContainer1, elegida: false },
+            { containerId: 'container2', jsonId: idAlbumContainer1, elegida: true },
+            { containerId: 'container3', jsonId: idAlbumContainer3, elegida: false }
+        ];
+
+        // Iterar sobre los contenedores y generar las galerías
+        contenedores.forEach(({ containerId, jsonId, elegida }) => {
+            obtenerImagenes(jsonId, elegida).then(imagenes => {
+                console.log("Imagenes: "+imagenes);
+            //obtenerImagenes(elegida).then(imagenes => {
+                generarGaleria(containerId, imagenes);
+                handleDownloadClick(containerId);
+            });
         });
-    });
+    }) ();
+
 
     let imagenes = [];
     let deletePhotos = [];
@@ -214,10 +248,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         async function obtenerImagenesModal(id, elegida) {
         //async function obtenerImagenesModal(elegida) {
+            console.log("ID del modal: "+id);
+
             try {
-                const response = await fetch("/obtener/photos");
-                const jsonData = await response.json();
-                const data = JSON.parse(jsonData);
+                const response = await fetch(`/obtener/photo/${id}`);
+                const data = await response.json();
 
                 if (!Array.isArray(data)) {
                     throw new Error("La respuesta no es un array");
@@ -227,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 //console.log(registro);
                 //if (!registro) return [];
 
-                imagenes = data.filter(img => img.has_been_selected === elegida).map(img => ({
+                imagenes = data.map(img => ({
                     id: img.id,
                     url: img.photo_url
                 }));
@@ -297,18 +332,34 @@ document.addEventListener("DOMContentLoaded", function() {
         fileInput.removeEventListener("change", handleFileSelect);
         fileInput.addEventListener("change", handleFileSelect);
         */
-        //obtenerImagenesModal(id, elegida).then(imgs => {
-        obtenerImagenesModal(elegida).then(imgs => {
+        console.log("ID de la función obtenerIMagenesModal: "+id);
+        obtenerImagenesModal(id, elegida).then(imgs => {
+        //obtenerImagenesModal(elegida).then(imgs => {
             imagenes = imgs;
             mostrarGaleria();
         });
     }
 
-    document.getElementById("editar1").addEventListener("click", function(event) {
+    // Selecciona los botones de "Editar" y el botón "Añadir" del modal
+    const editarButtons = document.querySelectorAll('.boton[id^="editar"]');
+    const comprobarButton = document.getElementById('comprobar-button');
+
+    // Añade eventos de click a los botones de "Editar"
+    editarButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const albumType = this.getAttribute('data-album');
+            comprobarButton.setAttribute('data-value', albumType);
+        });
+    });
+
+    document.getElementById("editar1").addEventListener("click", async function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
-        //inicializarModal(obtenerIdDeURL(), false);
-        inicializarModal(false);
+
+        let idAlbum = await obtenerIdAlbum("FSS");
+        console.log("ID de inicializarModal: "+idAlbum);
+        inicializarModal(idAlbum, false);
+        //inicializarModal(false);
     });
     /*
     document.getElementById("editar2").addEventListener("click", function(event) {
@@ -318,22 +369,24 @@ document.addEventListener("DOMContentLoaded", function() {
         inicializarModal(true);
     });
     */
-    document.getElementById("editar3").addEventListener("click", function(event) {
+    document.getElementById("editar3").addEventListener("click", async function(event) {
         event.preventDefault();
         document.getElementById("modalEditarAlbum").style.display = "grid";
-        //inicializarModal(obtenerIdDeURL(), false);
-        inicializarModal(false);
+        let idAlbum = await obtenerIdAlbum("FE");
+        inicializarModal(idAlbum, false);
+        //inicializarModal(false);
     });
 
     document.getElementById("CerrarModal").addEventListener("click", function(event) {
         event.preventDefault();
+        deletePhotos.length = 0;
         document.getElementById("modalEditarAlbum").style.display = "none";
+        location.reload();
     });
 
     //const addButton = document.getElementById('Añadir');
     //const fileInput = document.getElementById('uploadedimage');
 
-    document.getElementById("comprobar-button").addEventListener("click", widgetCloudinary);
 
     document.getElementById("GuardarModal").addEventListener("click", eliminarImagenes);
     async function eliminarImagenes() {
@@ -401,9 +454,8 @@ async function generateToken() {
     }
 }
 
-function widgetCloudinary() {
+async function widgetCloudinary(album) {
     let imagenesSubidas = [];
-    //const imagen = document.getElementById('prueba-photo');
 
     cloudinary.createUploadWidget({
         cloud_name: 'ddaq4my3n',
@@ -419,32 +471,73 @@ function widgetCloudinary() {
             //imagen.src = result.info.secure_url;
             imagenesSubidas.push(result.info.secure_url);
 
-            const datosParaEnviar = {
-                imagenes: imagenesSubidas,
-                albumId: ''
-            };
+            const idSession = obtenerIdDeURL();
+            console.log(idSession);
 
-            fetch('/save/photos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datosParaEnviar)
-            })
+            fetch(`/obtener/album/${idSession}`)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('HTTP error ' + response.status);
+                        throw new Error('Error al obtener los álbumes');
                     }
-                    return response.text();
+                    return response.json();
                 })
                 .then(data => {
-                    console.log('Respuesta del servidor:', data);
+                    const jsonArray = JSON.parse(data);
+                    const albumsArray = jsonArray.map(album => {
+                        return {
+                            id: album.id,
+                            name: album.name
+                        };
+                    });
+                    console.log(albumsArray);
+                    console.log(album);
+
+                    // Buscar el álbum correspondiente por nombre
+                    const albumEncontrado = albumsArray.find(a => a.name === album);
+
+                    let idAlbum = 0;
+                    let nameAlbum = null;
+
+                    if (albumEncontrado) {
+                        idAlbum = albumEncontrado.id;
+                        nameAlbum = albumEncontrado.name;
+                    } else {
+                        console.error('Album no encontrado');
+                    }
+
+                    console.log(`idAlbum: ${idAlbum}, nameAlbum: ${nameAlbum}`);
+
+                    const datosParaEnviar = {
+                        imagenes: imagenesSubidas,
+                        albumId: idAlbum
+                    };
+
+                    console.log(datosParaEnviar);
+
+                    fetch('/save/photos', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datosParaEnviar)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('HTTP error ' + response.status);
+                            }
+                            return response.text();
+                        })
+                        .then(data => {
+                            console.log('Respuesta del servidor:', data);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error en la petición:', error);
                 });
         }
     }).open();
-    //location.reload();
 }
 

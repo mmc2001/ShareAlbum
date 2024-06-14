@@ -124,7 +124,13 @@
                 <div class="campos">
                     <select id="recipient" name="recipient" class="padding"></select>
                     <input type="text" id="subject" name="subject" class="padding" placeholder="Asunto"/>
-                    <input type="file" id="fileUrl" name="fileUrl" class="padding"/>
+                    <div class="file-upload">
+                        <div class="file-select">
+                            <div class="file-select-button" id="fileName">Ficheros</div>
+                            <div class="file-select-name" id="noFile"></div>
+                            <input type="file" id="fileUrl" name="fileUrl" class="padding"/>
+                        </div>
+                    </div>
                     <textarea id="textMessage" name="textMessage" class="padding" placeholder="Mensaje"></textarea>
                 </div>
 

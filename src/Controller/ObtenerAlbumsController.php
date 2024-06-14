@@ -39,4 +39,22 @@ class ObtenerAlbumsController extends AbstractController
         // Retorna una respuesta JSON
         return new JsonResponse($albumsJson);
     }
+
+    #[Route('/obtener/album/{id}', name: 'app_obtener_album')]
+    public function getAlbum(int $id): Response
+    {
+        $albums = $this->albumRepository->findBy(['session' => $id]);
+
+        $albumsArray = [];
+        foreach ($albums as $album) {
+            $albumsArray[] = [
+                'id' => $album->getId(),
+                'session_id' => $album->getSession()->getId(),
+                'name' => $album->getName()
+            ];
+        }
+        $albumsJson = json_encode($albumsArray);
+
+        return new JsonResponse($albumsJson);
+    }
 }

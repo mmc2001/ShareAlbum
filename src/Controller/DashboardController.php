@@ -55,10 +55,6 @@ class  DashboardController extends AbstractController
         $nSession = $sessionRepository->count([]);
         $nPhotos = $photosRepository->count([]);
 
-        $message = new Message();
-        $formMessage = $this->createForm(MessageType::class, $message);
-        $formMessage->handleRequest($request);
-
         $event = new Event();
         $formEvent = $this->createForm(EventType::class, $event);
         $formEvent->handleRequest($request);
@@ -72,50 +68,6 @@ class  DashboardController extends AbstractController
         $formNewPassword->handleRequest($request);
 
         $user = $this->security->getUser();
-
-        if ($formMessage->isSubmitted() && $formMessage->isValid()) {
-
-            $message->setRecipient($formMessage->get('recipient')->getData());
-            $message->setSubject($formMessage->get('subject')->getData());
-
-            $file = $formMessage->get('fileUrl')->getData();
-            if ($file) {
-                $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-                try {
-                    $file->move(
-                        $this->getParameter('files_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    throw new \Exception('Ha habido un problema al subir el archivo.');
-                }
-                $message->setFileUrl($newFilename);
-            }
-
-            $message->setTextMessage($formMessage->get('textMessage')->getData());
-            $message->setSender($user);
-
-            $entityManager->persist($message);
-            $entityManager->flush();
-
-            // Send email to notify user
-            $email = (new TemplatedEmail())
-                ->from(new Address('mmcfotografia01@gmail.com', 'Moyano Fotografia'))
-                ->to($message->getRecipient()->getEmail())
-                ->subject($message->getSubject())
-                ->htmlTemplate('emails/mensaje.html.twig')
-                //->attach($newFilename)
-                ->context([
-                    'subject' => $message->getSubject(),
-                    'message' => $message->getTextMessage(),
-                ]);
-            //$email->attachFromPath($formMessage->get('fileUrl')->getData(), $formMessage->get('fileUrl')->getData()->getClientOriginalName());
-            //$mailer->send($email);
-
-            return $this->redirectToRoute('app_dashboard');
-        }
 
         if ($formEvent->isSubmitted() && $formEvent->isValid()) {
 
@@ -175,7 +127,6 @@ class  DashboardController extends AbstractController
             'nSession' => $nSession,
             'nClient' => $nClient,
             'nPhotos' => $nPhotos,
-            'formMessage' => $formMessage->createView(),
             'formEvent' => $formEvent->createView(),
             'formUserData' => $formUserData->createView(),
             'formNewPassword' => $formNewPassword->createView()
@@ -238,7 +189,7 @@ class  DashboardController extends AbstractController
             $file->getClientOriginalName()
         );
 
-        //$mailer->send($email);
+        $mailer->send($email);
 
         return new JsonResponse(['success' => true, 'message' => 'Mensaje enviado exitosamente']);
     }
