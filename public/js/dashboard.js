@@ -626,43 +626,46 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-document.getElementById('sendModal').addEventListener('click', () => {
-    console.log("Hola 2");
-    const recipient = document.getElementById("recipient").value;
-    const subject = document.getElementById("subject").value;
-    const fileInput = document.getElementById("fileUrl");
-    const file = fileInput.files[0];
-    const textMessage = document.getElementById("textMessage").value;
 
-    if (!recipient || !subject || !file || !textMessage) {
-        console.error('Todos los campos son obligatorios.');
-        return;
-    }
-    console.log(recipient);
-    console.log(subject);
-    console.log(file);
-    console.log(textMessage);
-    const formData = new FormData();
-    formData.append('recipient', recipient);
-    formData.append('subject', subject);
-    formData.append('fileUrl', file);
-    formData.append('textMessage', textMessage);
+document.addEventListener("DOMContentLoaded", function() {
 
-    fetch('/send/message', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Mensaje enviado exitosamente');
-            } else {
-                console.error('Error al enviar el mensaje');
-            }
+    document.getElementById('sendModal').addEventListener('click', () => {
+        console.log("Hola 2");
+        const recipient = document.getElementById("recipient").value;
+        const subject = document.getElementById("subject").value;
+        const fileInput = document.getElementById("fileUrl");
+        const file = fileInput.files[0];
+        const textMessage = document.getElementById("textMessage").value;
+
+        if (!recipient || !subject || !file || !textMessage) {
+            console.error('Todos los campos son obligatorios.');
+        }
+        console.log(recipient);
+        console.log(subject);
+        console.log(file);
+        console.log(textMessage);
+        const formData = new FormData();
+        formData.append('recipient', recipient);
+        formData.append('subject', subject);
+        formData.append('fileUrl', file);
+        formData.append('textMessage', textMessage);
+
+        fetch('/send/message', {
+            method: 'POST',
+            body: formData
         })
-        .catch(error => {
-            console.error('Error en la petición:', error);
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Mensaje enviado exitosamente');
+                } else {
+                    console.error('Error al enviar el mensaje');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la petición:', error);
+            });
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {

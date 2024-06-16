@@ -40,7 +40,7 @@ function logout() {
         });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', ()=> {
     const currentUrl = window.location.href;
     const navLinks = document.querySelectorAll('.nav-links a');
 
@@ -51,15 +51,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const menuIcon = document.querySelector('.menu-icon');
+    const navLinksContainer = document.querySelector('.nav-links');
+    const dropdownContent = document.querySelector('.dropdown-content');
+
     if (menuIcon) {
         menuIcon.addEventListener('click', () => {
-            const navLinks = document.querySelector('.nav-links');
-            const dropdownContent = document.querySelector('.dropdown-content');
-            if (navLinks && dropdownContent) {
-                navLinks.classList.toggle('active');
-                dropdownContent.classList.toggle('active');
-                menuIcon.classList.toggle('active');
+            if (navLinksContainer) {
+                navLinksContainer.classList.toggle('active');
             }
+            if (dropdownContent) {
+                dropdownContent.classList.toggle('active');
+            }
+            menuIcon.classList.toggle('active');
         });
     }
 });

@@ -30,7 +30,7 @@
     padding: 10px;
 }
 
-.menu-icon:hover{
+.menu-icon:hover {
     padding: 10px;
     background-color: rgb(235, 235, 235);
 }
@@ -136,11 +136,6 @@
 }
 
 @media screen and (max-width: 768px) {
-    .body {
-        padding-left: 100px;
-        padding-right: 100px;
-    }
-
     .menu-icon {
         display: block;
         cursor: pointer;
@@ -161,54 +156,37 @@
     }
 
     .nav-links {
-        margin: 0 auto;
-        padding: 0;
-        padding-top: 10px;
-        padding-bottom: 10px;
         position: fixed;
         top: 8.5vh;
         left: -100%;
-        width: 50%;
+        width: 100%;
         height: 100vh;
-        display: grid;
-        align-items: start;
-        justify-content: center;
         background-color: rgba(36, 36, 36, 0.979);
-        transition: 0.3s;
-        z-index: 1000;
-    }
-
-    .contenedor {
-        display: grid;
-        align-items: start;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
-        height: 10vh;
-    }
-
-    .nav-links .li {
-        text-align: center;
-    }
-
-    .nav-links .a {
-        padding: 20px;
-        color: #ffffff;
-        height: fit-content;
-    }
-
-    .nav-links .a::after {
-        background-color: var(--color-secundario);
-    }
-
-    .logo {
-        margin-left: 0px;
+        align-items: center;
+        transition: left 0.3s ease;
+        z-index: 1000;
     }
 
     .nav-links.active {
         left: 0;
     }
 
-    .dropdown {
-        position: relative;
+    .nav-links .li {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .nav-links .a {
+        color: #ffffff;
+        padding: 20px;
+        font-size: 1.2em;
+    }
+
+    .logo {
+        margin-left: 0;
     }
 
     .dropdown-content {
@@ -223,6 +201,7 @@
         margin-left: 0px;
     }
 }
+
 
 button {
     border: none;

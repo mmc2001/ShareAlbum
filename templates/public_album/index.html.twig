@@ -2,19 +2,46 @@
 
 {% block title %}{{ parent() }} - Invitado{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/public_album.css') }}">
+    <link rel="stylesheet" href="{{ asset('lightbox/lightgallery.css') }}">
+{% endblock %}
+
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div id="session-data" data-id="{{ session_id }}" style="display: none;"></div>
+    <div class="bodyContent">
+        <div class="cabecera">
+            <h1>{{session_name}}</h1>
+        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/wamp64/www/shareAlbum2/src/Controller/PublicAlbumController.php</code></li>
-        <li>Your template at <code>C:/wamp64/www/shareAlbum2/templates/public_album/index.html.twig</code></li>
-    </ul>
-</div>
+        <div class="buttonCentrado">
+            <button id="download3" class="button">
+                <span class="button-content">Descargar Imágenes
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
+                </span>
+            </button>
+        </div>
+
+        <div class="ordenacion" style="padding-bottom: 100px;">
+            <div class="contenedorAlbum">
+                <div class="contain">
+                </div>
+            </div>
+            <div class="contenedorImagenes" id="contenedorImagenes">
+                <div id="container3" data-id="{{ session_id }}"></div>
+            </div>
+        </div>
+    </div>
+
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('lightbox/lightgallery.js') }}"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://kit.fontawesome.com/77aa5e27b8.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
+        <script src="{{ asset('js/public_album.js') }}"></script>
+    {% endblock %}
 {% endblock %}

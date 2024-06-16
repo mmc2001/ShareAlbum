@@ -416,43 +416,46 @@ document.addEventListener("DOMContentLoaded", function() {
             location.reload();
         }
     }
+/*
+    async function generateToken() {
+        const albumId = await obtenerIdAlbum("FE");
+        const album = { id: albumId };
 
-    document.getElementById('generateToken').addEventListener('click', generateToken);
+        try {
+            const response = await fetch('/generate/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ album })
+            });
 
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                const token = result.token;
+                const url = `${window.location.origin}/public/album?token=${token}`;
+                await navigator.clipboard.writeText(url);
+                alert('URL copiada al portapapeles: ' + url);
+            } else {
+                alert('Error al generar el token: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al generar el token');
+        }
+    }
+
+    document.getElementById('generateToken').addEventListener('click', () => {
+        generateToken();
+    });
+ */
 });
 
-async function generateToken() {
-    const albumId = 123;
-    const album = { id: albumId };
-
-    try {
-        const response = await fetch('/generate/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ album })
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-            const token = result.token;
-            const url = `${window.location.origin}/public/album?token=${token}`;
-            await navigator.clipboard.writeText(url);
-            alert('URL copiada al portapapeles: ' + url);
-        } else {
-            alert('Error al generar el token: ' + result.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error al generar el token');
-    }
-}
 
 async function widgetCloudinary(album) {
     let imagenesSubidas = [];
@@ -541,3 +544,66 @@ async function widgetCloudinary(album) {
     }).open();
 }
 
+async function obtenerIdAlbum(album) {
+    let idSession = obtenerIdDeURL(); // Suponiendo que obtenerIdDeURL() devuelve el ID de sesión
+
+    try {
+        const response = await fetch(`/obtener/album/${idSession}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los álbumes');
+        }
+
+        const data = await response.json();
+        const jsonArray = JSON.parse(data);
+        const albumEncontrado = jsonArray.find(a => a.name === album);
+
+        if (!albumEncontrado) {
+            console.error('Álbum no encontrado');
+            return 0; // Devuelve 0 si el álbum no es encontrado
+        }
+
+        return albumEncontrado.id;
+    } catch (error) {
+        console.error('Error al obtener el ID del álbum:', error);
+        return 0; // Devuelve 0 si ocurre un error
+    }
+}
+
+async function generateToken() {
+    const albumId = await obtenerIdAlbum("FE");
+    const album = { id: albumId };
+
+    try {
+        const response = await fetch('/generate/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ album })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            const token = result.token;
+            const url = `${window.location.origin}/public/album?token=${token}`;
+            await navigator.clipboard.writeText(url);
+            alert('URL copiada al portapapeles: ' + url);
+        } else {
+            alert('Error al generar el token: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al generar el token');
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('generateToken').addEventListener('click', () => {
+        generateToken();
+    });
+});

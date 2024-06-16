@@ -35,6 +35,7 @@ class GenerateTokenController extends AbstractController
             $guest->setToken($tokenString);
             $guest->setAlbum($album);
             $guest->setExpirationDate($expirationDate);
+            $guest->setAlbum($album);
 
             $entityManager->persist($guest);
             $entityManager->flush();

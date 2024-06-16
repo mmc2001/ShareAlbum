@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Repository\AlbumRepository;
 use App\Repository\GuestRepository;
+use App\Repository\SessionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class PublicAlbumController extends AbstractController
 {
     #[Route('/public/album', name: 'app_public_album')]
-    public function publicAlbum(Request $request, GuestRepository $guestRepository): Response
+    public function publicAlbum(Request $request, GuestRepository $guestRepository, AlbumRepository $albumRepository, SessionRepository $sessionRepository): Response
     {
 
         $token = $request->query->get('token');
@@ -37,13 +39,15 @@ class PublicAlbumController extends AbstractController
             ]);
         }
 
-        //$albumId = $guest->getAlbum()->getId();
-        // $albumRepository = ... obtén el repository de tu entidad Album
-        // $album = $albumRepository->find($albumId);
+        $albumId = $guest->getAlbum()->getId();
+        $album = $albumRepository->find($albumId);
+        $sessionId = $album->getSession();
+        $session = $sessionRepository->find($sessionId);
 
         return $this->render('public_album/index.html.twig', [
             'controller_name' => 'PublicAlbumController',
-            //'albumId' => $albumId,
+            'session_name' => $session->getName(),
+            'session_id' => $sessionId->getId(),
         ]);
     }
 }
