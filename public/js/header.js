@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
-
 function logout() {
     fetch('/logout', {
         method: 'POST',
@@ -39,8 +38,7 @@ function logout() {
             console.error('Error during logout:', error);
         });
 }
-
-document.addEventListener('DOMContentLoaded', ()=> {
+document.addEventListener("DOMContentLoaded", function() {
     const currentUrl = window.location.href;
     const navLinks = document.querySelectorAll('.nav-links a');
 
@@ -49,7 +47,6 @@ document.addEventListener('DOMContentLoaded', ()=> {
             link.classList.add('active');
         }
     });
-
     const menuIcon = document.querySelector('.menu-icon');
     const navLinksContainer = document.querySelector('.nav-links');
     const dropdownContent = document.querySelector('.dropdown-content');
@@ -57,6 +54,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
     if (menuIcon) {
         menuIcon.addEventListener('click', () => {
             if (navLinksContainer) {
+                console.log('Menu icon clicked');
                 navLinksContainer.classList.toggle('active');
             }
             if (dropdownContent) {
@@ -65,9 +63,9 @@ document.addEventListener('DOMContentLoaded', ()=> {
             menuIcon.classList.toggle('active');
         });
     }
-});
 
-document.addEventListener('DOMContentLoaded', () => {
+});
+document.addEventListener("DOMContentLoaded", function() {
     const inicioLink = document.getElementById('inicio-link');
     const clientesLink = document.getElementById('clientes-link');
     const sesionesLink = document.getElementById('sesiones-link');
@@ -86,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
     const camposDiv = document.querySelector('.camposPassword');
     const mostrar = document.querySelector('#mostrar');
     const formPassword = document.getElementById('formPassword');
@@ -114,7 +111,6 @@ document.addEventListener("DOMContentLoaded", function() {
             // Aquí puedes añadir una confirmación si es necesario
         });
     }
-});
 
 // LOADING
 

@@ -381,7 +381,7 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault();
         deletePhotos.length = 0;
         document.getElementById("modalEditarAlbum").style.display = "none";
-        location.reload();
+        //location.reload();
     });
 
     //const addButton = document.getElementById('Añadir');
@@ -541,6 +541,9 @@ async function widgetCloudinary(album) {
                     console.error('Error en la petición:', error);
                 });
         }
+        if (result.event === 'close') {
+            location.reload();
+        }
     }).open();
 }
 
@@ -602,8 +605,6 @@ async function generateToken() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('generateToken').addEventListener('click', () => {
-        generateToken();
-    });
+document.getElementById('generateToken').addEventListener('click', () => {
+    generateToken();
 });

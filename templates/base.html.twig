@@ -12,9 +12,6 @@
         <link rel="stylesheet" href="{{ asset('styles/footer.css') }}">
     {% endblock %}
 
-    {% block javascripts %}
-        <script src="{{ asset('js/header.js') }}"></script>
-    {% endblock %}
 </head>
 <body class="body">
 {% block header %}
@@ -94,6 +91,10 @@
             </div>
         </div>
     </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/header.js') }}"></script>
+    {% endblock %}
 {% endblock %}
 
 {% block footer %}
