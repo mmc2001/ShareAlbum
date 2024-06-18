@@ -604,7 +604,6 @@ async function generateToken() {
         alert('Error al generar el token');
     }
 }
-
 document.getElementById('generateToken').addEventListener('click', () => {
     generateToken();
 });

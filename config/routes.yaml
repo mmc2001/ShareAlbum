@@ -138,3 +138,13 @@ app_obtener_photo:
     path: /obtener/photo/{id}
     controller: App\Controller\ObtenerPhotosController::getPhoto
     methods: [ 'GET' ]
+
+app_comprobar_caducidad:
+    path: /comprobar/caducidad
+    controller: App\Controller\LoginController::comprobarCaducidad
+    methods: [ 'GET', 'POST' ]
+
+app_update_password:
+    path: /update/password
+    controller: App\Controller\LoginController::updatePassword
+    methods: [ 'GET', 'POST' ]

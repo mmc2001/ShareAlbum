@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +17,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager){
+        $this->entityManager = $entityManager;
+    }
+
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -60,6 +70,47 @@ class LoginController extends AbstractController
 
         // Redirigir a donde desees después de enviar el formulario
         return $this->redirectToRoute('app_login');
+    }
+
+    #[Route(path: '/comprobar/caducidad', name: 'app_comprobar_caducidad')]
+    public function comprobarCaducidad(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if ($user) {
+            $currentDate = new \DateTime();
+            if ($user->getPasswordExpiryDate() < $currentDate) {
+                return $this->redirectToRoute('app_update_password');
+            } else {
+                return $this->redirectToRoute('app_dashboard');
+            }
+        }
+
+        return $this->redirectToRoute('app_login');
+    }
+
+    #[Route(path: '/update/password', name: 'app_update_password')]
+    public function updatePassword(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        if ($request->isMethod('POST')) {
+            $user = $this->getUser();
+            $newPassword = $request->request->get('new_password');
+            $newPassword2 = $request->request->get('new_password2');
+
+            if ($user instanceof User && $newPassword && $newPassword === $newPassword2) {
+                $userRepository->upgradePassword($user, $newPassword);
+                $user->setPasswordExpiryDate((new \DateTime())->modify('+90 days'));
+                $this->addFlash('success', 'Your password has been updated successfully.');
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_dashboard');
+            } else {
+                $this->addFlash('error', 'Las contraseñas no coinciden');
+            }
+        }
+
+        return $this->render('/update_password/update_password.html.twig');
     }
 
 }

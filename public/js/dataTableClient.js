@@ -156,7 +156,7 @@ const listUsers = async () => {
             }
 
             // Validación antes de enviar el formulario usando ID en vez de name
-            if (!$('#userUpdate_name').val() || !$('#userUpdate_surnames').val() || !$('#userUpdate_dni').val() || !$('#userUpdate_telephone').val() || !$('#userUpdate_email').val() || !$('#userUpdate_password1').val() || !$('#userUpdate_password2').val()) {
+            if (!$('#userUpdate_name').val() || !$('#userUpdate_surnames').val() || !$('#userUpdate_dni').val() || !$('#userUpdate_telephone').val() || !$('#userUpdate_email').val()) {
                 console.error('Todos los campos son obligatorios.');
                 return;
             }

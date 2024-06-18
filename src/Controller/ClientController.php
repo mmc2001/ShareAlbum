@@ -67,6 +67,7 @@ class ClientController extends AbstractController
             $client->setDni($formClient->get('dni')->getData());
             $client->setTelephone($formClient->get('telephone')->getData());
             $client->setRoles([$formClient->get('roles')->getData()]);
+            $client->setPasswordExpiryDate(new \DateTime());
 
             $entityManager->persist($client);
             $entityManager->flush();
