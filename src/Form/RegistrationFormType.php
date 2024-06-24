@@ -26,8 +26,8 @@ class RegistrationFormType extends AbstractType
             ->add('telephone')
             ->add('roles', ChoiceType::class, [
                 'choices'  => [
-                    'User' => '%ROLE_USER%',
-                    'Admin' => '%ROLE_ADMIN_USER%',
+                    'User' => 'ROLE_USER',
+                    'Admin' => 'ROLE_ADMIN_USER',
                 ],
                 'mapped' => false,
                 'multiple' => false,

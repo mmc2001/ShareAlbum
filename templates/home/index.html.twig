@@ -1,0 +1,44 @@
+{% extends 'baseHome.html.twig' %}
+
+{% block title %}{{parent()}} - Home{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/home.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    {{ parent() }}
+
+    <div class="mensajeBienvenida">
+        <h2 id="mensaje"></h2>
+        <h2> {{ user.name }} </h2>
+    </div>
+
+    <div class="sesiones">
+        <h2>Sesiones disponibles</h2>
+        <div id="sesiones" class="cards"></div>
+    </div>
+
+    <div class="email-form-container">
+        <div class="email-form" id="emailForm">
+            <span class="close-btn" id="closeBtn">&times;</span>
+            <h2>Enviar Email</h2>
+            <form id="form">
+                <label for="subject">Asunto</label>
+                <input type="text" id="subject" name="subject" required>
+                <label for="message">Mensaje</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+        <button class="email-button" id="emailButton">✉️</button>
+    </div>
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="{{ asset('js/home.js') }}"></script>
+        <script src="https://kit.fontawesome.com/77aa5e27b8.js" crossorigin="anonymous"></script>
+    {% endblock %}
+{% endblock %}

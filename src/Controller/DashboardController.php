@@ -49,7 +49,7 @@ class  DashboardController extends AbstractController
         $nClient = $userRepository->createQueryBuilder('u')
             ->select('COUNT(u)')
             ->where('u.roles LIKE :role')
-            ->setParameter('role', '["%ROLE_USER%"]')
+            ->setParameter('role', '["ROLE_USER"]')
             ->getQuery()
             ->getSingleScalarResult();
         $nSession = $sessionRepository->count([]);
@@ -77,8 +77,8 @@ class  DashboardController extends AbstractController
             $event->setServices($formEvent->get('services')->getData());
             $event->setSession($formEvent->get('session')->getData());
             if (empty($formEvent->get('comment')->getData())){
-                $comment = " "; // No necesitas establecer el comentario como espacio vacío aquí
-                $event->setComment($comment); // Esta línea se puede eliminar
+                $comment = " ";
+                $event->setComment($comment);
             } else {
                 $event->setComment($formEvent->get('comment')->getData());
             }

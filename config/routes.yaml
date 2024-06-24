@@ -148,3 +148,13 @@ app_update_password:
     path: /update/password
     controller: App\Controller\LoginController::updatePassword
     methods: [ 'GET', 'POST' ]
+
+app_obtener_sessions_users:
+    path: /obtener/sessions/user
+    controller: App\Controller\ObtenerSessionsUsersController::getSessionsUser
+    methods: [ 'GET' ]
+
+app_send_email:
+    path: /send/email
+    controller: App\Controller\SendEmailController::sendEmail
+    methods: [ 'POST' ]

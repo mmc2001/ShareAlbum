@@ -113,13 +113,13 @@ const listUsers = async () => {
                 const sessionClientNames = session.clients.split(',').map(name => name.trim());
 
                 const admins = sessionClientNames
-                    .map(clientName => clients.find(client => `${client.name} ${client.surnames}` === clientName && client.rol[0] === '%ROLE_ADMIN_USER%'))
+                    .map(clientName => clients.find(client => `${client.name} ${client.surnames}` === clientName && client.rol[0] === 'ROLE_ADMIN_USER'))
                     .filter(client => client)
                     .map(client => `${client.name} ${client.surnames}`)
                     .join(', ');
 
                 const users = sessionClientNames
-                    .map(clientName => clients.find(client => `${client.name} ${client.surnames}` === clientName && client.rol[0] === '%ROLE_USER%'))
+                    .map(clientName => clients.find(client => `${client.name} ${client.surnames}` === clientName && client.rol[0] === 'ROLE_USER'))
                     .filter(client => client)
                     .map(client => `${client.name} ${client.surnames}`)
                     .join(', ');
@@ -452,10 +452,10 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
                 const clientFullName = `${client.name} ${client.surnames}`;
 
                 if (sessionClients.includes(clientFullName)) {
-                    if (client.rol.includes("%ROLE_ADMIN_USER%")) {
+                    if (client.rol.includes("ROLE_ADMIN_USER")) {
                         photographer = clientFullName;
                     }
-                    if (client.rol.includes("%ROLE_USER%")) {
+                    if (client.rol.includes("ROLE_USER")) {
                         clients.push(clientFullName);
                     }
                 }

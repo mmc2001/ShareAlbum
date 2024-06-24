@@ -31,7 +31,7 @@ class MessageType extends AbstractType
                 'query_builder' => function(UserRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->where('u.roles LIKE :role')
-                        ->setParameter('role', '["%ROLE_USER%"]');
+                        ->setParameter('role', '["ROLE_USER"]');
                 },
                 'choice_label' => function($value, $key, $index) {
                     if ($index === 0) {

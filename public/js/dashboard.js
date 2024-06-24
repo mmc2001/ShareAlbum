@@ -455,7 +455,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Verificar si tiene elementos
                 if (Array.isArray(jsonArray) && jsonArray.length > 0) {
                     const htmlClientes = jsonArray.map(cliente => {
-                        if (cliente.rol[0] === '%ROLE_USER%'){
+                        if (cliente.rol[0] === 'ROLE_USER'){
                             // Concatenar el contenido del objeto clientes
                             const nombreCompleto = cliente.name + " " + cliente.surnames;
 
@@ -519,7 +519,7 @@ function cargarClientes() {
             jsonArray = JSON.parse(data);
             let clientesFiltrados = [];
             jsonArray.forEach(cliente => {
-                if (cliente.rol.includes('%ROLE_USER%')) {
+                if (cliente.rol.includes('ROLE_USER')) {
                     clientesFiltrados.push(cliente);
                 }
             });
@@ -537,7 +537,7 @@ function cargarClientes() {
                     listadoClientes.appendChild(option);
                 });
             } else {
-                console.error('No se encontraron clientes con el rol %ROLE_USER%');
+                console.error('No se encontraron clientes con el rol ROLE_USER');
             }
         })
         .catch(error => console.error('Error al cargar los clientes disponibles:', error.message));

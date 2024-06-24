@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}ShareAlbum{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('styles/reset.css') }}">
+        <link rel="stylesheet" href="{{ asset('styles/headerHome.css') }}">
+        <link rel="stylesheet" href="{{ asset('styles/footer.css') }}">
+    {% endblock %}
+
+</head>
+<body class="body">
+{% block header %}
+    <header class="headerNav">
+        <nav class="navP">
+            <ul class="nav-links">
+                <li class="li contenedor">
+                    <a href="{{ path('app_home') }}" id="inicio-link" class="a margen-izquierdo">Inicio</a>
+                </li>
+            </ul>
+            <a href="{{ path('app_home') }}" id="a logo-link" class="logo"><img src="/img/logo.svg" class="img" alt="Logo"></a>
+            <div class="dropdown">
+                <button type="button">
+                    <img src="/img/usuario.png" class="img margen-derecho" alt="Descripción de la imagen">
+                </button>
+                <div class="dropdown-content">
+                    <a href="#modalPerfil" class="a">Perfil</a>
+                    <a href="#" class="a" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+{% endblock header %}
+
+{% block body %}
+
+    <div id="loading-screen">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Modal Datos Perfil -->
+    <div class="modalPerfil" id="modalPerfil">
+        <div class="modalPerfil-content">
+            <span class="cerrarModal" id="CerrarPerfil">&times;</span>
+            <div class="datos">
+                <h1 class="h1">Perfil</h1>
+                <!-- Primer formulario -->
+                <form method="post" id="formPrincipal">
+                    {{ form_errors(formUserData) }}
+                    {{ form_start(formUserData) }}
+                    <div class="campos">
+                        {{ form_widget(formUserData.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                        {{ form_widget(formUserData.surnames, {'attr': {'class': 'padding', 'placeholder': 'Apellidos'}}) }}
+                        {{ form_widget(formUserData.email, {'attr': {'class': 'padding', 'placeholder': 'Email'}}) }}
+                        {{ form_widget(formUserData.dni, {'attr': {'class': 'padding', 'placeholder': 'DNI'}}) }}
+                        {{ form_widget(formUserData.telephone, {'attr': {'class': 'padding', 'placeholder': 'Telefono'}}) }}
+                    </div>
+                    <div class="botonSubmitPerfil">
+                        <!-- <button id="CerrarPerfil" class="submitPerfil padding" style="margin-bottom: 10px;">Atrás</button> -->
+                        <button type="submit" class="submitPerfil padding" style="margin-bottom: 10px;">Actualizar</button>
+                    </div>
+                    {{ form_end(formUserData)}}
+                </form>
+
+                <button id="mostrar" style="font-weight: bold; font-size: medium; margin-top: 20px; margin-bottom: 20px;">Cambiar contraseña</button>
+                <div class="camposPassword">
+                    <form method="post" id="formPassword">
+                        {{ form_errors(formNewPassword) }}
+                        {{ form_start(formNewPassword) }}
+                        {{ form_widget(formNewPassword.password.first, {'attr': {'class': 'padding', 'style': 'margin-bottom: 10px;', 'placeholder': 'Nueva contraseña'}}) }}
+                        {{ form_widget(formNewPassword.password.second, {'attr': {'class': 'padding', 'placeholder': 'Repite la contraseña'}}) }}
+                        <div class="campoPasword">
+                            <button type="submit" class="submitPassword padding" id="sendModal3">Actualizar</button>
+                        </div>
+                        {{ form_end(formNewPassword)}}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/headerHome.js') }}"></script>
+    {% endblock %}
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <p>
+            Aplicación: <i>ShareAlbum</i> -
+            Creado por: <i> Moisés Moyano Cejudo</i>
+        </p>
+    </footer>
+{% endblock footer %}
+</body>
+</html>
+

@@ -82,7 +82,11 @@ class LoginController extends AbstractController
             if ($user->getPasswordExpiryDate() < $currentDate) {
                 return $this->redirectToRoute('app_update_password');
             } else {
-                return $this->redirectToRoute('app_dashboard');
+                if ($user->getRoles()[0] == "ROLE_USER"){
+                    return $this->redirectToRoute('app_home');
+                } else {
+                    return $this->redirectToRoute('app_dashboard');
+                }
             }
         }
 
@@ -104,7 +108,11 @@ class LoginController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('app_dashboard');
+                if ($user->getRoles()[0] == "ROLE_USER"){
+                    return $this->redirectToRoute('app_home');
+                } else {
+                    return $this->redirectToRoute('app_dashboard');
+                }
             } else {
                 $this->addFlash('error', 'Las contraseñas no coinciden');
             }
