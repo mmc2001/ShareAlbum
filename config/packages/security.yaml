@@ -48,10 +48,11 @@ security:
 
         - { path: ^/dashboard, roles: ROLE_ADMIN_USER }
         - { path: ^/client, roles: ROLE_ADMIN_USER }
-        - { path: ^/album, roles: ROLE_ADMIN_USER }
+        - { path: ^/albums, roles: ROLE_ADMIN_USER }
         - { path: ^/session, roles: ROLE_ADMIN_USER }
 
         - { path: ^/home, roles: ROLE_USER }
+        - { path: ^/album/client, roles: ROLE_USER }
 
 when@test:
     security:

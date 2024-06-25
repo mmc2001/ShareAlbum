@@ -36,34 +36,30 @@ document.addEventListener("DOMContentLoaded", function() {
                 sessionName.textContent = session.name;
                 sessionCard.appendChild(sessionName);
 
+                const sessionServiceContainer = document.createElement("div");
+                sessionServiceContainer.classList.add("campos");
+                sessionServiceContainer.classList.add("session-service-container");
+
                 const sessionDate = document.createElement("p");
                 const dateString = session.date;
                 const date = new Date(dateString);
                 const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                 sessionDate.textContent = formattedDate;
-                sessionCard.appendChild(sessionDate);
-
-                const sessionServiceContainer = document.createElement("div");
-                sessionServiceContainer.classList.add("campos");
-                sessionServiceContainer.classList.add("session-service-container");
+                sessionServiceContainer.appendChild(sessionDate);
 
                 const sessionService = document.createElement("p");
                 sessionService.textContent = session.service;
                 sessionService.classList.add("sombreado");
                 sessionServiceContainer.appendChild(sessionService);
 
-                const serviceButton = document.createElement("button");
-                serviceButton.textContent = "Ver álbum";
-                serviceButton.classList.add("buttonCard");
-                serviceButton.addEventListener("click", () => {
-                    // Lógica para el botón
-                    alert(`Acción para ${session.service}`);
-                });
-                sessionServiceContainer.appendChild(serviceButton);
-
                 sessionCard.appendChild(sessionServiceContainer);
 
-                sesionesDiv.appendChild(sessionCard);
+                const sessionLink = document.createElement("a");
+                sessionLink.href = `/album/client/${session.id}`;
+
+                sessionLink.appendChild(sessionCard);
+
+                sesionesDiv.appendChild(sessionLink);
             });
         })
         .catch(error => {

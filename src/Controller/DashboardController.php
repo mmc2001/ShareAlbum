@@ -13,6 +13,9 @@ use App\Repository\PhotosRepository;
 use App\Repository\SessionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Google\Client;
+use Google\Service\Calendar\Calendar;
+use Google\Service\Calendar\EventDateTime;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -24,6 +27,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Service\GoogleClientProvider;
 
 class  DashboardController extends AbstractController
 {
@@ -34,13 +38,16 @@ class  DashboardController extends AbstractController
     private $userRepository;
     private $entityManager;
 
+    private $googleClientProvider;
 
-    public function __construct(Security $security, SessionRepository $sessionRepository, EntityManagerInterface $entityManager, UserRepository $userRepository)
+
+    public function __construct(Security $security, SessionRepository $sessionRepository, EntityManagerInterface $entityManager, UserRepository $userRepository, GoogleClientProvider $googleClientProvider)
     {
         $this->userRepository = $userRepository;
         $this->security = $security;
         $this->sessionRepository = $sessionRepository;
         $this->entityManager = $entityManager;
+        $this->googleClientProvider = $googleClientProvider;
     }
 
     #[Route('/dashboard', name: 'app_dashboard')]
@@ -49,7 +56,7 @@ class  DashboardController extends AbstractController
         $nClient = $userRepository->createQueryBuilder('u')
             ->select('COUNT(u)')
             ->where('u.roles LIKE :role')
-            ->setParameter('role', '["ROLE_USER"]')
+            ->setParameter('role', '["%ROLE_USER%"]')
             ->getQuery()
             ->getSingleScalarResult();
         $nSession = $sessionRepository->count([]);
@@ -87,7 +94,27 @@ class  DashboardController extends AbstractController
 
             $entityManager->persist($event);
             $entityManager->flush();
+            /*
+            // Añadir el evento a Google Calendar
+            $client = new \Google_Client();
+            $client->setApplicationName('Share Album');
+            $client->setScopes(\Google_Service_Calendar::CALENDAR);
+            $client->setAccessType('offline');
+            $client->setAuthConfig('C:\wamp64\www\shareAlbum2\client_secret_344167336176-52s75kfdes5i97ga71m6hrcal2ipgn69.apps.googleusercontent.com.json');
+            $service = new \Google_Service_Calendar($client);
 
+            $eventGoogle = new \Google_Service_Calendar_Event();
+            $eventGoogle->setSummary($event->getName());
+            $start = new \Google_Service_Calendar_EventDateTime();
+            $start->setDateTime( $event->getDate()->format('c'));
+            $eventGoogle->setStart($start);
+            $end = new \Google_Service_Calendar_EventDateTime();
+            $end->setDateTime($event->getDate()->modify('+1 hour')->format('c'));
+            $eventGoogle->setEnd($end);
+
+            $calendarId = 'primary';
+            $eventGoogle = $service->events->insert($calendarId, $eventGoogle);
+            */
             return $this->redirectToRoute('app_dashboard');
         }
 

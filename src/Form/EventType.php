@@ -25,8 +25,8 @@ class EventType extends AbstractType
                 'class' => User::class,
                 'query_builder' => function(UserRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->where('u.roles LIKE :role')
-                        ->setParameter('role', 'ROLE_ADMIN_USER');
+                        ->where('u.roles LIKE :roles')
+                        ->setParameter('roles', '%ROLE_ADMIN_USER%');
                 },
                 'choice_label' => function($value, $key, $index) {
                     if ($index === 0) {

@@ -236,11 +236,16 @@ input {
     margin: 10px 0;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .sombreado {
     width: fit-content;
     border-radius: 15px;
     padding: 8px;
-    background-color: rgba(237, 217, 0, 0.32);
+    background-color: rgba(237, 217, 0, 0.26);
 }
 
 .campos {
