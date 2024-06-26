@@ -519,7 +519,7 @@ function cargarClientes() {
             jsonArray = JSON.parse(data);
             let clientesFiltrados = [];
             jsonArray.forEach(cliente => {
-                if (cliente.rol.includes('ROLE_USER')) {
+                if (cliente.rol.includes('ROLE_USER') && !cliente.rol.includes('ROLE_ADMIN_USER')) {
                     clientesFiltrados.push(cliente);
                 }
             });

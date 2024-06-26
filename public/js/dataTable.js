@@ -455,7 +455,7 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
                     if (client.rol.includes("ROLE_ADMIN_USER")) {
                         photographer = clientFullName;
                     }
-                    if (client.rol.includes("ROLE_USER")) {
+                    if (client.rol.includes("ROLE_USER") && !client.rol.includes("ROLE_ADMIN_USER")) {
                         clients.push(clientFullName);
                     }
                 }
@@ -477,7 +477,7 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
 
     let totalExtras = modalData.extras.reduce((sum, extra) => sum + (parseFloat(extra.price) * parseInt(extra.cantidad, 10)), 0);
     let totalPrice = (parseFloat(modalData.precioTotal) + totalExtras).toFixed(2);
-
+    let cadenaTotalPrice = `Precio Total: ${totalPrice}`;
     let filasHTML = "";
     //console.log(modalData);
 
@@ -492,6 +492,8 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
             filasHTML += "</tr>";
         });
     }
+
+    const priceParagraph = document.getElementById("totalPrice");
 
     let ticketHTML = `
         <div class="container" id="template_invoice">
@@ -538,7 +540,7 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
                                 <table class="table table-condensed">
                                     <thead>
                                         <tr>
-                                            <td><strong>Servicio</strong></td>
+                                            <td><strong>Lista de Servicios</strong></td>
                                             <td class="text-center"><strong>Precio</strong></td>
                                         </tr>
                                     </thead>
@@ -571,7 +573,7 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
                         </div>
                         <div class="panel-heading">
                             <div id="precioCompleto">
-                                <p>Precio Total: ${totalPrice} €</p>
+                                <p>${cadenaTotalPrice}</p>
                             </div>  
                         </div>
                     </div>

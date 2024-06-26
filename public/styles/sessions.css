@@ -284,14 +284,14 @@ input {
 /* Estilo para cada elemento dentro del desplegable */
 .desplegable .label {
     display: inline-block; /* Mostrar los elementos en línea */
-    width: calc(100% - 67px); /* Ajustar el ancho al contenido */
+    width: calc(100% - 50px); /* Ajustar el ancho al contenido */
     text-align: left;
 }
 
 /* Estilo para los checkboxes */
 .desplegable input[type="checkbox"] {
     display: inline-block; /* Mostrar los checkboxes en línea */
-    width: 120px; /* Ajustar el ancho al contenido */
+    width: 140px; /* Ajustar el ancho al contenido */
 }
 
 
