@@ -584,6 +584,42 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
 
     //console.log(ticketHTML);
 
+    let css = `body{ background: #E0E0E0;}`;
+
+    const doc = new jsPDF("p", "pt", "letter");
+    const margins = {
+        top: 40,
+        bottom: 60,
+        left: 40,
+        width: 522
+    };
+
+    //const html = ticketHTML;
+
+    try {
+        doc.fromHTML(
+            ticketHTML,
+            margins.left,
+            margins.top,
+            {
+                width: margins.width,
+                elementHandlers: {
+                    '#ignorePDF': function (element, renderer) {
+                        return true;
+                    }
+                }
+            },
+            function(dispose) {
+                const nombreArchivo = `Ticket_${sessionData.id}.pdf`;
+                doc.save(nombreArchivo);
+            },
+            margins,
+            css
+        );
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+    }
+    /*
     const doc = new jsPDF("p", "pt", "letter");
     const margins = {
         top: 40,
@@ -614,6 +650,7 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
     } catch (error) {
         console.error('Error generating PDF:', error);
     }
+     */
 }
 
 
