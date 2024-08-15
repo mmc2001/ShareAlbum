@@ -692,6 +692,11 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault();
         document.getElementById("modal").style.display = "none";
     });
+
+    document.getElementById("CerrarTarea").addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("modal").style.display = "none";
+    });
 });
 
 /* Datos del usuario logueado */

@@ -3,14 +3,15 @@
 {% block title %}{{ parent() }} - Sesiones{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('styles/sessions.css') }}">
 
     <!-- Estilos de datatables -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap4.css">
     <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.bootstrap4.min.css" rel="stylesheet">
+
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/sessions.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -18,19 +19,21 @@
 
     <div style="width: 100vw;">
         <div class="cabecera">
-            <h2 class="titulo">Sesiones disponibles</h2>
-            <div style="display: flex; align-items: center; gap: 6px">
-                <button class="boton" id="nuevaSesion">Sesión</button>
-                <div class="divider"></div>
-                <button class="boton" id="nuevoServicio">Servicio</button>
-                <button class="boton" id="nuevoExtra">Extra</button>
+            <div class="contenidoCabecera">
+                <h2 class="titulo">Sesiones disponibles</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="boton" id="nuevaSesion">Sesión</button>
+                    <div class="divider"></div>
+                    <button class="boton" id="nuevoServicio">Servicio</button>
+                    <button class="boton" id="nuevoExtra">Extra</button>
+                </div>
             </div>
         </div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row contenedor-dataTable">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="table-responsive">
-                        <table id="example" class="table table-striped table-bordered" style="width:100%">
+                        <table id="example" class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>Nº</th>
@@ -57,32 +60,51 @@
     <!-- Modal Crear Sesion -->
     <div class="modalSesion" id="modalSesion">
         <div class="modalSesion-content">
-            <h1>Nueva sesión</h1>
+            <span class="cerrarModal" id="CerrarSessionButton">&times;</span>
+            <h1><i class="fa-solid fa-camera"></i>&nbsp;Nueva sesión</h1>
             <div class="contenedorFormularioSesion" id="contenedorFormularioSesion">
                 <form method="post" id="formEvent">
                     {#  {{ form_errors(formEvent) }} #}
                     {{ form_start(formSession) }}
-                    <label class="label">Nombre</label>
-                    {{ form_widget(formSession.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
-                    <label class="label">Servicio</label>
-                    {{ form_widget(formSession.service, {'attr': {'class': 'padding', 'placeholder': 'Servicio'}}) }}
-                    <label class="label">Fecha</label>
-                    {{ form_widget(formSession.date, {'attr': {'class': 'padding', 'placeholder': 'Fecha'}}) }}
-                    <label class="label">Precio</label>
-                    {{ form_widget(formSession.priceSession, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
-                    <label class="label">Descripción</label>
-                    {{ form_widget(formSession.descriptionSession, {'attr': {'class': 'padding', 'placeholder': 'Descripción'}}) }}
-                    <label class="label">Usuarios</label>
-                    <div class="desplegable">
-                        {{ form_widget(formSession.users, {'attr': {'class': 'padding'}}) }}
+                    <div class="camposSession">
+                        <div>
+                            <label class="label">Nombre</label>
+                            {{ form_widget(formSession.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Servicio</label>
+                            {{ form_widget(formSession.service, {'attr': {'class': 'padding', 'placeholder': 'Servicio'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Fecha</label>
+                            {{ form_widget(formSession.date, {'attr': {'class': 'padding', 'placeholder': 'Fecha'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Precio</label>
+                            {{ form_widget(formSession.priceSession, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Descripción</label>
+                            {{ form_widget(formSession.descriptionSession, {'attr': {'class': 'padding', 'placeholder': 'Descripción'}}) }}
+                        </div>
                     </div>
-                    <label class="label">Extras</label>
-                    <div class="desplegable">
-                        {{ form_widget(formSession.extras, {'attr': {'class': 'padding'}}) }}
+                    <div class="camposSession">
+                        <div>
+                            <label class="label">Usuarios</label>
+                            <div class="desplegable">
+                                {{ form_widget(formSession.users, {'attr': {'class': 'padding'}}) }}
+                            </div>
+                        </div>
+                        <div>
+                            <label class="label">Extras</label>
+                            <div class="desplegable">
+                                {{ form_widget(formSession.extras, {'attr': {'class': 'padding'}}) }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="camposParalelos">
-                        <button id="CerrarSesion">Cerrar</button>
-                        <button type="submit">Crear</button>
+                    <div class="camposParalelosSession">
+                        <button id="CerrarSesion" class="closeSession">Atrás</button>
+                        <button type="submit" class="submitSession">Crear</button>
                     </div>
                     {{ form_end(formSession) }}
                 </form>
@@ -94,21 +116,26 @@
     <!-- Modal Crear Extra -->
     <div class="modalExtra" id="modalExtra">
         <div class="modalExtra-content">
-            <h1>Nuevo Extra</h1>
+            <span class="cerrarModal" id="CerrarExtraButton">&times;</span>
+            <h1><i class="fa-solid fa-circle-plus"></i>&nbsp;Nuevo Extra</h1>
             <div class="contenedorFormularioExtra" id="contenedorFormularioExtra">
                 <form method="post" id="formExtras">
                     {#  {{ form_errors(formExtras) }} #}
                     {{ form_start(formExtras) }}
-                    <label class="label">Nombre</label>
-                    {{ form_widget(formExtras.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
-                    <label class="label">Precio</label>
-                    {{ form_widget(formExtras.priceExtra, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
-                    <div class="camposParalelos">
-                        <button id="CerrarExtra">Cerrar</button>
-                        <button type="submit">Crear</button>
+                    <div>
+                        <label class="label">Nombre</label>
+                        {{ form_widget(formExtras.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                    </div>
+                    <div>
+                        <label class="label">Precio</label>
+                        {{ form_widget(formExtras.priceExtra, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
                     </div>
                     {{ form_end(formExtras) }}
                 </form>
+                <div class="camposParalelos">
+                    <button id="CerrarExtra" class="closeExtras">Atrás</button>
+                    <button type="submit" class="submitExtras">Crear</button>
+                </div>
             </div>
         </div>
     </div>
@@ -117,21 +144,26 @@
     <!-- Modal Crear Servicio -->
     <div class="modalServicio" id="modalServicio">
         <div class="modalServicio-content">
-            <h1>Nuevo Servicio</h1>
+            <span class="cerrarModal" id="CerrarServicioButton">&times;</span>
+            <h1><i class="fa-solid fa-circle-plus"></i>&nbsp;Nuevo Servicio</h1>
             <div class="contenedorFormularioServicio" id="contenedorFormularioServicio">
                 <form method="post" id="formServices">
                     {#  {{ form_errors(formServices) }} #}
                     {{ form_start(formServices) }}
-                    <label class="label">Nombre</label>
-                    {{ form_widget(formServices.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
-                    <label class="label">Precio</label>
-                    {{ form_widget(formServices.priceService, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
-                    <div class="camposParalelos">
-                        <button id="CerrarServicio">Cerrar</button>
-                        <button type="submit">Crear</button>
+                    <div>
+                        <label class="label">Nombre</label>
+                        {{ form_widget(formServices.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                    </div>
+                    <div>
+                        <label class="label">Precio</label>
+                        {{ form_widget(formServices.priceService, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
                     </div>
                     {{ form_end(formServices) }}
                 </form>
+                <div class="camposParalelos">
+                    <button id="CerrarServicio" class="closeServicio">Atrás</button>
+                    <button type="submit" class="submitServicio">Crear</button>
+                </div>
             </div>
         </div>
     </div>
@@ -140,35 +172,42 @@
     <!-- Modal Ver Ticket -->
     <div class="modalVerTicket" id="modalVerTicket">
         <div class="modalVerTicket-content">
-            <h1>Ticket</h1>
+            <span class="cerrarModal" id="CerrarVerTicketButton">&times;</span>
+            <h1><i class="fa-solid fa-file"></i>&nbsp;Ticket</h1>
             <div class="contenedorFormularioVerTicket" id="contenedorFormularioVerTicket">
                 <form>
-                    <label class="label">Sesión</label>
-                    <input type="text" name="session"/>
-
-                    <label class="label">Fecha</label>
-                    <input type="datetime-local" name="date"/>
-
-                    <label class="label">Servicio</label>
-                    <!--<input type="text" name="service"/>-->
-                    <select name="service" class="padding">
-                        <option value=""></option>
-                    </select>
-
-                    <label class="label">Descripción</label>
-                    <textarea name="descripcion"></textarea>
-
-                    <label class="label">Precio Total</label>
-                    <input type="text" name="precioTotal"/>
+                    <div class="camposTicket">
+                        <div>
+                            <label class="label">Sesión</label>
+                            <input type="text" name="session"/>
+                        </div>
+                        <div>
+                            <label class="label">Fecha</label>
+                            <input type="datetime-local" name="date"/>
+                        </div>
+                        <div>
+                            <label class="label">Servicio</label>
+                            <!--<input type="text" name="service"/>-->
+                            <select name="service" class="padding">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label">Precio Total</label>
+                            <input type="text" name="precioTotal"/>
+                        </div>
+                        <div>
+                            <label class="label">Descripción</label>
+                            <textarea name="descripcion"></textarea>
+                        </div>
+                    </div>
 
                     <div class="botonesExtras" id="extrasContainer"></div>
                 </form>
-                <div class="botonesTicket" style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between;">
-                    <div class="botonesGuardarDescargar">
-                        <button id="cerrarVerTicket">Cerrar</button>
+                <div class="camposParalelos">
+                        <button id="cerrarVerTicket" class="closeVerTicket">Atrás</button>
                         <!--<button id="guardarVerTicket">Guardar</button>-->
-                        <button id="descargarVerTicket">Descargar</button>
-                    </div>
+                        <button id="descargarVerTicket" class="submitVerTicket">Descargar</button>
                 </div>
             </div>
         </div>
@@ -178,26 +217,41 @@
     <!-- Modal Editar Sesion -->
     <div class="modalEditarSesion" id="modalEditarSesion">
         <div class="modalEditarSesion-content">
-            <h1>Editar sesión</h1>
+            <span class="cerrarModal" id="CerrarEditarSessionButton">&times;</span>
+            <h1><i class="fa-solid fa-camera"></i>&nbsp;Editar sesión</h1>
             <div class="contenedorFormularioEditarSesion" id="contenedorFormularioEditarSesion">
                 <form id="formSessionUpdate">
-                    <label class="label">Id</label>
-                    <label class="label">Sesión</label>
-                    <input type="text" class="bloquear" name="id" disabled/>
-                    <input type="text" id="sessionUpdate_name" name="sessionUpdate_name" class="padding"/>
-                    <label class="label">Servicio</label>
-                    <label class="label">Fecha</label>
-                    <select id="sessionUpdate_service" name="sessionUpdate_service" class="padding">
-                        <option value=""></option>
-                    </select>
-                    <input type="datetime-local" id="sessionUpdate_date" name="sessionUpdate_date" class="padding"/>
-                    <label class="label">Precio</label>
-                    <label class="label">Descripción</label>
-                    <input type="number" id="sessionUpdate_price" name="sessionUpdate_price" class="padding"/>
-                    <input type="text" id="sessionUpdate_description" name="sessionUpdate_description" class="padding"/>
-                    <button id="cerrarEditarSesion" class="button">Cerrar</button>
-                    <button type="submit" id="guardarEditarSesion">Guardar</button>
+                    <div>
+                        <label class="label">Id</label>
+                        <input type="text" class="bloquear" name="id" disabled/>
+                    </div>
+                    <div>
+                        <label class="label">Sesión</label>
+                        <input type="text" id="sessionUpdate_name" name="sessionUpdate_name" class="padding"/>
+                    </div>
+                    <div>
+                        <label class="label">Servicio</label>
+                        <select id="sessionUpdate_service" name="sessionUpdate_service" class="padding">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label">Fecha</label>
+                        <input type="datetime-local" id="sessionUpdate_date" name="sessionUpdate_date" class="padding"/>
+                    </div>
+                    <div>
+                        <label class="label">Precio</label>
+                        <input type="number" id="sessionUpdate_price" name="sessionUpdate_price" class="padding"/>
+                    </div>
+                    <div>
+                        <label class="label">Descripción</label>
+                        <input type="text" id="sessionUpdate_description" name="sessionUpdate_description" class="padding"/>
+                    </div>
                 </form>
+                    <div class="camposParalelos">
+                        <button id="cerrarEditarSesion" class="closeEditarSession">Atrás</button>
+                        <button type="submit" id="guardarEditarSesion" class="submitEditarSession">Guardar</button>
+                    </div>
             </div>
         </div>
     </div>

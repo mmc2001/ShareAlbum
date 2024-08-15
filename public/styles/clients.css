@@ -21,156 +21,11 @@
     width: 100%;
 }
 
-/* MODAL DATOS DEL PERFIL */
-.campos {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    /* margin-top: 20px; */
-}
-.campos > textarea {
-    /* border-radius: 8px; */
-    height: 150px;
-}
-.campos > select, .campos > input, .campos > textarea {
-    margin: 0 auto;
-    margin-top: 15px;
-    width: 380px;
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    font-size: large;
-}
-.camposPassword {
-    display: none;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    z-index: 1000;
-}
-.campoPasword {
+.campoPassword {
     display: grid;
     justify-content: right;
     align-items: center;
 }
-.camposPassword > input {
-    margin-bottom: 8px;
-}
-.camposPassword form {
-    margin-bottom: 0;
-}
-.botonSubmitPerfil {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 10px;
-}
-.submitPerfil {
-    width: 100%;
-    padding: 10px 100px;
-    border-radius: 20px;
-    background-color: var(--color-primario);
-    color: #fff;
-    font-weight: bold;
-    font-size: larger;
-}
-.modalPerfil {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-}
-.modalPerfil-content {
-    margin: 0 auto;
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-secundario);
-    border-radius: 0px;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-    0 10px 10px rgba(0,0,0,0.22);
-    position: relative;
-    overflow: hidden;
-    width: 768px;
-    height: fit-content;
-    max-width: 568px;
-    min-height: 380px;
-    padding: 0px 80px 0px 80px;
-}
-.datos {
-    height: 100%;
-}
-.datos > h1 {
-    margin-top: 40px;
-    margin-bottom: 10px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    font-weight: bold;
-    font-size: xx-large;
-}
-.cerrarModal {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 40px;
-    margin-right: 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    color: #aaa;
-}
-
-.cerrarModal:hover,
-.cerrarModal:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-span {
-    font-weight: bold;
-}
-.password-container {
-    position: relative;
-    display: inline-block;
-}
-#passwordInput {
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    width: 100%;
-    font-size: large;
-}
-.camposPassword {
-    display: none;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-}
-input {
-    background-color: #eee;
-    border: none;
-    /* padding: 12px 15px; */
-    width: 100%;
-    font-size: large;
-}
-.submitPassword {
-    text-align: center;
-    margin-top: 10px;
-    width: 120px;
-    border-radius: 20px;
-    background-color: var(--color-primario);
-    color: #fff;
-    font-weight: lighter;
-    font-size: medium;
-}
-
 
 /* MODAL CREAR CLIENT */
 .modalCliente {
@@ -191,17 +46,16 @@ input {
     align-items: center;
     justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
     width: fit-content;
-    min-height: 420px;
     height: fit-content;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding: 0px 80px 0px 80px;
+    max-width: 650px;
+    min-height: 520px;
+    padding: 0px 20px 0px 20px;
 }
 .modalCliente-content > h1 {
     margin-top: 30px;
@@ -213,7 +67,8 @@ input {
     text-align: left;
 }
 .modalCliente-content > .contenedorFormularioCliente {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
@@ -226,50 +81,58 @@ input {
     gap: 6px;
     height: 100%;
 }
-.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > .label {
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > div > .label {
+    margin-top: 5px;
     text-align: left;
-    margin-bottom: 0rem !important;
 }
-.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > input {
-    background-color: #eee;
-    border: none;
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > div > input {
+    margin-top: 8px;
     padding: 12px 15px;
     width: 100%;
     font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
-.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > #registration_form_plainPassword {
-    padding: 10px;
-    background-color: #eee;
-    border: none;
-    border-radius: 5px;
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > div > #registration_form_plainPassword {
+    padding: 12px 15px;
+    width: 100%;
+    font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
-.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > #registration_form_roles {
-    padding: 10px;
-    background-color: #eee;
-    border: none;
-    border-radius: 5px;
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > div > #registration_form_roles {
+    margin-top: 8px;
+    width: 100%;
+    font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
-.contenedorFormularioCliente > form > .camposClient > input[type="text"],
-.contenedorFormularioCliente > form > .camposClient > input[type="number"],
-.contenedorFormularioCliente > form > .camposClient > div > select {
-    padding: 10px;
-    background-color: #eee;
-    border: none;
-    border-radius: 5px;
+.contenedorFormularioCliente > form > .camposClient > div > input[type="text"],
+.contenedorFormularioCliente > form > .camposClient > div > input[type="number"],
+.contenedorFormularioCliente > form > .camposClient > div > div > select {
+    padding: 12px 15px;
+    width: 100%;
+    font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
 
-.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > .password {
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > div > .password {
     position: relative;
     display: inline-block;
 }
-.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > .password > input {
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > div > .password > input {
     background-color: #eee;
     border-radius: 5px;
     padding: 12px 10px;
     width: 100%;
     font-size: large;
 }
-.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > .password > button {
+.modalCliente-content > .contenedorFormularioCliente > form > .camposClient > div > .password > button {
     margin: 0 auto;
     margin-right: 20px;
     margin-top: 6px;
@@ -290,43 +153,50 @@ input {
     width: 34px;
     height: 34px;
 }
-
-.modalCliente-content > .contenedorFormularioCliente > form > .camposParalelos > button {
-    border-radius: 30px;
-    border: 2px solid var(--color-primario);
-    background-color: var(--color-primario);
-    color: var(--color-secundario);
-    font-size: medium;
-    font-weight: bold;
-    padding: 12px 15px;
-    transition: transform 80ms ease-in;
-    cursor: pointer;
-    margin-top: 30px;
-    /* margin: 10px 0px 20px 0px; */
-}
-
 .modalCliente-content > .contenedorFormularioCliente > form > button:hover {
     background-color: rgb(6, 47, 90);
 }
 .camposParalelos {
-    width: 100%;
-    display: grid;
-    justify-content: center;
+    display: flex;
     align-items: center;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    gap: 10px;
+    border-top: 1.5px solid #ddd;
+}
+
+.closeCliente {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 30px;
+    background-color: transparent;
+    color: var(--color-primario);
+    border: 1.5px solid var(--color-primario);
+    font-size: medium;
+}
+.submitCliente {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 30px;
+    background-color: var(--color-primario);
+    color: #fff;
+    font-size: medium;
+}
+.submitCliente:hover {
+    background-color: rgb(6, 47, 90);
+
+}
+.desplegable {
+    max-height: 100px;
+    max-width: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
     margin-bottom: 10px;
 }
 
-.desplegable {
-    max-height: 100px; /* Altura máxima del desplegable */
-    max-width: 400px;
-    overflow-y: auto; /* Agregar desplazamiento vertical si se excede la altura */
-    border: 1px solid #ccc; /* Borde para mejor apariencia */
-    margin-bottom: 10px; /* Espacio inferior */
-}
-
-/* Estilo para cada elemento dentro del desplegable */
 .desplegable .label {
     display: inline-block; /* Mostrar los elementos en línea */
     width: calc(100% - 67px); /* Ajustar el ancho al contenido */
@@ -527,7 +397,8 @@ h1, .label {
 }
 
 .container {
-    width: 100%;
+    /*width: 100%;*/
+    width: fit-content;
 }
 
 .centered {
@@ -535,25 +406,39 @@ h1, .label {
 }
 
 .cabecera {
-    margin: 120px 0px 0px 50px;
+    width: 100%;
+    margin-top: 120px;
+    margin-bottom: 40px;
     height: 50px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+}
+
+.contenidoCabecera {
+    width: fit-content;
+    background-color: var(--color-secundario);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     gap: 40px;
+    padding: 15px 40px;
+    border-radius: 40px;
 }
 
 .titulo {
     color: rgb(14, 14, 14);
-    text-align: left;
+    text-align: center;
     font-size: 30px;
 }
 
 .contenedor-dataTable {
+    width: auto;
     margin-top: 20px;
     padding-top: 30px;
     padding-bottom: 10px;
     background-color: #FFFFFF !important;
+    border-radius: 12px;
 }
 
 .album {
@@ -899,27 +784,37 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
 .modalEditarCliente-content {
     margin: 0 auto;
     display: grid;
-    align-items: start;
+    align-items: center;
     justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
     width: fit-content;
-    min-height: 450px;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding: 0px 80px 0px 80px;
+    height: fit-content;
+    max-width: 650px;
+    min-height: 520px;
+    padding: 0px 20px 0px 20px;
 }
 .modalEditarCliente-content > h1 {
     margin-top: 40px;
-    max-height: 40px;
-    color: #333;
+    margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
     font-weight: bold;
     font-size: xx-large;
-    text-align: center;
+}
+.botonesPerfil {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 10px;
+    border-top: 1.5px solid #ddd;
 }
 .modalEditarCliente-content > .contenedorFormularioEditarCliente {
     display: grid;
@@ -932,52 +827,98 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
     justify-content: center;
     align-items: center;
     gap: 12px;
-    padding: 0 50px;
     height: 100%;
 }
-.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .label {
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .camposClient {
+    background-color: var(--color-secundario);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .camposClient > div > .label {
+    margin-top: 5px;
     text-align: left;
 }
-.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > label {
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .camposClient > div > label {
     margin-bottom: 0rem;
 }
-.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > input {
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .camposClient > div > input {
+    margin-top: 8px;
     width: 100%;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
+    padding: 12px 15px;
     font-size: large;
 }
-.modalEditarCliente-content .contenedorFormularioEditarCliente form input[readonly] {
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .camposClient > div > input[readonly] {
     background-color: #d8d8d8;
     color: #5e5e5e;
     cursor:auto;
 }
-.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .botonesEditarCliente > button {
-    border-radius: 30px;
-    border: 2px solid var(--color-primario);
-    background-color: var(--color-primario);
-    color: var(--color-secundario);
-    font-size: medium;
-    font-weight: bold;
-    padding: 12px 15px;
-    transition: transform 80ms ease-in;
-    cursor: pointer;
-    width: 100%;
-}
-
-.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .botonesEditarCliente > button:hover {
-    background-color: rgb(6, 47, 90);
+.modalEditarCliente-content > .contenedorFormularioEditarCliente > form > button {
+    width: fit-content;
+    display: flex;
+    justify-content: left;
+    align-items: center;
 }
 .modalEditarCliente-content > .contenedorFormularioEditarCliente > form > .botonesEditarCliente {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    gap: 10px;
+    border-top: 1.5px solid #ddd;
 }
-
+.closeEditarCliente {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px 50px;
+    border-radius: 30px;
+    background-color: transparent;
+    color: var(--color-primario);
+    border: 1.5px solid var(--color-primario);
+    font-size: medium;
+}
+.submitEditarCliente {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px 50px;
+    border-radius: 30px;
+    background-color: var(--color-primario);
+    color: #fff;
+    font-size: medium;
+}
+.padding {
+    padding: 12px 15px;
+}
 .hidden {
     display: none;
+}
+.show {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+}
+.show > div > .label {
+    margin-top: 5px;
+    text-align: left;
+}
+.show > div > label {
+    margin-bottom: 0rem;
+}
+.show > div > input {
+    margin-top: 8px;
+    width: 100%;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
+    padding: 12px 15px;
+    font-size: large;
 }

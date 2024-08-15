@@ -3,14 +3,15 @@
 {% block title %}{{ parent() }} - Clientes{% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('styles/clients.css') }}">
 
     <!-- Estilos de datatables -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap4.css">
     <link href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.bootstrap4.min.css" rel="stylesheet">
+
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/clients.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -18,8 +19,8 @@
 
     <div style="width: 100vw;">
         <div class="cabecera">
-            <h2 class="titulo">Clientes disponibles</h2>
-            <div>
+            <div class="contenidoCabecera">
+                <h2 class="titulo">Clientes disponibles</h2>
                 <button class="boton" id="nuevoCliente">Nuevo</button>
             </div>
         </div>
@@ -50,30 +51,45 @@
     <!-- Modal Crear Cliente -->
     <div class="modalCliente" id="modalCliente">
         <div class="modalCliente-content">
-            <h1>Nuevo cliente</h1>
+            <span class="cerrarModal" id="CerrarCliente">&times;</span>
+            <h1><i class="fa-solid fa-user-plus"></i>&nbsp; Nuevo cliente</h1>
             <div class="contenedorFormularioCliente" id="contenedorFormularioCliente">
                 <form method="post" id="formClient">
                     {#  {{ form_errors(formClient) }} #}
                     {{ form_start(formClient) }}
                     <div class="camposClient">
-                        <label class="label">Nombre</label>
-                        <label class="label">Apellidos</label>
-                        {{ form_widget(formClient.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
-                        {{ form_widget(formClient.surnames, {'attr': {'class': 'padding', 'placeholder': 'Apellidos'}}) }}
-                        <label class="label">DNI</label>
-                        <label class="label">Teléfono</label>
-                        {{ form_widget(formClient.dni, {'attr': {'class': 'padding', 'placeholder': 'DNI'}}) }}
-                        {{ form_widget(formClient.telephone, {'attr': {'class': 'padding', 'placeholder': 'Teléfono'}}) }}
-                        <label class="label">Correo</label>
-                        <label class="label">Password</label>
-                        {{ form_widget(formClient.email, {'attr': {'class': 'padding', 'placeholder': 'Correo'}}) }}
-                        {{ form_widget(formClient.plainPassword, {'attr': {'class': 'padding', 'placeholder': 'Contraseña'}}) }}
-                        <label class="label">Rol</label>
-                        {{ form_widget(formClient.roles, {'attr': {'class': 'form-control', 'placeholder': 'Rol'}}) }}
+                        <div>
+                            <label class="label">Nombre</label>
+                            {{ form_widget(formClient.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Apellidos</label>
+                            {{ form_widget(formClient.surnames, {'attr': {'class': 'padding', 'placeholder': 'Apellidos'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">DNI</label>
+                            {{ form_widget(formClient.dni, {'attr': {'class': 'padding', 'placeholder': 'DNI'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Teléfono</label>
+                            {{ form_widget(formClient.telephone, {'attr': {'class': 'padding', 'placeholder': 'Teléfono'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Correo</label>
+                            {{ form_widget(formClient.email, {'attr': {'class': 'padding', 'placeholder': 'Correo'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Password</label>
+                            {{ form_widget(formClient.plainPassword, {'attr': {'class': 'padding', 'placeholder': 'Contraseña'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Rol</label>
+                            {{ form_widget(formClient.roles, {'attr': {'class': 'form-control', 'placeholder': 'Rol'}}) }}
+                        </div>
                     </div>
                     <div class="camposParalelos">
-                        <button id="CerrarCliente">Cerrar</button>
-                        <button type="submit">Crear</button>
+                        <button class="closeCliente" id="CerrarClienteButton">Atrás</button>
+                        <button type="submit" class="submitCliente">Crear</button>
                     </div>
                     {{ form_end(formClient) }}
                 </form>
@@ -85,32 +101,49 @@
     <!-- Modal Editar Cliente -->
     <div class="modalEditarCliente" id="modalEditarCliente">
         <div class="modalEditarCliente-content">
-            <h1>Editar cliente</h1>
+            <span class="cerrarModal" id="CerrarEditarClienteButton">&times;</span>
+            <h1><i class="fa-solid fa-user"></i>&nbsp;Editar cliente</h1>
             <div class="contenedorFormularioEditarCliente" id="contenedorFormularioEditarCliente">
                 <form id="formClientUpdate">
-                    <label class="label">Nombre</label>
-                    <input type="text" class="padding" id="userUpdate_name" name="userUpdate_name"/>
-                    <label class="label">Apellidos</label>
-                    <input type="text" class="padding" id="userUpdate_surnames" name="userUpdate_surnames"/>
-                    <label class="label">DNI</label>
-                    <input type="text" class="padding" id="userUpdate_dni" name="userUpdate_dni"/>
-                    <label class="label">Teléfono</label>
-                    <input type="number" class="padding" id="userUpdate_telephone" name="userUpdate_telephone"/>
-                    <label class="label">Email</label>
-                    <input type="text" class="padding" id="userUpdate_email" name="userUpdate_email"/>
+                    <div class="camposClient">
+                        <div>
+                            <label class="label">Nombre</label>
+                            <input type="text" class="padding" id="userUpdate_name" name="userUpdate_name"/>
+                        </div>
+                        <div>
+                            <label class="label">Apellidos</label>
+                            <input type="text" class="padding" id="userUpdate_surnames" name="userUpdate_surnames"/>
+                        </div>
+                        <div>
+                            <label class="label">DNI</label>
+                            <input type="text" class="padding" id="userUpdate_dni" name="userUpdate_dni"/>
+                        </div>
+                        <div>
+                            <label class="label">Teléfono</label>
+                            <input type="number" class="padding" id="userUpdate_telephone" name="userUpdate_telephone"/>
+                        </div>
+                        <div>
+                            <label class="label">Correo electrónico</label>
+                            <input type="text" class="padding" id="userUpdate_email" name="userUpdate_email"/>
+                        </div>
+                    </div>
 
-                    <button id="showPasswordFields">Actualizar contraseña</button>
+                    <button id="showPasswordFields" style="font-weight: bold; font-size: medium; margin-top: 20px;">Cambiar contraseña</button>
 
                     <div id="passwordFields" class="hidden">
-                        <label class="label">Nueva contraseña</label>
-                        <input type="text" class="padding" id="userUpdate_password1" name="userUpdate_password1"/>
-                        <label class="label">Repite la contraseña</label>
-                        <input type="text" class="padding" id="userUpdate_password2" name="userUpdate_password2"/>
+                        <div>
+                            <label class="label">Nueva contraseña</label>
+                            <input type="text" class="padding" id="userUpdate_password1" name="userUpdate_password1"/>
+                        </div>
+                        <div>
+                            <label class="label">Repita la contraseña</label>
+                            <input type="text" class="padding" id="userUpdate_password2" name="userUpdate_password2"/>
+                        </div>
                     </div>
 
                     <div class="botonesEditarCliente">
-                        <button id="cerrarEditarCliente">Cerrar</button>
-                        <button type="submit" id="guardarEditarUsuario">Guardar</button>
+                        <button id="cerrarEditarCliente" class="closeEditarCliente">Atrás</button>
+                        <button type="submit" id="guardarEditarUsuario" class="submitEditarCliente">Guardar</button>
                     </div>
                 </form>
             </div>

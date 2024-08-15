@@ -8,6 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         document.getElementById("modalSesion").style.display = "none";
     });
+
+    document.getElementById("CerrarSessionButton").addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("modalSesion").style.display = "none";
+    });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -20,6 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         document.getElementById("modalExtra").style.display = "none";
     });
+
+    document.getElementById("CerrarExtraButton").addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("modalExtra").style.display = "none";
+    });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -29,6 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("CerrarServicio").addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("modalServicio").style.display = "none";
+    });
+
+    document.getElementById("CerrarServicioButton").addEventListener("click", function (event) {
         event.preventDefault();
         document.getElementById("modalServicio").style.display = "none";
     });

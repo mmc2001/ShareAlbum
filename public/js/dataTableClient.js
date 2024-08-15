@@ -130,7 +130,11 @@ const listUsers = async () => {
 
         $('#showPasswordFields').click(function(event) {
             event.preventDefault();
-            $('#passwordFields').toggleClass('hidden');
+            if ($('#passwordFields').hasClass('show')) {
+                $('#passwordFields').removeClass('show').addClass('hidden');
+            } else {
+                $('#passwordFields').removeClass('hidden').addClass('show');
+            }
         });
 
         $('#guardarEditarUsuario').click(function (event) {
@@ -186,6 +190,11 @@ const listUsers = async () => {
         });
 
         $('#cerrarEditarCliente').click(function(client) {
+            client.preventDefault();
+            $('#modalEditarCliente').css('display', 'none');
+        });
+
+        $('#CerrarEditarClienteButton').click(function(client) {
             client.preventDefault();
             $('#modalEditarCliente').css('display', 'none');
         });

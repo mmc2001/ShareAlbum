@@ -145,12 +145,13 @@
     <!-- Modal Nueva Tarea -->
     <div class="modal" id="modal">
         <div class="modal-content">
-            <h1 class="tituloModal">Nueva Tarea</h1>
+            <span class="cerrarModal" id="CerrarTarea">&times;</span>
+            <h1 class="tituloModal"><i class="fa-solid fa-list-check"></i>&nbsp; Nueva Tarea</h1>
             <div class="contenedorFormulario" id="contenedorFormulario">
                 <form method="post" id="formEvent">
                     {#  {{ form_errors(formEvent) }} #}
                     {{ form_start(formEvent) }}
-                    <div class="camposParalelos" style="margin-bottom: 40px;">
+                    <div class="camposTarea" style="margin-bottom: 40px;">
                         {{ form_widget(formEvent.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
                         {{ form_widget(formEvent.date, {'attr': {'class': 'padding', 'placeholder': 'Fecha'}}) }}
                         {{ form_widget(formEvent.user, {'attr': {'class': 'padding form-control', 'id': 'Fotógrafo'}}) }}
@@ -161,8 +162,8 @@
                     <!-- <div class="campoUnico"> -->
                     <!-- </div> -->
                     <div class="camposParalelos">
-                        <button id="Cerrar" class="botonesTareas">Cerrar</button>
-                        <button type="submit" class="botonesTareas">Crear</button>
+                        <button id="Cerrar" class="closeTarea">Atrás</button>
+                        <button type="submit" class="submitTarea">Crear tarea</button>
                     </div>
                         {{ form_end(formEvent) }}
                 </form>
@@ -174,11 +175,11 @@
     <div class="modalEnvio" id="modalEnvio">
         <div class="modalEnvio-content">
             <div class="aviso">
-                <h1>Confirmar Envío</h1>
+                <h1><i class="fa-solid fa-paper-plane"></i>&nbsp;Confirmar Envío</h1>
                 <div class="contenedorFormulario">
                     <form id="formModalEnvio"> <!-- Agregamos un ID al formulario -->
                         <div class="contenido">
-                            <h2 style="margin-top: 15px;">Vas a enviar el siguiente mensaje a <h3 id="clienteModal"></h3></h2>
+                            <h2 style="margin-top: 25px;">Vas a enviar el siguiente mensaje a <h3 id="clienteModal"></h3></h2>
                             <div class="filas">
                                 <span>Asunto  </span>
                                 <p id="asuntoModal"></p>
@@ -191,11 +192,11 @@
                                 <span>Mensaje  </span>
                                 <p id="mensajeModal" class="textarea"></p>
                             </div>
-                            <h2>¿Estas seguro?</h2>
+                            <h2 style="margin-top: 15px;">¿Estas seguro?</h2>
                         </div>
                         <div class="camposParalelos">
-                            <button id="cancel" class="botonesEnvio">Cancelar</button>
-                            <button type="submit" class="botonesEnvio" id="sendModal">Enviar</button>
+                            <button id="cancel" class="closeEnvio">Atrás</button>
+                            <button type="submit" class="botonEnvio" id="sendModal">Enviar</button>
                         </div>
                     </form>
                 </div>

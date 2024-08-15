@@ -21,154 +21,10 @@
     width: 100%;
 }
 
-/* MODAL DATOS DEL PERFIL */
-.campos {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    /* margin-top: 20px; */
-}
-.campos > textarea {
-    /* border-radius: 8px; */
-    height: 150px;
-}
-.campos > select, .campos > input, .campos > textarea {
-    margin: 0 auto;
-    margin-top: 15px;
-    width: 380px;
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    font-size: large;
-}
-.camposPassword {
-    display: none;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    z-index: 1000;
-}
-.campoPasword {
+.campoPassword {
     display: grid;
     justify-content: right;
     align-items: center;
-}
-.camposPassword > input {
-    margin-bottom: 8px;
-}
-.camposPassword form {
-    margin-bottom: 0;
-}
-.botonSubmitPerfil {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 10px;
-}
-.submitPerfil {
-    width: 100%;
-    padding: 10px 100px;
-    border-radius: 20px;
-    background-color: var(--color-primario);
-    color: #fff;
-    font-weight: bold;
-    font-size: larger;
-}
-.modalPerfil {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-}
-.modalPerfil-content {
-    margin: 0 auto;
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-secundario);
-    border-radius: 0px;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-    0 10px 10px rgba(0,0,0,0.22);
-    position: relative;
-    overflow: hidden;
-    width: 768px;
-    height: fit-content;
-    max-width: 568px;
-    min-height: 380px;
-    padding: 0px 80px 0px 80px;
-}
-.datos {
-    height: 100%;
-}
-.datos > h1 {
-    margin-top: 40px;
-    margin-bottom: 10px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    font-weight: bold;
-    font-size: xx-large;
-}
-.cerrarModal {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 40px;
-    margin-right: 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    color: #aaa;
-}
-
-.cerrarModal:hover,
-.cerrarModal:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-span {
-    font-weight: bold;
-}
-.password-container {
-    position: relative;
-    display: inline-block;
-}
-#passwordInput {
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    width: 100%;
-    font-size: large;
-}
-.camposPassword {
-    display: none;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-}
-input {
-    background-color: #eee;
-    border: none;
-    /* padding: 12px 15px; */
-    width: 100%;
-    font-size: large;
-}
-.submitPassword {
-    text-align: center;
-    margin-top: 10px;
-    width: 120px;
-    border-radius: 20px;
-    background-color: var(--color-primario);
-    color: #fff;
-    font-weight: lighter;
-    font-size: medium;
 }
 
 
@@ -191,21 +47,19 @@ input {
     align-items: center;
     justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
     width: fit-content;
-    min-height: 580px;
     height: fit-content;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding: 0px 80px 0px 80px;
+    min-width: 720px;
+    min-height: 580px;
+    padding: 0px 20px 0px 20px;
 }
 .modalSesion-content > h1 {
     margin-top: 30px;
-    margin-bottom: 10px;
     min-height: 40px;
     height: fit-content;
     color: #333;
@@ -214,7 +68,8 @@ input {
     text-align: left;
 }
 .modalSesion-content > .contenedorFormularioSesion {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
@@ -224,74 +79,113 @@ input {
     justify-content: center;
     align-items: center;
     gap: 6px;
-    padding: 0 50px;
+    /*padding: 0 50px;*/
     height: 100%;
 }
-.modalSesion-content > .contenedorFormularioSesion > form > .label {
-    text-align: left;
-    margin-bottom: 0rem !important;
-}
-.modalSesion-content > .contenedorFormularioSesion > form > input {
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    width: 100%;
-    font-size: large;
-}
-.contenedorFormularioSesion > form > input[type="text"],
-.contenedorFormularioSesion > form > input[type="date"],
-.contenedorFormularioSesion > form > select {
-    padding: 10px;
-    background-color: #eee;
-    border-radius: 5px;
-}
-
-.modalSesion-content > .contenedorFormularioSesion > form > .camposParalelos > button {
-    border-radius: 30px;
-    border: 2px solid var(--color-primario);
-    background-color: var(--color-primario);
-    color: var(--color-secundario);
-    font-size: medium;
-    font-weight: bold;
-    padding: 12px 15px;
-    transition: transform 80ms ease-in;
-    cursor: pointer;
-    /* margin: 10px 0px 20px 0px; */
-}
-
-.modalSesion-content > .contenedorFormularioSesion > form > button:hover {
-    background-color: rgb(6, 47, 90);
-}
-.camposParalelos {
-    width: 100%;
+.modalSesion-content > .contenedorFormularioSesion > form > .camposSession {
+    background-color: var(--color-secundario);
     display: grid;
     justify-content: center;
     align-items: center;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    padding: 0px 10px 0px 10px;
-    margin-bottom: 10px;
+    gap: 6px;
+    height: 100%;
+}
+.modalSesion-content > .contenedorFormularioSesion > form > .camposSession > div> .label {
+    text-align: left;
+    margin-bottom: 0rem !important;
+}
+.modalSesion-content > .contenedorFormularioSesion > form > .camposSession > div> input {
+    margin-top: 8px;
+    padding: 12px 15px;
+    width: 100%;
+    font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
+}
+.contenedorFormularioSesion > form > .camposSession > div> input[type="text"],
+.contenedorFormularioSesion > form > .camposSession > div> input[type="date"],
+.contenedorFormularioSesion > form > .camposSession > div> select {
+    margin-top: 8px;
+    padding: 12px 15px;
+    width: 100%;
+    font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
 
+.modalSesion-content > .contenedorFormularioSesion > form > .camposParalelos > button:hover {
+    background-color: rgb(6, 47, 90);
+}
+.camposParalelos {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    gap: 10px;
+    border-top: 1.5px solid #ddd;
+}
+.camposParalelosSession {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    gap: 10px;
+    border-top: 1.5px solid #ddd;
+}
+.closeSession, .closeServicio, .closeExtras, .closeEditarSession, .closeVerTicket {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 30px;
+    background-color: transparent;
+    color: var(--color-primario);
+    border: 1.5px solid var(--color-primario);
+    font-size: medium;
+}
+.submitSession, .submitServicio, .submitExtras, .submitEditarSession, .submitVerTicket {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 30px;
+    background-color: var(--color-primario);
+    color: #fff;
+    font-size: medium;
+}
 .desplegable {
-    max-height: 100px; /* Altura máxima del desplegable */
+    max-height: 100px;
     max-width: 400px;
-    overflow-y: auto; /* Agregar desplazamiento vertical si se excede la altura */
-    border: 1px solid #ccc; /* Borde para mejor apariencia */
-    margin-bottom: 10px; /* Espacio inferior */
+    overflow-y: auto;
+    /*border: 1px solid #ccc; */
+    margin-bottom: 10px;
+    margin-top: 8px;
+    /*padding: 12px 15px;*/
+    /*width: 100%;*/
+    font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
 
 /* Estilo para cada elemento dentro del desplegable */
-.desplegable .label {
+.desplegable > .padding > label {
     display: inline-block; /* Mostrar los elementos en línea */
-    width: calc(100% - 50px); /* Ajustar el ancho al contenido */
+    width: calc(100% - 30px); /* Ajustar el ancho al contenido */
     text-align: left;
+    /*margin-right: 20px;*/
 }
 
 /* Estilo para los checkboxes */
-.desplegable input[type="checkbox"] {
+.desplegable > .padding > input[type="checkbox"] {
     display: inline-block; /* Mostrar los checkboxes en línea */
-    width: 140px; /* Ajustar el ancho al contenido */
+    width: 20px; /* Ancho del checkbox */
+    margin-right: 10px; /* Agregar un margen derecho para separar del label */
 }
 
 
@@ -314,21 +208,19 @@ input {
     align-items: center;
     justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
     width: fit-content;
-    min-height: 300px;
     height: fit-content;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding: 0px 80px 0px 80px;
+    max-width: 650px;
+    min-height: 300px;
+    padding: 0px 20px 0px 20px;
 }
 .modalExtra-content > h1 {
     margin-top: 30px;
-    margin-bottom: 10px;
     min-height: 40px;
     height: fit-content;
     color: #333;
@@ -337,41 +229,33 @@ input {
     text-align: left;
 }
 .modalExtra-content > .contenedorFormularioExtra {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
 .modalExtra-content > .contenedorFormularioExtra > form {
     background-color: var(--color-secundario);
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    padding: 0 40px;
+    gap: 6px;
+    /*padding: 0 40px;*/
     height: 100%;
 }
-.modalExtra-content > .contenedorFormularioExtra > form > .label {
+.modalExtra-content > .contenedorFormularioExtra > form > div > .label {
+    margin-top: 5px;
     text-align: left;
 }
-.modalExtra-content > .contenedorFormularioExtra > form > input {
-    background-color: #eee;
-    border: none;
+.modalExtra-content > .contenedorFormularioExtra > form > div > input {
+    margin-top: 8px;
     padding: 12px 15px;
     width: 100%;
     font-size: large;
-}
-.modalExtra-content > .contenedorFormularioExtra > form > .camposParalelos > button {
-    width: 100%;
-    border-radius: 30px;
-    border: 2px solid var(--color-primario);
-    background-color: var(--color-primario);
-    color: var(--color-secundario);
-    font-size: medium;
-    font-weight: bold;
-    padding: 12px 15px;
-    transition: transform 80ms ease-in;
-    cursor: pointer;
-    margin: 10px 0px 20px 0px;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
 
 
@@ -394,21 +278,19 @@ input {
     align-items: center;
     justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
     width: fit-content;
-    min-height: 300px;
     height: fit-content;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding: 0px 80px 0px 80px;
+    max-width: 650px;
+    min-height: 300px;
+    padding: 0px 20px 0px 20px;
 }
 .modalServicio-content > h1 {
     margin-top: 30px;
-    margin-bottom: 10px;
     min-height: 40px;
     height: fit-content;
     color: #333;
@@ -417,41 +299,33 @@ input {
     text-align: left;
 }
 .modalServicio-content > .contenedorFormularioServicio {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
 .modalServicio-content > .contenedorFormularioServicio > form {
     background-color: var(--color-secundario);
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    padding: 0 40px;
+    gap: 6px;
+    /*padding: 0 40px;*/
     height: 100%;
 }
-.modalServicio-content > .contenedorFormularioServicio > form > .label {
+.modalServicio-content > .contenedorFormularioServicio > form > div > .label {
+    margin-top: 5px;
     text-align: left;
 }
-.modalServicio-content > .contenedorFormularioServicio > form > input {
-    background-color: #eee;
-    border: none;
+.modalServicio-content > .contenedorFormularioServicio > form > div > input {
+    margin-top: 8px;
     padding: 12px 15px;
     width: 100%;
     font-size: large;
-}
-.modalServicio-content > .contenedorFormularioServicio > form > .camposParalelos > button {
-    width: 100%;
-    border-radius: 30px;
-    border: 2px solid var(--color-primario);
-    background-color: var(--color-primario);
-    color: var(--color-secundario);
-    font-size: medium;
-    font-weight: bold;
-    padding: 12px 15px;
-    transition: transform 80ms ease-in;
-    cursor: pointer;
-    margin: 10px 0px 20px 0px;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
 
 header {
@@ -490,12 +364,24 @@ h1, .label {
 }
 
 .cabecera {
+    width: 100%;
     margin-top: 120px;
+    margin-bottom: 40px;
     height: 50px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+}
+
+.contenidoCabecera {
+    width: fit-content;
+    background-color: var(--color-secundario);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     gap: 40px;
+    padding: 15px 40px;
+    border-radius: 40px;
 }
 
 .titulo {
@@ -505,10 +391,12 @@ h1, .label {
 }
 
 .contenedor-dataTable {
+    width: auto;
     margin-top: 20px;
     padding-top: 30px;
     padding-bottom: 10px;
     background-color: #FFFFFF !important;
+    border-radius: 12px;
 }
 
 .album {
@@ -956,11 +844,6 @@ select {
 
 
 /* MODAL EDITAR SESIÓN */
-.bloquear{
-    background-color: #e9ecef;
-    color: #6c757d;
-    border: 1px solid #ced4da;
-}
 .modalEditarSesion {
     display: none;
     justify-content: center;
@@ -976,30 +859,32 @@ select {
 .modalEditarSesion-content {
     margin: 0 auto;
     display: grid;
-    align-items: start;
+    align-items: center;
     justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
     width: fit-content;
-    min-height: 550px;
-    padding-left: 60px;
-    padding-right: 60px;
-    padding: 0px 80px 0px 80px;
+    height: fit-content;
+    max-width: 650px;
+    min-height: 460px;
+    padding: 0px 20px 0px 20px;
 }
 .modalEditarSesion-content > h1 {
-    margin-top: 40px;
-    max-height: 40px;
+    margin-top: 30px;
+    min-height: 40px;
+    height: fit-content;
     color: #333;
     font-weight: bold;
     font-size: xx-large;
-    text-align: center;
+    text-align: left;
 }
 .modalEditarSesion-content > .contenedorFormularioEditarSesion {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
@@ -1009,42 +894,33 @@ select {
     justify-content: center;
     align-items: center;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    padding: 0 50px;
+    gap: 6px;
     height: 100%;
 }
-.modalEditarSesion-content > .contenedorFormularioEditarSesion > form > .label {
+.modalEditarSesion-content > .contenedorFormularioEditarSesion > form > div > .label {
+    margin-top: 5px;
     text-align: left;
 }
-.modalEditarSesion-content > .contenedorFormularioEditarSesion > form > input {
-    background-color: #eee;
-    border: none;
+.modalEditarSesion-content > .contenedorFormularioEditarSesion > form > div > input,
+.modalEditarSesion-content > .contenedorFormularioEditarSesion > form > div > select{
+    margin-top: 8px;
     padding: 12px 15px;
     width: 100%;
     font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
 }
-.modalEditarSesion-content .contenedorFormularioEditarSesion form input[readonly] {
-    background-color: #d8d8d8;
+.modalEditarSesion-content > .contenedorFormularioEditarSesion > form > div > input[readonly] {
+    background-color: #ababab;
     color: #5e5e5e;
     cursor:auto;
 }
-.modalEditarSesion-content > .contenedorFormularioEditarSesion > form > button {
-    border-radius: 30px;
-    border: 2px solid var(--color-primario);
-    background-color: var(--color-primario);
-    color: var(--color-secundario);
-    font-size: medium;
-    font-weight: bold;
-    padding: 12px 15px;
-    transition: transform 80ms ease-in;
-    cursor: pointer;
-    margin: 20px;
+.bloquear{
+    background-color: #d2d2d2;
+    color: #6c757d;
+    border: 1px solid #ced4da;
 }
-
-.modalEditarSesion-content > .contenedorFormularioEditarSesion > form > button:hover {
-    background-color: rgb(6, 47, 90);
-}
-
 /* MODAL VER TICKET */
 .modalVerTicket {
     display: none;
@@ -1061,99 +937,85 @@ select {
 .modalVerTicket-content {
     margin: 0 auto;
     display: grid;
-    align-items: start;
+    align-items: center;
     justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
+    width: fit-content;
     height: fit-content;
-    max-height: 800px;
-    width: 600px;
-    padding: 0px 80px 0px 80px;
+    max-width: 650px;
+    min-height: 460px;
+    padding: 0px 20px 0px 20px;
     overflow-y: auto;
 }
 .modalVerTicket-content > h1 {
-    margin-top: 40px;
-    margin-bottom: 30px;
-    max-height: 40px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    min-height: 40px;
+    height: fit-content;
     color: #333;
     font-weight: bold;
     font-size: xx-large;
-    text-align: center;
+    text-align: left;
 }
 .modalVerTicket-content > .contenedorFormularioVerTicket {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
-.modalVerTicket-content > .contenedorFormularioVerTicket > form {
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket,
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras {
     background-color: var(--color-secundario);
     display: grid;
     justify-content: center;
     align-items: center;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
     height: 100%;
 }
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .label,
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras > .label {
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > .label,
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras > div > .label {
+    margin-top: 5px;
     text-align: left;
-    margin-bottom: 0px !important;
 }
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > input,
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras> input {
-    background-color: #eee;
-    border: none;
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > input,
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > select,
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras > div > input {
+    margin-top: 8px;
+    padding: 12px 15px;
+    width: 100%;
+    height: 100%;
+    font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
+}
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > textarea {
+    margin-top: 8px;
     padding: 12px 15px;
     width: 100%;
     font-size: large;
-}
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > textarea {
-    margin-top: 10px;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
     resize: none;
     overflow: auto;
-    width: 100%;
-    height: 100px;
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
 }
-.modalVerTicket-content .contenedorFormularioVerTicket form input[readonly] {
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > input[readonly] {
     background-color: #d8d8d8;
     color: #5e5e5e;
     cursor:auto;
 }
-.modalVerTicket-content > .contenedorFormularioVerTicket > .botonesTicket > .botonesGuardarDescargar {
-    display: flex;
-    gap: 150px;
-}
-.modalVerTicket-content > .contenedorFormularioVerTicket > .botonesTicket > button,
-.modalVerTicket-content > .contenedorFormularioVerTicket > .botonesTicket > .botonesGuardarDescargar > button {
-    border-radius: 40px;
-    border: 2px solid var(--color-primario);
-    background-color: var(--color-primario);
-    color: var(--color-secundario);
-    font-size: medium;
-    font-weight: bold;
-    padding: 12px 30px;
-    transition: transform 80ms ease-in;
-    cursor: pointer;
-    margin: 10px 5px 40px 5px;
-}
-
-.modalVerTicket-content > .contenedorFormularioVerTicket > .botonesTicket > button:hover,
-.modalVerTicket-content > .contenedorFormularioVerTicket > .botonesTicket > .botonesGuardarDescargar > button:hover {
-    background-color: rgb(6, 47, 90);
-}
-
-
 
 
 .container {
-    width: 21cm;
+    /*width: 21cm;*/
+    width: fit-content;
     min-height: 29.7cm;
 }
 

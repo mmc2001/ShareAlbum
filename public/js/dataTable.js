@@ -142,7 +142,8 @@ const listUsers = async () => {
                     </div>
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-primary editarSesion" data-id="${session.id}"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="btn btn-sm btn-primary verSession" data-id="${session.id}"><i class="fa-solid fa-eye"></i></button>
+                    <button class="btn btn-sm btn-info editarSesion" data-id="${session.id}"><i class="fa-solid fa-pencil"></i></button>
                     <button class="btn btn-sm btn-danger" data-id="${session.id}"><i class="fa-solid fa-trash-can"></i></button>
                 </td>
             </tr>`;
@@ -269,9 +270,18 @@ const listUsers = async () => {
                     });
             });
 
-
+            $('.verSession').click(function(event) {
+                event.preventDefault();
+                const idSession = $(this).data('id');
+                window.location.href = `/albums/${idSession}`;
+            });
 
             $('#cerrarEditarSesion').click(function (event) {
+                event.preventDefault();
+                $('#modalEditarSesion').css('display', 'none');
+            });
+
+            $('#CerrarEditarSessionButton').click(function (event) {
                 event.preventDefault();
                 $('#modalEditarSesion').css('display', 'none');
             });
@@ -348,12 +358,14 @@ const listUsers = async () => {
 
                                     const extrasContainer = $('#modalVerTicket #extrasContainer');
                                     extrasContainer.empty();
-                                    const titulo = $('<label class="label" style="display: block; padding-bottom: 6px;">').text("Extras");
+                                    const titulo = $('<label class="label" style="display: block; margin: 20px 0 20px; 0">').text("Extras");
                                     extrasContainer.append(titulo);
                                     for (let i = 1; i <= arrayExtras.length; i++) {
                                         const extra = arrayExtras[i - 1];
                                         const precio = arrayExtrasFetch.find(e => e.name === extra)?.price || 0;
                                         const divExtras = $('<div>').addClass('divExtras');
+                                        const divAdicionalExtra = $('<div>');
+                                        const divAdicionalCantidad = $('<div>');
                                         const labelPrice = $('<label>').text(`Extra ${i}: ${extra}`);
                                         const inputPrice = $('<input>').attr({
                                             type: 'number',
@@ -370,7 +382,9 @@ const listUsers = async () => {
                                             'data-index': i,
                                             style: "margin-top: 10px; margin-bottom: 10px;"
                                         });
-                                        divExtras.append(labelPrice, inputPrice, labelCantidad, inputCantidad);
+                                        divAdicionalExtra.append(labelPrice, inputPrice);
+                                        divAdicionalCantidad.append(labelCantidad, inputCantidad);
+                                        divExtras.append(divAdicionalExtra, divAdicionalCantidad);
                                         extrasContainer.append(divExtras);
                                     }
                                     $('#extrasContainer').css('display', 'block');
@@ -418,6 +432,12 @@ const listUsers = async () => {
             });
 
             $('#cerrarVerTicket').click(function (event) {
+                event.preventDefault();
+                //location.reload();
+                $('#modalVerTicket').css('display', 'none');
+            });
+
+            $('#CerrarVerTicketButton').click(function (event) {
                 event.preventDefault();
                 //location.reload();
                 $('#modalVerTicket').css('display', 'none');
