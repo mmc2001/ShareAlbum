@@ -5,8 +5,11 @@ function obtenerIdDeURL() {
     const id = pathSegments[pathSegments.length - 1];
     return parseInt(id);
 }
-document.addEventListener("DOMContentLoaded", function() {
 
+let executed = false;
+document.addEventListener("DOMContentLoaded", function() {
+    if (executed) return;
+    executed = true;
     // Función para obtener las imágenes según el id y la propiedad elegida
     async function obtenerImagenes(id, elegida) {
     //async function obtenerImagenes(elegida) {
@@ -52,11 +55,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (i % 2 === 0) {
                     htmlCode += ' class="vertical"';
                 } else if (i % 3 === 0) {
-                    htmlCode += ' class="horizontal"';
+                    htmlCode += ' class="vertical"';
                 } else if (i % 5 === 0) {
-                    htmlCode += ' class="big"';
+                    htmlCode += ' class="vertical"';
                 } else {
-                    htmlCode += ' class=""';
+                    htmlCode += ' class="vertical"';
                 }
                 htmlCode += `><img src="${imagenes[i].url}" />`;
 
@@ -72,11 +75,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (i % 2 === 0) {
                     htmlCode += ' class="vertical"';
                 } else if (i % 3 === 0) {
-                    htmlCode += ' class="horizontal"';
+                    htmlCode += ' class="vertical"';
                 } else if (i % 5 === 0) {
-                    htmlCode += ' class="big"';
+                    htmlCode += ' class="vertical"';
                 } else {
-                    htmlCode += ' class=""';
+                    htmlCode += ' class="vertical"';
                 }
                 htmlCode += `><img src="${imagenes[i].url}" />`;
 
@@ -92,11 +95,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (i % 2 === 0) {
                     htmlCode += ' class="vertical"';
                 } else if (i % 3 === 0) {
-                    htmlCode += ' class="horizontal"';
+                    htmlCode += ' class="vertical"';
                 } else if (i % 5 === 0) {
-                    htmlCode += ' class="big"';
+                    htmlCode += ' class="vertical"';
                 } else {
-                    htmlCode += ' class=""';
+                    htmlCode += ' class="vertical"';
                 }
                 htmlCode += `><img src="${imagenes[i].url}" /></a>`;
             }
@@ -151,40 +154,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('Error al actualizar el estado de la imagen:', error);
         }
         location.reload();
-    }
-
-    // Función para manejar la descarga de las imágenes del contenedor especificado
-    function handleDownloadClick(containerId) {
-        const downloadButton = document.getElementById(`download${containerId.substr(-1)}`); // Obtener el botón de descarga correspondiente
-
-        downloadButton.addEventListener('click', async () => {
-            const imagenes = Array.from(document.querySelectorAll(`#${containerId} img`)).map(img => img.src); // Obtener las URLs de las imágenes en el contenedor
-            const zip = new JSZip();
-            const folder = zip.folder('imagenes');
-
-            for (let i = 0; i < imagenes.length; i++) {
-                const response = await fetch(imagenes[i]);
-                const blob = await response.blob();
-                folder.file(`imagen-${i}.png`, blob);
-            }
-
-            const content = await zip.generateAsync({ type: 'blob' });
-            const url = URL.createObjectURL(content);
-            const a = document.createElement('a');
-            a.href = url;
-            if (containerId === "container1") {
-                a.download = `fotosSinSeleccionar.zip`;
-            } else if (containerId === "container2") {
-                a.download = `fotosSeleccionadas.zip`;
-            } else if (containerId === "container3") {
-                a.download = `fotosEditadas.zip`;
-            }
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        });
     }
 
     async function obtenerIdAlbum(album) {
@@ -384,6 +353,13 @@ document.addEventListener("DOMContentLoaded", function() {
         //location.reload();
     });
 
+    document.getElementById("CerrarEditarAlbum").addEventListener("click", function(event) {
+        event.preventDefault();
+        deletePhotos.length = 0;
+        document.getElementById("modalEditarAlbum").style.display = "none";
+        //location.reload();
+    });
+
     //const addButton = document.getElementById('Añadir');
     //const fileInput = document.getElementById('uploadedimage');
 
@@ -456,6 +432,49 @@ document.addEventListener("DOMContentLoaded", function() {
  */
 });
 
+// Función para manejar la descarga de las imágenes del contenedor especificado
+function handleDownloadClick(containerId) {
+    const downloadButton = document.getElementById(`download${containerId.substr(-1)}`); // Obtener el botón de descarga correspondiente
+
+    downloadButton.addEventListener('click', async () => {
+        const imagenes = Array.from(document.querySelectorAll(`#${containerId} img`)).map(img => img.src); // Obtener las URLs de las imágenes en el contenedor
+        const zip = new JSZip();
+        const folder = zip.folder('');
+
+        // if (containerId === "container1") {
+        //     const folder = zip.folder('Fotos Sin Seleccionar');
+        // } else if (containerId === "container2") {
+        //     const folder = zip.folder('Fotos Seleccionadas');
+        // } else if (containerId === "container3") {
+        //     const folder = zip.folder('Fotos Terminadas');
+        // } else {
+        // }
+
+        for (let i = 0; i < imagenes.length; i++) {
+            const response = await fetch(imagenes[i]);
+            const blob = await response.blob();
+            const fileType = response.headers.get('Content-Type');
+            const fileExtension = fileType.split('/')[1]; // obtener la extensión del archivo (e.g. "jpg", "jpeg", "png", etc.)
+            folder.file(`imagen-${i}.${fileExtension}`, blob);
+        }
+
+        const content = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(content);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `MoyanoFotografia.zip`;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    });
+}
+
+document.getElementById("comprobar-button").addEventListener("click", function(event) {
+    const dataValue = event.target.getAttribute('data-value');
+    widgetCloudinary(dataValue);
+});
 
 async function widgetCloudinary(album) {
     let imagenesSubidas = [];

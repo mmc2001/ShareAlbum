@@ -11,8 +11,9 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     z-index: 1000;
+    background: linear-gradient(to right, rgba(9, 64, 121, 1) 45%, rgba(33, 152, 187, 1) 100%);
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: 'Montserrat', sans-serif;
@@ -32,7 +33,8 @@
 
 .menu-icon:hover {
     padding: 10px;
-    background-color: rgb(235, 235, 235);
+    /*background-color: rgb(235, 235, 235);*/
+    background-color: rgba(36, 36, 36, 0.51);
     border-radius: 12px;
 }
 
@@ -43,7 +45,8 @@
     margin: 5px auto;
     -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
-    background-color: #333;
+    /*background-color: #333;*/
+    background-color: white;
 }
 
 .contenedor {
@@ -54,27 +57,25 @@
 }
 
 .nav-links .li {
-    list-style: none;
+    list-style: none !important;
 }
 
 .nav-links .a {
     display: block;
-    padding: 10px;
-    color: #333;
+    padding: 10px 15px 10px 15px;
+    /*color: #333;*/
+    color: var(--color-secundario);
     text-decoration: none;
     position: relative;
+    border-radius: 30px;
+    transition: background-color 0.3s ease;
 }
 
-.nav-links .a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 2px;
-    background-color: var(--color-primario);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+/*.nav-links a.active {*/
+.nav-links a:hover{
+    /*background-color: rgba(0, 105, 144, 0.18);*/
+    color: var(--color-primario);
+    background-color: var(--color-secundario);
 }
 
 .nav-links .a.active::after,
@@ -85,13 +86,12 @@
 .margen-izquierdo {
     margin-left: 40px;
 }
-
-.logo {
-    margin-left: -205px;
+.margen-derecho {
+    margin-right: 40px;
 }
 
 .logo .img {
-    height: 40px;
+    height: 50px;
 }
 
 .dropdown {
@@ -143,10 +143,6 @@
     display: block;
 }
 
-.margen-derecho {
-    margin-right: 40px;
-}
-
 @media screen and (max-width: 768px) {
     .menu-icon {
         display: block;
@@ -168,24 +164,25 @@
     }
 
     .contenedor {
+        margin-top: 20px;
         display: grid;
         justify-content: left;
         align-items: center;
-        gap: 10px;
+        gap: 0;
         height: fit-content;
     }
 
     .nav-links {
-
         position: fixed;
-        top: 8.5vh;
+        /*top: 8.5vh;*/
+        top: 80px;
         left: -100%;
         width: 100%;
         height: 100%;
         background-color: rgba(36, 36, 36, 0.979);
         display: flex;
-        /*
         flex-direction: column;
+        /*
         justify-content: center;
         align-items: center;
         */
@@ -199,13 +196,23 @@
 
     .nav-links .li {
         /*text-align: center;*/
-        margin: 80px 0 0 100px;
+        /*padding: 10px 0 0 60px;*/
     }
 
     .nav-links .a {
+        width: 100vw;
         color: #ffffff;
         padding: 20px;
         font-size: 1.2em;
+        text-align: center;
+        border-radius: 0;
+        background-color: transparent;
+        margin-left: -20px;
+    }
+
+    .nav-links a.active, .nav-links a:hover {
+        color: var(--color-primario);
+        background-color: var(--color-secundario);
     }
 
     .logo {
@@ -213,15 +220,15 @@
     }
 
     .dropdown-content {
-        margin-right: 25px;
+        margin-right: 0;
     }
 
     .margen-derecho {
-        margin-right: 25px;
+        margin-right: 10px;
     }
 
     .margen-izquierdo {
-        margin-left: 0px;
+        margin-left: 0;
     }
 }
 
@@ -231,6 +238,9 @@ button {
     background: none;
     cursor: pointer;
     padding: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button img {
@@ -257,16 +267,16 @@ button img {
     align-items: center;
     justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 0px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
-    width: 768px;
+    width: fit-content;
     height: fit-content;
-    max-width: 568px;
+    max-width: 650px;
     min-height: 380px;
-    padding: 0px 80px 0px 80px;
+    padding: 0px 20px 0px 20px;
 }
 .datos {
     height: 100%;
@@ -281,20 +291,32 @@ button img {
     font-weight: bold;
     font-size: xx-large;
 }
-.botonSubmitPerfil {
+.botonesPerfil {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 20px;
     gap: 10px;
+    border-top: 1.5px solid #ddd;
+}
+.closePerfil {
+    margin-top: 10px;
+    width: fit-content;
+    padding: 10px 50px;
+    border-radius: 30px;
+    background-color: transparent;
+    color: var(--color-primario);
+    border: 1.5px solid var(--color-primario);
+    font-size: medium;
 }
 .submitPerfil {
-    width: 100%;
-    padding: 10px 100px;
-    border-radius: 20px;
+    margin-top: 10px;
+    width: fit-content;
+    padding: 10px 50px;
+    border-radius: 30px;
     background-color: var(--color-primario);
     color: #fff;
-    font-weight: bold;
-    font-size: larger;
+    font-size: medium;
 }
 .contenedorPerfilFormulario {
     display: grid;
@@ -303,7 +325,8 @@ button img {
 }
 .contenedorPerfilFormulario > form {
     background-color: var(--color-secundario);
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     grid-template-columns: repeat(2, 1fr);
@@ -336,34 +359,78 @@ button img {
 .contenedorPerfilFormulario > form > button:hover {
     background-color: rgb(6, 47, 90);
 }
-.campos {
+.camposPerfil {
+    margin-top: 20px;
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
     justify-content: center;
     align-items: center;
     /* margin-top: 20px; */
+
 }
-.campos > textarea {
+.camposPerfil > textarea {
     /* border-radius: 8px; */
     height: 150px;
 }
-.campos > select, .campos > input, .campos > textarea {
-    margin: 0 auto;
-    margin-top: 15px;
-    /* border-radius: 8px; */
-    width: 380px;
+
+.camposPerfil > select, .camposPerfil > input, .camposPerfil > textarea {
+    /*margin: 0 auto;*/
+    margin-top: 5px;
+    width: fit-content;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
+    padding: 12px 15px;
+    font-size: large;
 }
 .camposPassword {
     display: none;
+    /*display: grid;*/
+    /*grid-template-columns: repeat(2, 1fr);*/
+    /*gap: 6px;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
     background-color: #ffffff;
-    padding: 20px;
+    margin-top: 10px;
+    /*padding: 20px;*/
     border-radius: 5px;
     z-index: 1000;
+
 }
+
+.campoPassword {
+    display: grid;
+    justify-content: right;
+    align-items: center;
+}
+
+.camposPasswordPerfil {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+}
+
+.campoPasswordPerfil {
+    width: fit-content;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
+    padding: 12px 15px;
+    font-size: large;
+}
+
 .camposPassword > input {
+    width: fit-content;
     margin-bottom: 8px;
 }
 .camposPassword form {
     margin-bottom: 0;
+}
+.paddingButton {
+    padding: 12px 20px;
 }
 .padding {
     padding: 12px 15px;
@@ -376,7 +443,8 @@ button img {
     margin-right: 20px;
     margin-top: 20px;
     cursor: pointer;
-    color: #aaa;
+    color: #505050;
+    font-weight: bold;
 }
 
 .cerrarModal:hover,

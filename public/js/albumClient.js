@@ -52,11 +52,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (i % 2 === 0) {
                     htmlCode += ' class="vertical"';
                 } else if (i % 3 === 0) {
-                    htmlCode += ' class="horizontal"';
+                    htmlCode += ' class="vertical"';
                 } else if (i % 5 === 0) {
-                    htmlCode += ' class="big"';
+                    htmlCode += ' class="vertical"';
                 } else {
-                    htmlCode += ' class=""';
+                    htmlCode += ' class="vertical"';
                 }
                 htmlCode += `><img src="${imagenes[i].url}" />`;
 
@@ -72,11 +72,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (i % 2 === 0) {
                     htmlCode += ' class="vertical"';
                 } else if (i % 3 === 0) {
-                    htmlCode += ' class="horizontal"';
+                    htmlCode += ' class="vertical"';
                 } else if (i % 5 === 0) {
-                    htmlCode += ' class="big"';
+                    htmlCode += ' class="vertical"';
                 } else {
-                    htmlCode += ' class=""';
+                    htmlCode += ' class="vertical"';
                 }
                 htmlCode += `><img src="${imagenes[i].url}" />`;
 
@@ -92,11 +92,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (i % 2 === 0) {
                     htmlCode += ' class="vertical"';
                 } else if (i % 3 === 0) {
-                    htmlCode += ' class="horizontal"';
+                    htmlCode += ' class="vertical"';
                 } else if (i % 5 === 0) {
-                    htmlCode += ' class="big"';
+                    htmlCode += ' class="vertical"';
                 } else {
-                    htmlCode += ' class=""';
+                    htmlCode += ' class="vertical"';
                 }
                 htmlCode += `><img src="${imagenes[i].url}" /></a>`;
             }

@@ -42,7 +42,7 @@ const dataTableOptions = {
     lengthMenu: [5, 10, 15, 20, 100],
     columnDefs: [
         { className: "centered", targets: [0, 3, 4, 5, 6] },
-        { orderable: false, targets: [4, 5] },
+        { orderable: false, targets: [6] },
         { searchable: false, targets: [1] }
     ],
     destroy: true,

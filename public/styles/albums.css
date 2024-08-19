@@ -19,142 +19,10 @@ body {
     align-items:flex-start;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     margin: -20px 0 0px;
 }
 
-/* MODAL DATOS DEL PERFIL */
-.campos {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    /* margin-top: 20px; */
-}
-.campos > textarea {
-    /* border-radius: 8px; */
-    height: 150px;
-}
-.campos > select, .campos > input, .campos > textarea {
-    margin: 0 auto;
-    margin-top: 15px;
-    width: 380px;
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    font-size: large;
-}
-.camposPassword {
-    display: none;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    z-index: 1000;
-}
-.campoPasword {
-    display: grid;
-    justify-content: right;
-    align-items: center;
-}
-.camposPassword > input {
-    margin-bottom: 8px;
-}
-.camposPassword form {
-    margin-bottom: 0;
-}
-.botonSubmitPerfil {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 10px;
-}
-.submitPerfil {
-    width: 100%;
-    padding: 10px 100px;
-    border-radius: 20px;
-    background-color: var(--color-primario);
-    color: #fff;
-    font-weight: bold;
-    font-size: larger;
-}
-.modalPerfil {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-}
-.modalPerfil-content {
-    margin: 0 auto;
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-secundario);
-    border-radius: 0px;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-    0 10px 10px rgba(0,0,0,0.22);
-    position: relative;
-    overflow: hidden;
-    width: 768px;
-    height: fit-content;
-    max-width: 568px;
-    min-height: 380px;
-    padding: 0px 80px 0px 80px;
-}
-.datos {
-    height: 100%;
-}
-.datos > h1 {
-    margin-top: 40px;
-    margin-bottom: 10px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    font-weight: bold;
-    font-size: xx-large;
-}
-.cerrarModal {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 40px;
-    margin-right: 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    color: #aaa;
-}
-
-.cerrarModal:hover,
-.cerrarModal:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-span {
-    font-weight: bold;
-}
-.password-container {
-    position: relative;
-    display: inline-block;
-}
-#passwordInput {
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    width: 100%;
-    font-size: large;
-}
-.camposPassword {
-    display: none;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-}
 input {
     background-color: #eee;
     border: none;
@@ -188,7 +56,7 @@ h1 {
     font-weight: 800;
     color: var(--color-titulos);
     font-size: x-large;
-    margin-left: 60px;
+    /*margin-left: 40px;*/
     text-align: left;
 }
 
@@ -198,17 +66,21 @@ svg {
 }
 
 .ordenacion {
+    width: 100%;
     display: grid;
-    gap: 80px;
+    /*gap: 80px;*/
     margin-top: 60px;
 }
 
 .contenedorAlbum {
-    width: 90vw;
-    margin-right: 60px;
+    margin-left: 40px;
+    margin-right: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--color-secundario);
+    border-radius: 12px;
+    padding: 20px;
 }
 
 .contain {
@@ -217,23 +89,43 @@ svg {
     align-items: center;
     gap: 50px;
 }
-.contain > a > svg:hover {
-    transform: scale(1.2);
+.contain > a {
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0px 1px 2px 0px #303030;
 }
-.contain > span > svg:hover {
-    transform: scale(1.2);
+.contain > span {
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0px 1px 2px 0px #303030;
+}
+.contain > a:hover {
+    transform: scale(1.1);
+}
+.contain > span:hover {
+    transform: scale(1.1);
 }
 
 
 .contenedorImagenes {
-    width: calc(100% - 200px);
+    /*width: calc(100% - 200px);*/
+    /*background-color: var(--color-secundario);*/
+    /*overflow-y: auto;*/
+    /*max-height: 500px;*/
+    /*padding: 20px;*/
+    /*margin-top: -40px;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    border-radius: 12px;
     background-color: var(--color-secundario);
     overflow-y: auto;
-    max-height: 500px;
+    max-height: 960px;
     padding: 20px;
-    margin-top: -40px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 40px;
 }
 
 .contenedorImagenes::-webkit-scrollbar {
@@ -246,9 +138,9 @@ svg {
 }
 
 @media screen and (max-width: 768px) {
-    .contenedorImagenes {
-        width: 70%;
-    }
+    /*.contenedorImagenes {*/
+    /*    width: 70%;*/
+    /*}*/
 
     h1 {
         font-size: large;
@@ -322,7 +214,8 @@ svg {
 }
 
 .vertical {
-    grid-row: span 1;
+    grid-row: span 3;
+    grid-column: span 2;
 }
 
 .big {
@@ -334,7 +227,7 @@ svg {
     width: 80px;
     height: 38px;
     border-radius: 20px;
-    border: 2px solid var(--color-primario);
+    border: 1px solid var(--color-primario);
     background-color: transparent;
     color: var(--color-primario);
     font-size: 14px;
@@ -373,58 +266,65 @@ svg {
 }
 .modalEditarAlbum-content {
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    align-items: center;
+    justify-content: center;
     background-color: var(--color-secundario);
-    border-radius: 0px;
+    border-radius: 12px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
     0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
-    width: 880px;
-    height: 520px;
-    /* padding-left: 60px; */
-    max-width: 100%;
-    margin: 0 auto;
+    width: 650px;
+    height: fit-content;
+    max-width: 650px;
+    max-height: 500px;
+    min-height: 450px;
+    padding: 0px 20px 0px 20px;
 }
 .modalEditarAlbum-content p:last-child {
     margin-top: -100px !important;
 }
 .modalEditarAlbum-content > h1 {
+    margin-top: 40px;
+    margin-bottom: 10px;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: left;
+    gap: 30px;
     font-weight: bold;
     font-size: xx-large;
-    padding: 60px 60px 40px 60px;
-    margin-left: 0px;
 }
 .modalEditarAlbum-content > .contenedorImagenesModal {
-    width: calc(100% - 200px);
-    min-height: 280px;
+    /*width: calc(100% - 200px);*/
+    width: 100%;
+    min-height: 200px;
     overflow-y: auto;
     /* padding-left: 20px;
     padding-right: 20px;  */
     margin-left: auto;
     margin-right: auto;
 }
-.modalEditarAlbum-content > .contenedorImagenesModal::-webkit-scrollbar {
+.modalEditarAlbum-content > .contenedorImagenesModal > .galleryModal::-webkit-scrollbar {
     width: 10px;
 }
-.modalEditarAlbum-content > .contenedorImagenesModal::-webkit-scrollbar-thumb {
+.modalEditarAlbum-content > .contenedorImagenesModal > .galleryModal::-webkit-scrollbar-thumb {
     background-color: #888;
     border-radius: 5px;
 }
 .modalEditarAlbum-content > .contenedorImagenesModal > .galleryModal {
     /* display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); */
+    width: 610px;
+    margin-top: 20px;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
+    height: 230px;
     overflow: hidden;
+    overflow-y: auto;
 }
 .modalEditarAlbum-content > .contenedorImagenesModal > .galleryModal img {
     /* width: 100%; */
@@ -434,28 +334,39 @@ svg {
     object-fit: cover;
 }
 .modalEditarAlbum-content > .botonesModal {
-    margin: 0 auto;
-    margin-top: 10px;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 80px;
-}
-.modalEditarAlbum-content > .botonesModal > .botonModal {
-    border-radius: 20px;
-    border: 2px solid var(--color-primario);
-    background-color: var(--color-primario);
-    color: var(--color-secundario);
-    font-size: medium;
-    font-weight: bold;
-    height: 38px;
-    width: 145px;
-    /* text-transform: uppercase; */
-    transition: transform 80ms ease-in;
-    cursor: pointer;
+    justify-content: space-between;
     margin-top: 20px;
-    margin-bottom: 40px;
-    text-align: center;
+    margin-bottom: 10px;
+    gap: 10px;
+    border-top: 1.5px solid #ddd;
+}
+.closeEditarAlbum {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 30px;
+    background-color: transparent;
+    color: var(--color-primario);
+    border: 1.5px solid var(--color-primario);
+    font-size: medium;
+}
+.closeEditarAlbum:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+.submitEditarAlbum {
+    margin-top: 20px;
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 30px;
+    background-color: var(--color-primario);
+    color: #fff;
+    font-size: medium;
+}
+.submitEditarAlbum:hover {
+    background-color: #062749;
 }
 .separacion > .botonModal {
     border-radius: 20px;
@@ -519,6 +430,7 @@ label {
 .container a {
     position: relative;
     overflow: hidden;
+    border-radius: 6px;
 }
 .container > a > img {
     width: 100%;
@@ -536,6 +448,7 @@ label {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
     opacity: 0;
     transition: opacity .3s ease;
 }

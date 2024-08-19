@@ -210,8 +210,9 @@
         margin-left: -20px;
     }
 
-    .nav-links a:hover, .nav-links a.active {
-        background-color: rgba(0, 22, 30, 0.18);
+    .nav-links a.active, .nav-links a:hover {
+        color: var(--color-primario);
+        background-color: var(--color-secundario);
     }
 
     .logo {

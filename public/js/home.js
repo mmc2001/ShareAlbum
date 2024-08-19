@@ -32,31 +32,46 @@ document.addEventListener("DOMContentLoaded", function() {
                 const sessionCard = document.createElement("div");
                 sessionCard.classList.add("session-card");
 
+                // const notiglow = document.createElement("div");
+                // notiglow.classList.add("notiglow");
+                // sessionCard.appendChild(notiglow);
+                //
+                // const notiborderglow = document.createElement("div");
+                // notiborderglow.classList.add("notiborderglow");
+                // sessionCard.appendChild(notiborderglow);
+
                 const sessionName = document.createElement("h3");
                 sessionName.textContent = session.name;
                 sessionCard.appendChild(sessionName);
 
-                const sessionServiceContainer = document.createElement("div");
-                sessionServiceContainer.classList.add("campos");
-                sessionServiceContainer.classList.add("session-service-container");
+                // const sessionServiceContainer = document.createElement("div");
+                // sessionServiceContainer.classList.add("campos");
+                // sessionServiceContainer.classList.add("session-service-container");
 
                 const sessionDate = document.createElement("p");
                 const dateString = session.date;
                 const date = new Date(dateString);
                 const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                 sessionDate.textContent = formattedDate;
-                sessionServiceContainer.appendChild(sessionDate);
+                sessionCard.appendChild(sessionDate);
+
+                const sessionCardFooter = document.createElement("div");
+                sessionCardFooter.classList.add("sessionCardFooter");
+                sessionCard.appendChild(sessionCardFooter);
 
                 const sessionService = document.createElement("p");
                 sessionService.textContent = session.service;
                 sessionService.classList.add("sombreado");
-                sessionServiceContainer.appendChild(sessionService);
+                sessionCardFooter.appendChild(sessionService);
 
-                sessionCard.appendChild(sessionServiceContainer);
+                const sessionIcon = document.createElement("i");
+                sessionIcon.classList.add("fa-solid", "fa-circle-chevron-right", "icono");
+                sessionCardFooter.appendChild(sessionIcon);
+
+                // sessionCard.appendChild(sessionServiceContainer);
 
                 const sessionLink = document.createElement("a");
                 sessionLink.href = `/album/client/${session.id}`;
-
                 sessionLink.appendChild(sessionCard);
 
                 sesionesDiv.appendChild(sessionLink);

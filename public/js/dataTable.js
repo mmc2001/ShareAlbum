@@ -41,8 +41,8 @@ const dataTableOptions = {
     ],
     lengthMenu: [5, 10, 15, 20, 100],
     columnDefs: [
-        { className: "centered", targets: [0, 2, 3, 4, 5, 7, 8, 9] },
-        { orderable: false, targets: [5, 6, 7, 8, 9, 10] },
+        { className: "centered", targets: [0, 2, 3, 4, 5, 7, 8, 9, 10] },
+        { orderable: false, targets: [ 6, 9, 10] },
         { searchable: false, targets: [1] }
     ],
     destroy: true,
@@ -137,11 +137,11 @@ const listUsers = async () => {
                 <td>${users}</td>
                 <td class="bloque">
                     <div>
-                        <button class="btn btn-sm btn-primary verTicket" data-id="${session.id}"><i class="fa-solid fa-eye"></i></button>
+                        <button class="btn btn-sm btn-primary verTicket" data-id="${session.id}"><i class="fa-solid fa-file"></i></button>
                         <!-- <button class="btn btn-sm btn-primary crearTicket" data-row="${session.id}"><i class="fa-solid fa-pencil"></i></button> -->
                     </div>
                 </td>
-                <td>
+                <td class="text-center">
                     <button class="btn btn-sm btn-primary verSession" data-id="${session.id}"><i class="fa-solid fa-eye"></i></button>
                     <button class="btn btn-sm btn-info editarSesion" data-id="${session.id}"><i class="fa-solid fa-pencil"></i></button>
                     <button class="btn btn-sm btn-danger" data-id="${session.id}"><i class="fa-solid fa-trash-can"></i></button>

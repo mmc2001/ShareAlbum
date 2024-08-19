@@ -30,138 +30,6 @@ h2 {
     text-align: center;
 }
 
-/* MODAL DATOS DEL PERFIL */
-.campos {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    /* margin-top: 20px; */
-}
-.campos > textarea {
-    /* border-radius: 8px; */
-    height: 150px;
-}
-.campos > select, .campos > input, .campos > textarea {
-    margin: 0 auto;
-    margin-top: 15px;
-    width: 380px;
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    font-size: large;
-}
-.camposPassword {
-    display: none;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    z-index: 1000;
-}
-.campoPasword {
-    display: grid;
-    justify-content: right;
-    align-items: center;
-}
-.camposPassword > input {
-    margin-bottom: 8px;
-}
-.camposPassword form {
-    margin-bottom: 0;
-}
-.botonSubmitPerfil {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 10px;
-}
-.submitPerfil {
-    width: 100%;
-    padding: 10px 100px;
-    border-radius: 20px;
-    background-color: var(--color-primario);
-    color: #fff;
-    font-weight: bold;
-    font-size: larger;
-}
-.modalPerfil {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-}
-.modalPerfil-content {
-    margin: 0 auto;
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-secundario);
-    border-radius: 0px;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-    0 10px 10px rgba(0,0,0,0.22);
-    position: relative;
-    overflow: hidden;
-    width: 768px;
-    height: fit-content;
-    max-width: 568px;
-    min-height: 380px;
-    padding: 0px 80px 0px 80px;
-}
-.datos {
-    height: 100%;
-}
-.datos > h1 {
-    margin-top: 40px;
-    margin-bottom: 10px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-    font-weight: bold;
-    font-size: xx-large;
-}
-.cerrarModal {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 40px;
-    margin-right: 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    color: #aaa;
-}
-
-.cerrarModal:hover,
-.cerrarModal:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-span {
-    font-weight: bold;
-}
-.password-container {
-    position: relative;
-    display: inline-block;
-}
-#passwordInput {
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    width: 100%;
-    font-size: large;
-}
-.camposPassword {
-    display: none;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-}
 input {
     /*background-color: #eee;*/
     border: none;
@@ -195,6 +63,7 @@ input {
 }
 
 .sesiones {
+    border-radius: 12px;
     height: fit-content;
     padding: 20px;
     width: 80%;
@@ -202,6 +71,7 @@ input {
 }
 
 .sesiones > h2 {
+    margin: 10px;
     font-size: x-large;
     text-align: left;
 }
@@ -214,26 +84,130 @@ input {
 }
 
 .session-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 15px 15px 5px 15px;
-    margin: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    cursor: pointer;
-    border-left: 4px solid #337ab7;
+    border: 2px solid #3D83FFFF;
+    display: flex;
+    flex-direction: column;
+    isolation: isolate;
+    position: relative;
+    width: 20rem;
+    height: 6.8rem;
+    /*background: #d1d1d1;*/
+    border-radius: 1rem;
+    overflow: hidden;
+    /*font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;*/
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    --gradient: linear-gradient(to bottom, #2eadff, #3d83ff, #7e61ff);
+    --color: #32a6ff
 }
 
-.session-card:hover {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+.session-card:before {
+    position: absolute;
+    content: "";
+    inset: 0.0625rem;
+    border-radius: 0.9375rem;
+    /*background: #18181b;*/
+    z-index: 2
+}
+
+.session-card:after {
+    position: absolute;
+    content: "";
+    width: 0.25rem;
+    inset: 0.65rem auto 0.65rem 0.5rem;
+    border-radius: 0.125rem;
+    background: var(--gradient);
+    transition: transform 300ms ease;
+    z-index: 4;
+}
+
+.session-card:hover:after {
+    transform: translateX(0.15rem)
+}
+
+.notiglow,
+.notiborderglow {
+    position: absolute;
+    width: 20rem;
+    height: 20rem;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle closest-side at center, #2eadff, transparent);
+    opacity: 0;
+    transition: opacity 300ms ease;
+}
+
+.notiglow {
+    z-index: 3;
+}
+
+.notiborderglow {
+    z-index: 1;
+}
+
+.session-card:hover .notiglow {
+    opacity: 0.1
+}
+
+.session-card:hover .notiborderglow {
+    opacity: 0.1
 }
 
 .session-card h3 {
-    margin-top: 0;
+    color: #2582cb;
+    padding: 0.65rem 0.25rem 0.4rem 1.25rem;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: transform 300ms ease;
+    z-index: 5;
+}
+
+.session-card:hover {
+    transform: translateX(0.15rem);
+    transition: transform 300ms ease;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.20);
 }
 
 .session-card p {
-    margin: 10px 0;
+    margin-left: 20px;
+    color: #696969;
+    /*padding: 0 1.25rem;*/
+    transition: transform 300ms ease;
+    z-index: 5;
+}
+
+.sessionCardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.session-card:hover .session-card p {
+    transform: translateX(0.25rem)
+}
+
+.icono {
+    margin-top: 15px;
+    margin-right: 20px;
+    color: #2582cb;
+    font-size: x-large;
+    /*padding: 0 1.25rem;*/
+    transition: transform 300ms ease;
+    z-index: 5;
+}
+
+.session-card:hover .icono i {
+    transform: translateX(0.25rem)
+}
+
+.note {
+    color: var(--color);
+    position: fixed;
+    top: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 0.9rem;
+    width: 75%;
 }
 
 a {
@@ -242,9 +216,11 @@ a {
 }
 
 .sombreado {
+    margin-top: 15px;
+    margin-left: 20px;
     width: fit-content;
     border-radius: 15px;
-    padding: 8px;
+    padding: 4px 8px 4px 8px;
     background-color: rgba(237, 217, 0, 0.26);
 }
 
@@ -274,7 +250,7 @@ a {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: #007bff;
+    background-color: #2582cb;
     color: white;
     border: none;
     cursor: pointer;
@@ -342,7 +318,7 @@ a {
     background-color: var(--color-primario);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     cursor: pointer;
 }
 

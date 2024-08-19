@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const modalPerfilLink = document.querySelector('a[href="#modalPerfil"]');
     const cerrarPerfilButton = document.getElementById("CerrarPerfil");
+    const cerrarPerfil = document.getElementById("CerrarPerfilButton");
 
     if (modalPerfilLink) {
         modalPerfilLink.addEventListener("click", function (event) {
@@ -14,6 +15,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (cerrarPerfilButton) {
         cerrarPerfilButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            const modalPerfil = document.getElementById("modalPerfil");
+            if (modalPerfil) {
+                modalPerfil.style.display = "none";
+            }
+        });
+    }
+
+    if (cerrarPerfil) {
+        cerrarPerfil.addEventListener("click", function (event) {
             event.preventDefault();
             const modalPerfil = document.getElementById("modalPerfil");
             if (modalPerfil) {

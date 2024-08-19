@@ -20,19 +20,22 @@ body {
     align-items: flex-start;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
+    /*width: fit-content;*/
+    /*overflow: hidden;*/
 
 }
 
 /* Panel de control */
 
 .panelControl {
-    width: 100vw;
+    width: 100%;
     margin-top: 100px;
     padding: 0px 20px 100px 20px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
 h2 {

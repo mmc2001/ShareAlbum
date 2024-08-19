@@ -22,12 +22,14 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
-            <ul class="nav-links">
-                <li class="li contenedor">
-                    <a href="{{ path('app_home') }}" id="inicio-link" class="a margen-izquierdo">Inicio</a>
-                </li>
-            </ul>
-            <a href="{{ path('app_home') }}" id="a logo-link" class="logo"><img src="/img/logo.svg" class="img" alt="Logo"></a>
+            <div style="height: 80px; display:flex; justify-content: center; align-items: center; width: fit-content;">
+                <a href="{{ path('app_home') }}" id="a logo-link" class="margen-izquierdo logo"><img src="/img/logo.svg" class="img" style="filter: invert(1);" alt="Logo"></a>
+                <ul class="nav-links">
+                    <li class="li contenedor">
+                        <a href="{{ path('app_home') }}" id="inicio-link" class="a margen-izquierdo">Inicio</a>
+                    </li>
+                </ul>
+            </div>
             <div class="dropdown">
                 <button type="button">
                     <img src="/img/usuario.png" class="img margen-derecho" alt="Descripción de la imagen">
@@ -52,37 +54,41 @@
         <div class="modalPerfil-content">
             <span class="cerrarModal" id="CerrarPerfil">&times;</span>
             <div class="datos">
-                <h1 class="h1">Perfil</h1>
+                <h1 class="h1"><i class="fa-solid fa-user"></i>&nbsp; Perfil</h1>
                 <!-- Primer formulario -->
                 <form method="post" id="formPrincipal">
                     {{ form_errors(formUserData) }}
                     {{ form_start(formUserData) }}
-                    <div class="campos">
+                    <div class="camposPerfil">
                         {{ form_widget(formUserData.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
                         {{ form_widget(formUserData.surnames, {'attr': {'class': 'padding', 'placeholder': 'Apellidos'}}) }}
                         {{ form_widget(formUserData.email, {'attr': {'class': 'padding', 'placeholder': 'Email'}}) }}
                         {{ form_widget(formUserData.dni, {'attr': {'class': 'padding', 'placeholder': 'DNI'}}) }}
                         {{ form_widget(formUserData.telephone, {'attr': {'class': 'padding', 'placeholder': 'Telefono'}}) }}
                     </div>
-                    <div class="botonSubmitPerfil">
-                        <!-- <button id="CerrarPerfil" class="submitPerfil padding" style="margin-bottom: 10px;">Atrás</button> -->
-                        <button type="submit" class="submitPerfil padding" style="margin-bottom: 10px;">Actualizar</button>
-                    </div>
+
                     {{ form_end(formUserData)}}
                 </form>
-
-                <button id="mostrar" style="font-weight: bold; font-size: medium; margin-top: 20px; margin-bottom: 20px;">Cambiar contraseña</button>
+                <!-- Segundo formulario -->
+                <button id="mostrar" style="font-weight: bold; font-size: medium; margin-top: 20px;">Cambiar contraseña</button>
                 <div class="camposPassword">
                     <form method="post" id="formPassword">
                         {{ form_errors(formNewPassword) }}
                         {{ form_start(formNewPassword) }}
-                        {{ form_widget(formNewPassword.password.first, {'attr': {'class': 'padding', 'style': 'margin-bottom: 10px;', 'placeholder': 'Nueva contraseña'}}) }}
-                        {{ form_widget(formNewPassword.password.second, {'attr': {'class': 'padding', 'placeholder': 'Repite la contraseña'}}) }}
+                        <div class="camposPasswordPerfil">
+                            {{ form_widget(formNewPassword.password.first, {'attr': {'class': 'padding campoPasswordPerfil', 'placeholder': 'Nueva contraseña'}}) }}
+                            {{ form_widget(formNewPassword.password.second, {'attr': {'class': 'padding campoPasswordPerfil', 'placeholder': 'Repite la contraseña'}}) }}
+                        </div>
                         <div class="campoPasword">
-                            <button type="submit" class="submitPassword padding" id="sendModal3">Actualizar</button>
+                            <!-- Botón para enviar el segundo formulario -->
+                            <button type="submit" form="formPassword" class="submitPerfil paddingButton" id="sendModal3">Cambiar Contraseña</button>
                         </div>
                         {{ form_end(formNewPassword)}}
                     </form>
+                </div>
+                <div class="botonesPerfil">
+                    <button id="CerrarPerfilButton" class="closePerfil paddingButton" style="margin-bottom: 10px;">Atrás</button>
+                    <button type="submit" form="formPrincipal" class="submitPerfil paddingButton" style="margin-bottom: 10px;">Actualizar</button>
                 </div>
             </div>
         </div>

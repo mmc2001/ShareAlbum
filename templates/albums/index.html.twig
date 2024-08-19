@@ -74,17 +74,18 @@
     <!-- Modal Editar Album -->
     <div class="modalEditarAlbum" id="modalEditarAlbum">
         <div class="modalEditarAlbum-content" id="modalEditarAlbum-content">
+            <span class="cerrarModal" id="CerrarEditarAlbum">&times;</span>
             <h1>Listado de fotos <i class="fas fa-trash-alt fa-xs" style="cursor: pointer;"></i></h1>
             <div class="contenedorImagenesModal" id="contenedorImagenesModal">
                 <div class="galleryModal" id="galleryModal"></div>
             </div>
             <div class="botonesModal">
-                <button class="botonModal" id="CerrarModal">Cerrar</button>
+                <button class="closeEditarAlbum" id="CerrarModal">Cerrar</button>
                 <div class="separacion">
                     <input type="file" id="uploadedimage" accept="image/*" style="display: none;" multiple>
                     <!-- <label for="inputImagenes" id="Añadir">Añadir</button> -->
-                    <button type="button" class="botonModal" id="comprobar-button" data-value="">Añadir</button>
-                    <button class="botonModal" id="GuardarModal">Guardar</button>
+                    <button type="button" class="closeEditarAlbum" id="comprobar-button" data-value="">Añadir</button>
+                    <button class="submitEditarAlbum" id="GuardarModal">Guardar</button>
                 </div>
             </div>
         </div>
@@ -101,10 +102,99 @@
     {% endblock %}
 
     <script>
-        document.getElementById("comprobar-button").addEventListener("click", function(event) {
-            const dataValue = event.target.getAttribute('data-value');
-            widgetCloudinary(dataValue);
-        });
+        // document.getElementById("comprobar-button").addEventListener("click", function(event) {
+        //     const dataValue = event.target.getAttribute('data-value');
+        //     widgetCloudinary(dataValue);
+        // });
+
+        // async function widgetCloudinary(album) {
+        //     let imagenesSubidas = [];
+        //     cloudinary.createUploadWidget({
+        //         cloud_name: 'ddaq4my3n',
+        //         upload_preset: 'preset_ShareAlbum'
+        //     }, (err, result) => {
+        //         if (err) {
+        //             console.error('Error al subir la imagen', err);
+        //             return;
+        //         }
+        //
+        //         if (result && result.event === 'success') {
+        //             console.log('Imagen subida con éxito', result.info);
+        //             //imagen.src = result.info.secure_url;
+        //             imagenesSubidas.push(result.info.secure_url);
+        //
+        //             const idSession = obtenerIdDeURL();
+        //             console.log(idSession);
+        //
+        //             fetch(`/obtener/album/${idSession}`)
+        //                 .then(response => {
+        //                     if (!response.ok) {
+        //                         throw new Error('Error al obtener los álbumes');
+        //                     }
+        //                     return response.json();
+        //                 })
+        //                 .then(data => {
+        //                     const jsonArray = JSON.parse(data);
+        //                     const albumsArray = jsonArray.map(album => {
+        //                         return {
+        //                             id: album.id,
+        //                             name: album.name
+        //                         };
+        //                     });
+        //                     console.log(albumsArray);
+        //                     console.log(album);
+        //
+        //                     // Buscar el álbum correspondiente por nombre
+        //                     const albumEncontrado = albumsArray.find(a => a.name === album);
+        //
+        //                     let idAlbum = 0;
+        //                     let nameAlbum = null;
+        //
+        //                     if (albumEncontrado) {
+        //                         idAlbum = albumEncontrado.id;
+        //                         nameAlbum = albumEncontrado.name;
+        //                     } else {
+        //                         console.error('Album no encontrado');
+        //                     }
+        //
+        //                     console.log(`idAlbum: ${idAlbum}, nameAlbum: ${nameAlbum}`);
+        //
+        //                     const datosParaEnviar = {
+        //                         imagenes: imagenesSubidas,
+        //                         albumId: idAlbum
+        //                     };
+        //
+        //                     console.log(datosParaEnviar);
+        //
+        //                     fetch('/save/photos', {
+        //                         method: 'POST',
+        //                         headers: {
+        //                             'Content-Type': 'application/json'
+        //                         },
+        //                         body: JSON.stringify(datosParaEnviar)
+        //                     })
+        //                         .then(response => {
+        //                             if (!response.ok) {
+        //                                 throw new Error('HTTP error ' + response.status);
+        //                             }
+        //                             return response.text();
+        //                         })
+        //                         .then(data => {
+        //                             console.log('Respuesta del servidor:', data);
+        //                         })
+        //                         .catch(error => {
+        //                             console.error('Error:', error);
+        //                         });
+        //                 })
+        //                 .catch(error => {
+        //                     console.error('Error en la petición:', error);
+        //                 });
+        //         }
+        //         // if (result.event === 'close') {
+        //         //     location.reload();
+        //         // }
+        //     }).open();
+        // }
     </script>
 
     <!--
