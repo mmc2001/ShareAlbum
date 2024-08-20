@@ -29,21 +29,24 @@ body {
 
 .panelControl {
     width: 100%;
-    margin-top: 100px;
+    margin-top: 120px;
     padding: 0px 20px 100px 20px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    gap: 20px;
     overflow: hidden;
 }
 
 h2 {
+    margin: 0;
     font-weight: 600;
     color: var(--color-primario);
     text-align: center;
 }
 h3 {
+    margin: 0;
     width: 100%;
     font-weight: 600;
     color: var(--color-primario);
@@ -52,14 +55,15 @@ h3 {
     text-overflow: ellipsis;
     margin-bottom: 10px;
 }
+p {
+    margin: 0;
+}
 
 .contadorCalendario {
     /* width: 100%; */
     /* margin: 0 auto; */
     width: 460px;
     height: 510px;
-    margin-top: 30px;
-    margin-left: 20px;
     display: grid;
     /* justify-content: center;
     justify-items: center;
@@ -125,6 +129,7 @@ h3 {
     }
 }
 .number {
+    margin: 0;
     color: #1b1b1b;
     text-align: center;
     font: 32px Acme, sans-serif;
@@ -234,8 +239,6 @@ h3 {
     height: 510px;
     width: 460px;
     /* width: 80%; */
-    margin-top: 30px;
-    margin-left: 20px;
     border-radius: 8px;
     box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.25);
     background-color: #fff;
@@ -284,7 +287,7 @@ span {
     height: 360px;
 }
 .lista2, .lista3 {
-    padding: 00px 10px 0px 20px;
+    padding: 0 20px 0 20px;
 }
 #contenedorScroll1, #contenedorScroll2 {
     overflow-y: auto;
@@ -304,9 +307,9 @@ span {
     display: flex;
     align-items: center;
     justify-content: left;
-    padding: 10px 10px 10px 0px;
+    padding: 10px 0 10px 0;
     border-bottom: 1px solid #ccc;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
 }
 .listado label {
     flex: 1;
@@ -673,6 +676,7 @@ textarea {
 }
 
 .contenido-texto .tituloTarjeta {
+    margin: 0;
     font-size: medium;
     font-weight: 600;
 }
@@ -706,6 +710,7 @@ textarea {
 .no-style-link .tarjeta .contenido-texto h3,
 .no-style-link .tarjeta .contenido-texto p {
     color: inherit;
+    margin: 0;
 }
 
 
@@ -942,6 +947,7 @@ textarea {
     width: 100%;
 }
 .aviso > h1 {
+    margin: 0;
     /*margin-top: 40px;*/
     /*width: 100%;*/
     /*display: flex;*/

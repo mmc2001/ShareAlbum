@@ -1,6 +1,9 @@
 
 /* CALENDARIO, TAREAS DIARIAS Y TAREAS MENSUALES */
+let executed1 = false;
 document.addEventListener('DOMContentLoaded', function() {
+    if (executed1) return;
+    executed1 = true;
     // Función para aplicar estilos de tachado al hacer clic en los checkboxes
     function aplicarEstilosTachado() {
         const checkboxes = document.querySelectorAll('.listado input[type="checkbox"]');
@@ -383,9 +386,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 /* SESIONES DISPONIBLES */
+let executed2 = false;
 document.addEventListener("DOMContentLoaded", function () {
-    const listadoSesionesDisponibles = document.getElementById("listadoSesionesDisponibles");
+    if (executed2) return;
+    executed2 = true;
 
+    const listadoSesionesDisponibles = document.getElementById("listadoSesionesDisponibles");
     function cargarSesionesDisponibles() {
         fetch('/obtener/sessions')
             .then(response => {
@@ -437,9 +443,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /* CLIENTES DISPONIBLES */
+let executed3 = false;
 document.addEventListener("DOMContentLoaded", function() {
-    const listadoClientesDisponibles = document.getElementById("listadoClientesDisponibles");
+    if (executed3) return;
+    executed3 = true;
 
+    const listadoClientesDisponibles = document.getElementById("listadoClientesDisponibles");
     function cargarClientesDisponibles() {
         fetch('/obtener/clients')
             .then(response => {
@@ -486,7 +495,11 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // PRUEBAS PARA ARREGLAR ADJUNTAR PDF
+let executed4 = false;
 document.addEventListener("DOMContentLoaded", function() {
+    if (executed4) return;
+    executed4 = true;
+
     document.getElementById("fileUrl").addEventListener("change", function () {
         var fileInput = document.querySelector("#fileUrl");
         var filename = fileInput.value;
@@ -544,7 +557,10 @@ function cargarClientes() {
 }
 
 /* Modal Confirmar Envio Correo */
+let executed5 = false;
 document.addEventListener("DOMContentLoaded", function() {
+    if (executed5) return;
+    executed5 = true;
 
     document.getElementById("send").addEventListener("click", function(event) {
         event.preventDefault();
@@ -585,49 +601,52 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("modalEnvio").style.display = "none";
     });
 
-    function sendEmail() {
-        console.log("Hola 2");
-        const recipient = document.getElementById("recipient").value;
-        const subject = document.getElementById("subject").value;
-        const fileInput = document.getElementById("fileUrl");
-        const file = fileInput.files[0];
-        const textMessage = document.getElementById("textMessage").value;
-
-        if (!recipient || !subject || !file || !textMessage) {
-            console.error('Todos los campos son obligatorios.');
-            return;
-        }
-        console.log(recipient);
-        console.log(subject);
-        console.log(file);
-        console.log(textMessage);
-        const formData = new FormData();
-        formData.append('recipient', recipient);
-        formData.append('subject', subject);
-        formData.append('fileUrl', file);
-        formData.append('textMessage', textMessage);
-
-        fetch('/send/message', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Mensaje enviado exitosamente');
-                } else {
-                    console.error('Error al enviar el mensaje');
-                }
-            })
-            .catch(error => {
-                console.error('Error en la petición:', error);
-            });
-    }
+    // function sendEmail() {
+    //     console.log("Hola 2");
+    //     const recipient = document.getElementById("recipient").value;
+    //     const subject = document.getElementById("subject").value;
+    //     const fileInput = document.getElementById("fileUrl");
+    //     const file = fileInput.files[0];
+    //     const textMessage = document.getElementById("textMessage").value;
+    //
+    //     if (!recipient || !subject || !file || !textMessage) {
+    //         console.error('Todos los campos son obligatorios.');
+    //         return;
+    //     }
+    //     console.log(recipient);
+    //     console.log(subject);
+    //     console.log(file);
+    //     console.log(textMessage);
+    //     const formData = new FormData();
+    //     formData.append('recipient', recipient);
+    //     formData.append('subject', subject);
+    //     formData.append('fileUrl', file);
+    //     formData.append('textMessage', textMessage);
+    //
+    //     fetch('/send/message', {
+    //         method: 'POST',
+    //         body: formData
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //                 Swal.fire("Mensaje enviado exitosamente");
+    //                 console.log('Mensaje enviado exitosamente');
+    //             } else {
+    //                 console.error('Error al enviar el mensaje');
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error en la petición:', error);
+    //         });
+    // }
 
 });
 
-
+let executed6 = false;
 document.addEventListener("DOMContentLoaded", function() {
+    if (executed6) return;
+    executed6 = true;
 
     document.getElementById('sendModal').addEventListener('click', () => {
         console.log("Hola 2");
@@ -657,8 +676,20 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    Swal.fire({
+                        title: "Éxito",
+                        text: "Tu mensaje ha sido enviado",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
                     console.log('Mensaje enviado exitosamente');
                 } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Error al enviar tu mensaje",
+                    });
                     console.error('Error al enviar el mensaje');
                 }
             })
@@ -668,7 +699,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+let executed7 = false;
 document.addEventListener('DOMContentLoaded', function() {
+    if (executed7) return;
+    executed7 = true;
+
     const horaActual = new Date().getHours();
     let saludo;
     if (horaActual >= 6 && horaActual <= 12) {

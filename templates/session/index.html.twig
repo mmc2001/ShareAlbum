@@ -21,7 +21,7 @@
         <div class="cabecera">
             <div class="contenidoCabecera">
                 <h2 class="titulo">Sesiones disponibles</h2>
-                <div style="display: flex; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
                     <button class="boton" id="nuevaSesion">Sesión</button>
                     <div class="divider"></div>
                     <button class="boton" id="nuevoServicio">Servicio</button>
@@ -63,8 +63,8 @@
             <span class="cerrarModal" id="CerrarSessionButton">&times;</span>
             <h1><i class="fa-solid fa-camera"></i>&nbsp;Nueva sesión</h1>
             <div class="contenedorFormularioSesion" id="contenedorFormularioSesion">
-                <form method="post" id="formEvent">
-                    {#  {{ form_errors(formEvent) }} #}
+                <form method="post" id="formSession">
+                    {#  {{ form_errors(formSession) }} #}
                     {{ form_start(formSession) }}
                     <div class="camposSession">
                         <div>
@@ -122,20 +122,22 @@
                 <form method="post" id="formExtras">
                     {#  {{ form_errors(formExtras) }} #}
                     {{ form_start(formExtras) }}
-                    <div>
-                        <label class="label">Nombre</label>
-                        {{ form_widget(formExtras.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                    <div class="camposExtra">
+                        <div>
+                            <label class="label">Nombre</label>
+                            {{ form_widget(formExtras.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Precio</label>
+                            {{ form_widget(formExtras.priceExtra, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
+                        </div>
                     </div>
-                    <div>
-                        <label class="label">Precio</label>
-                        {{ form_widget(formExtras.priceExtra, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
+                    <div class="camposParalelos">
+                        <button id="CerrarExtra" class="closeExtras">Atrás</button>
+                        <button type="submit" class="submitExtras">Crear</button>
                     </div>
                     {{ form_end(formExtras) }}
                 </form>
-                <div class="camposParalelos">
-                    <button id="CerrarExtra" class="closeExtras">Atrás</button>
-                    <button type="submit" class="submitExtras">Crear</button>
-                </div>
             </div>
         </div>
     </div>
@@ -150,20 +152,22 @@
                 <form method="post" id="formServices">
                     {#  {{ form_errors(formServices) }} #}
                     {{ form_start(formServices) }}
-                    <div>
-                        <label class="label">Nombre</label>
-                        {{ form_widget(formServices.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                    <div class="camposServicio">
+                        <div>
+                            <label class="label">Nombre</label>
+                            {{ form_widget(formServices.name, {'attr': {'class': 'padding', 'placeholder': 'Nombre'}}) }}
+                        </div>
+                        <div>
+                            <label class="label">Precio</label>
+                            {{ form_widget(formServices.priceService, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
+                        </div>
                     </div>
-                    <div>
-                        <label class="label">Precio</label>
-                        {{ form_widget(formServices.priceService, {'attr': {'class': 'padding', 'placeholder': 'Precio'}}) }}
+                    <div class="camposParalelos">
+                        <button id="CerrarServicio" class="closeServicio">Atrás</button>
+                        <button type="submit" class="submitServicio">Crear</button>
                     </div>
                     {{ form_end(formServices) }}
                 </form>
-                <div class="camposParalelos">
-                    <button id="CerrarServicio" class="closeServicio">Atrás</button>
-                    <button type="submit" class="submitServicio">Crear</button>
-                </div>
             </div>
         </div>
     </div>
@@ -291,7 +295,48 @@
         </script>
 
         <script>
+            document.getElementById('formSession').addEventListener('submit', function(event) {
+                event.preventDefault();
+                document.getElementById("modalSesion").style.display = "none";
+                Swal.fire({
+                    title: "Éxito",
+                    text: "Sesión creada correctamente",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    this.submit();
+                });
+            });
 
+            document.getElementById('formExtras').addEventListener('submit', function(event) {
+                event.preventDefault();
+                document.getElementById("modalExtra").style.display = "none";
+                Swal.fire({
+                    title: "Éxito",
+                    text: "Extra creado correctamente",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    this.submit();
+                });
+            });
+
+            document.getElementById('formServices').addEventListener('submit', function(event) {
+                event.preventDefault();
+                document.getElementById("modalServicio").style.display = "none";
+                Swal.fire({
+                    title: "Éxito",
+                    text: "Servicio creado correctamente",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    this.submit();
+                });
+            });
         </script>
+
     {% endblock %}
 {% endblock %}

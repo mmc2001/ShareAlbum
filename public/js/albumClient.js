@@ -5,8 +5,10 @@ function obtenerIdDeURL() {
     const id = pathSegments[pathSegments.length - 1];
     return parseInt(id);
 }
+let executed = false;
 document.addEventListener("DOMContentLoaded", function() {
-
+    if (executed) return;
+    executed = true;
     // Función para obtener las imágenes según el id y la propiedad elegida
     async function obtenerImagenes(id, elegida) {
         //async function obtenerImagenes(elegida) {
@@ -36,6 +38,11 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
         } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al obtener las imágenes",
+            });
             console.error("Error al obtener las imágenes:", error);
             return [];
         }
@@ -148,6 +155,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 throw new Error('Error al actualizar la imagen: ' + response.status);
             }
         } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al actualizar el estado de la imagen",
+            });
             console.error('Error al actualizar el estado de la imagen:', error);
         }
         location.reload();
@@ -201,11 +213,21 @@ document.addEventListener("DOMContentLoaded", function() {
             const albumEncontrado = jsonArray.find(a => a.name === album);
 
             if (!albumEncontrado) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Álbum no encontrado",
+                });
                 console.error('Álbum no encontrado');
                 return 0; // Devuelve 0 si el álbum no es encontrado
             }
             return albumEncontrado.id;
         } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al obtener el ID del álbum",
+            });
             console.error('Error al obtener el ID del álbum:', error);
             return 0; // Devuelve 0 si ocurre un error
         }
@@ -282,16 +304,33 @@ async function generateToken() {
         const result = await response.json();
 
         if (result.success) {
+            Swal.fire({
+                icon: "info",
+                title: "Información",
+                text: "Url copiada en el portapapeles",
+                showConfirmButton: false,
+                timer: 2000
+            });
             const token = result.token;
             const url = `${window.location.origin}/public/album?token=${token}`;
             await navigator.clipboard.writeText(url);
-            alert('URL copiada al portapapeles: ' + url);
+            // alert('URL copiada al portapapeles: ' + url);
         } else {
-            alert('Error al generar el token: ' + result.message);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al generar la url",
+            });
+            // alert('Error al generar el token: ' + result.message);
         }
     } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error al generar el token",
+        });
         console.error('Error:', error);
-        alert('Error al generar el token');
+        // alert('Error al generar el token');
     }
 }
 document.getElementById('generateToken').addEventListener('click', () => {

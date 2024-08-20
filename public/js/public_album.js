@@ -35,6 +35,11 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
         } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al obtener las imágenes",
+            });
             console.error("Error al obtener las imágenes:", error);
             return [];
         }
@@ -83,12 +88,22 @@ document.addEventListener("DOMContentLoaded", function() {
             const albumEncontrado = jsonArray.find(a => a.name === album);
 
             if (!albumEncontrado) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Álbum no encontrado",
+                });
                 console.error('Álbum no encontrado');
                 return 0; // Devuelve 0 si el álbum no es encontrado
             }
 
             return albumEncontrado.id;
         } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al obtener el ID del álbum",
+            });
             console.error('Error al obtener el ID del álbum:', error);
             return 0; // Devuelve 0 si ocurre un error
         }

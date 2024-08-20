@@ -181,6 +181,22 @@
         <script>
             new DataTable('#example');
         </script>
+
+        <script>
+            document.getElementById('formClient').addEventListener('submit', function(event) {
+                event.preventDefault();
+                document.getElementById("modalCliente").style.display = "none";
+                Swal.fire({
+                    title: "Éxito",
+                    text: "Nuevo usuario creado",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    this.submit();
+                });
+            });
+        </script>
     {% endblock %}
 {% endblock %}
 

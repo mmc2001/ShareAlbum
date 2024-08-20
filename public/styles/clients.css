@@ -434,6 +434,7 @@ h1, .label {
 }
 
 .titulo {
+    margin: 0;
     color: rgb(14, 14, 14);
     text-align: center;
     font-size: 30px;
@@ -548,6 +549,11 @@ h1, .label {
 .contenido-texto p {
     font-size: small;
 }
+
+.margen-izquierdo {
+    margin-left: 12px;
+}
+
 
 @media (max-width: 1100px) {
 
@@ -812,7 +818,7 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: left;
     font-weight: bold;
     font-size: xx-large;
 }

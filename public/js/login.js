@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
             container.classList.remove("right-panel-active");
         });
     } else {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "No se encontrados todos los elementos necesarios en el documento",
+        });
         console.error('Error: No se encontraron todos los elementos necesarios en el documento.');
     }
 });

@@ -119,9 +119,22 @@ function sendEmail() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('Correo enviado correctamente');
+                    Swal.fire({
+                        title: "Éxito",
+                        text: "Tu mensaje ha sido enviado",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    // alert('Correo enviado correctamente');
                 } else {
-                    alert('Error al enviar el correo: ' + data.message);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Error al enviar el mensaje",
+
+                    });
+                    // alert('Error al enviar el correo: ' + data.message);
                 }
 
                 emailForm.style.display = "none";

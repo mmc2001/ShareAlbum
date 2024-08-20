@@ -232,7 +232,7 @@ const listUsers = async () => {
 
 
             $('#guardarEditarSesion').click(function (event) {
-                event.preventDefault(); // Evita el envío del formulario por defecto
+                event.preventDefault();
 
                 const idSession = $(this).data('id-session');
                 console.log("ID de la sesión: ", idSession);
@@ -258,10 +258,23 @@ const listUsers = async () => {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            console.log('Sesión actualizada exitosamente');
                             $('#modalEditarSesion').css('display', 'none');
-                            location.reload();
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Sesión actualizada exitosamente",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                location.reload();
+                            });
+                            console.log('Sesión actualizada exitosamente');
                         } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Error al actualizar la sesión",
+                            });
                             console.error('Error al actualizar la sesión:', data.message);
                         }
                     })
@@ -448,10 +461,42 @@ const listUsers = async () => {
                 const idSession = $(this).data("id");
                 console.log("ID en el botón: " + idSession);
 
-                if (confirm("¿Estás seguro de que deseas eliminar esta sesión?")) {
-                    await deleteSession(idSession);
-                    location.reload();
-                }
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Vas a eliminar esta sesión para siempre",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, eliminar!",
+                    cancelButtonText: "No, cancelar!",
+                    reverseButtons: false,
+                    customClass: {
+                        confirmButton: "btn btn-success",
+                        cancelButton: "btn btn-danger margen-izquierdo"
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Eliminado!",
+                            text: "La sesión ha sido eliminada.",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                        deleteSession(idSession);
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire({
+                            title: "Cancelado",
+                            text: "La sesión está a salvo :)",
+                            icon: "error"
+                        });
+                    }
+                });
+
+                // if (confirm("¿Estás seguro de que deseas eliminar esta sesión?")) {
+                //     await deleteSession(idSession);
+                //     location.reload();
+                // }
             });
         });
     } catch (ex) {

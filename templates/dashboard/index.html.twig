@@ -206,14 +206,29 @@
 
     {% block javascripts %}
         {{ parent() }}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="{{ asset('js/dashboard.js') }}"></script>
         <script src="https://kit.fontawesome.com/77aa5e27b8.js" crossorigin="anonymous"></script>
     {% endblock %}
 
     <script>
         cargarClientes();
+    </script>
 
-
+    <script>
+        document.getElementById('formEvent').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById("modal").style.display = "none";
+            Swal.fire({
+                title: "Éxito",
+                text: "Nuevo evento creado",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                this.submit();
+            });
+        });
     </script>
 
 {% endblock %}

@@ -49,7 +49,7 @@ input {
 }
 
 .mensajeBienvenida {
-    margin: 120px 0px 50px 0px;
+    margin: 100px 0px 20px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -153,6 +153,7 @@ input {
 }
 
 .session-card h3 {
+    margin: 0;
     color: #2582cb;
     padding: 0.65rem 0.25rem 0.4rem 1.25rem;
     font-weight: 500;
@@ -168,6 +169,7 @@ input {
 }
 
 .session-card p {
+    margin: 0;
     margin-left: 20px;
     color: #696969;
     /*padding: 0 1.25rem;*/
@@ -176,6 +178,7 @@ input {
 }
 
 .sessionCardFooter {
+    margin-top: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -186,7 +189,7 @@ input {
 }
 
 .icono {
-    margin-top: 15px;
+    /*margin-top: 15px;*/
     margin-right: 20px;
     color: #2582cb;
     font-size: x-large;

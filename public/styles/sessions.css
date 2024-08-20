@@ -234,7 +234,7 @@
     justify-content: center;
     align-items: center;
 }
-.modalExtra-content > .contenedorFormularioExtra > form {
+.modalExtra-content > .contenedorFormularioExtra > form > .camposExtra {
     background-color: var(--color-secundario);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -244,11 +244,11 @@
     /*padding: 0 40px;*/
     height: 100%;
 }
-.modalExtra-content > .contenedorFormularioExtra > form > div > .label {
+.modalExtra-content > .contenedorFormularioExtra > form > .camposExtra > div > .label {
     margin-top: 5px;
     text-align: left;
 }
-.modalExtra-content > .contenedorFormularioExtra > form > div > input {
+.modalExtra-content > .contenedorFormularioExtra > form > .camposExtra > div > input {
     margin-top: 8px;
     padding: 12px 15px;
     width: 100%;
@@ -304,7 +304,7 @@
     justify-content: center;
     align-items: center;
 }
-.modalServicio-content > .contenedorFormularioServicio > form {
+.modalServicio-content > .contenedorFormularioServicio > form > .camposServicio {
     background-color: var(--color-secundario);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -314,11 +314,11 @@
     /*padding: 0 40px;*/
     height: 100%;
 }
-.modalServicio-content > .contenedorFormularioServicio > form > div > .label {
+.modalServicio-content > .contenedorFormularioServicio > form > .camposServicio > div > .label {
     margin-top: 5px;
     text-align: left;
 }
-.modalServicio-content > .contenedorFormularioServicio > form > div > input {
+.modalServicio-content > .contenedorFormularioServicio > form > .camposServicio > div > input {
     margin-top: 8px;
     padding: 12px 15px;
     width: 100%;
@@ -388,6 +388,7 @@ h1, .label {
 }
 
 .titulo {
+    margin: 0 auto;
     color: rgb(14, 14, 14);
     text-align: left;
     font-size: 30px;
@@ -398,7 +399,7 @@ h1, .label {
     /*margin-top: 20px;*/
     padding-top: 30px;
     padding-bottom: 10px;
-    margin: 30px 40px 10px 40px;
+    margin: 30px 40px 70px 40px;
     background-color: #FFFFFF !important;
     border-radius: 12px;
 }

@@ -177,10 +177,23 @@ const listUsers = async () => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        Swal.fire({
+                            title: "Éxito",
+                            text: "Cliente actualizado exitosamente",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            location.reload();
+                        });
                         console.log('Cliente actualizado exitosamente');
                         $('#modalEditarCliente').css('display', 'none');
-                        location.reload();
                     } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Error al actualizar el cliente",
+                        });
                         console.error('Error al actualizar al cliente:', data.message);
                     }
                 })
@@ -200,14 +213,40 @@ const listUsers = async () => {
         });
 
         $(".btn-danger").click(async function() {
-
             const idClient = $(this).data("id");
             console.log("ID en el botón: " + idClient);
 
-            if (confirm("¿Estás seguro de que deseas eliminar esta sesión? Si lo haces se eliminarán todas las sessiones y álbumes asociados a este usuario")) {
-                await deleteClient(idClient);
-                location.reload();
-            }
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "Si lo haces eliminaras también todas las sesiones y álbumes asociadas a este usuario",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, eliminar!",
+                cancelButtonText: "No, cancelar!",
+                reverseButtons: false,
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger margen-izquierdo"
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Eliminado!",
+                        text: "La sesión ha sido eliminada.",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    deleteClient(idClient);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: "Cancelado",
+                        text: "El cliente está a salvo :)",
+                        icon: "error"
+                    });
+                }
+            });
         });
     } catch (ex) {
         alert(ex);
