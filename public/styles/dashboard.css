@@ -59,6 +59,10 @@ p {
     margin: 0;
 }
 
+.margen-izquierdo {
+    margin-left: 12px;
+}
+
 .contadorCalendario {
     /* width: 100%; */
     /* margin: 0 auto; */

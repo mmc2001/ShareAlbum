@@ -561,6 +561,11 @@ async function descargarTicket(sessionData, fechaTicket, modalData) {
     const priceParagraph = document.getElementById("totalPrice");
 
     let ticketHTML = `
+    <style>
+        body {
+            background-color: #E0E0E0;
+        }
+    </style>
         <div class="container" id="template_invoice">
             <div class="row">
                 <div class="col-xs-4">

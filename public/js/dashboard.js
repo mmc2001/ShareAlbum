@@ -307,7 +307,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     botonesEliminar.forEach(boton => {
                         boton.addEventListener('click', function () {
                             const idEvento = this.dataset.id;
-                            deleteEvento(idEvento);
+                            Swal.fire({
+                                title: "¿Estás seguro?",
+                                text: "Vas a eliminar un evento de tu agenda",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Sí, eliminar!",
+                                cancelButtonText: "No, cancelar!",
+                                reverseButtons: false,
+                                customClass: {
+                                    confirmButton: "btn btn-success",
+                                    cancelButton: "btn btn-danger margen-izquierdo"
+                                },
+                                buttonsStyling: false
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire({
+                                        title: "Eliminado!",
+                                        text: "El evento ha sido eliminado",
+                                        icon: "success",
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    deleteEvento(idEvento);
+                                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                    Swal.fire({
+                                        title: "Cancelado",
+                                        text: "El evento está a salvo :)",
+                                        icon: "error"
+                                    });
+                                }
+                            });
                         });
                     });
                 } else {

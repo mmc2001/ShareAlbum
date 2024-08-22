@@ -126,6 +126,95 @@ document.addEventListener("DOMContentLoaded", function() {
         lightGallery(imagPop);
     }
 
+    // APLICANDO LAZY LOADING AL GENERAR LA GALERÍA
+    // function generarGaleria(containerId, imagenes) {
+    //     var htmlCode = `<div class="container" id="${containerId}_lightgallery">`;
+    //     if (containerId === 'container1') {
+    //         for (let i = 0; i < imagenes.length; i++) {
+    //             htmlCode += `<a href="${imagenes[i].url}"`;
+    //             if (i % 2 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else if (i % 3 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else if (i % 5 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else {
+    //                 htmlCode += ' class="vertical"';
+    //             }
+    //             htmlCode += `><img data-src="${imagenes[i].url}" src="placeholder.jpg" />`; // Agregamos data-src y src="placeholder.jpg"
+    //
+    //             const heartIconClass = imagenes[i].has_been_selected ? 'fa-solid heart-icon2' : 'fa-regular heart-icon';
+    //             htmlCode += `<i class="${heartIconClass} fa-heart" data-id="${imagenes[i].id}"></i>`;
+    //
+    //             htmlCode += `</a>`;
+    //         }
+    //         htmlCode += '</div>';
+    //     } else if (containerId === 'container2') {
+    //         for (let i = 0; i < imagenes.length; i++) {
+    //             htmlCode += `<a href="${imagenes[i].url}"`;
+    //             if (i % 2 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else if (i % 3 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else if (i % 5 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else {
+    //                 htmlCode += ' class="vertical"';
+    //             }
+    //             htmlCode += `><img data-src="${imagenes[i].url}" src="placeholder.jpg" />`; // Agregamos data-src y src="placeholder.jpg"
+    //
+    //             const heartIconClass = imagenes[i].has_been_selected ? 'fa-solid heart-icon2' : 'fa-regular heart-icon';
+    //             htmlCode += `<i class="${heartIconClass} fa-heart" data-id="${imagenes[i].id}"></i>`;
+    //
+    //             htmlCode += `</a>`;
+    //         }
+    //         htmlCode += '</div>';
+    //     } else {
+    //         for (var i = 0; i < imagenes.length; i++) {
+    //             htmlCode += `<a href="${imagenes[i].url}"`;
+    //             if (i % 2 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else if (i % 3 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else if (i % 5 === 0) {
+    //                 htmlCode += ' class="vertical"';
+    //             } else {
+    //                 htmlCode += ' class="vertical"';
+    //             }
+    //             htmlCode += `><img data-src="${imagenes[i].url}" src="placeholder.jpg" /></a>`; // Agregamos data-src y src="placeholder.jpg"
+    //         }
+    //         htmlCode += '</div>';
+    //     }
+    //     document.getElementById(containerId).innerHTML = htmlCode;
+    //
+    //     // Obtener todos los <img> dentro del contenedor y aplicar lazy loading
+    //     var lazyImages = document.querySelectorAll(`#${containerId}_lightgallery img[data-src]`);
+    //     lazyImages.forEach((image) => {
+    //         const observer = new IntersectionObserver((entries) => {
+    //             if (entries[0].isIntersecting) {
+    //                 image.src = image.dataset.src;
+    //                 observer.unobserve(image);
+    //             }
+    //         }, { threshold: 1.0 });
+    //
+    //         observer.observe(image);
+    //     });
+    //
+    //     // Obtener todos los <i> dentro del contenedor y adjuntar el event listener
+    //     var heartIcons = document.querySelectorAll(`#${containerId}_lightgallery i.fa-heart`);
+    //     heartIcons.forEach((icon) => {
+    //         icon.addEventListener('click', (event) => {
+    //             event.preventDefault();
+    //             event.stopPropagation();
+    //             const id = event.target.dataset.id;
+    //             selectPhoto(id, event.target);
+    //         });
+    //     });
+    //
+    //     var imagPop = document.getElementById(`${containerId}_lightgallery`);
+    //     lightGallery(imagPop);
+    // }
+
     // Define la función selectPhoto en el ámbito global
     async function selectPhoto(id, element) {
 
