@@ -501,110 +501,110 @@ function handleDownloadClick(containerId) {
     });
 }
 
-document.getElementById("comprobar-button").addEventListener("click", function(event) {
-    const dataValue = event.target.getAttribute('data-value');
-    widgetCloudinary(dataValue);
-});
-
-async function widgetCloudinary(album) {
-    let imagenesSubidas = [];
-
-    cloudinary.createUploadWidget({
-        cloud_name: 'ddaq4my3n',
-        upload_preset: 'preset_ShareAlbum'
-    }, (err, result) => {
-        if (err) {
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: "Error al subir la imagen",
-            });
-            console.error('Error al subir la imagen', err);
-            return;
-        }
-
-        if (result && result.event === 'success') {
-            console.log('Imagen subida con éxito', result.info);
-            //imagen.src = result.info.secure_url;
-            imagenesSubidas.push(result.info.secure_url);
-
-            const idSession = obtenerIdDeURL();
-            console.log(idSession);
-
-            fetch(`/obtener/album/${idSession}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al obtener los álbumes');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const jsonArray = JSON.parse(data);
-                    const albumsArray = jsonArray.map(album => {
-                        return {
-                            id: album.id,
-                            name: album.name
-                        };
-                    });
-                    console.log(albumsArray);
-                    console.log(album);
-
-                    // Buscar el álbum correspondiente por nombre
-                    const albumEncontrado = albumsArray.find(a => a.name === album);
-
-                    let idAlbum = 0;
-                    let nameAlbum = null;
-
-                    if (albumEncontrado) {
-                        idAlbum = albumEncontrado.id;
-                        nameAlbum = albumEncontrado.name;
-                    } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Álbum no encontrado",
-                        });
-                        console.error('Album no encontrado');
-                    }
-
-                    console.log(`idAlbum: ${idAlbum}, nameAlbum: ${nameAlbum}`);
-
-                    const datosParaEnviar = {
-                        imagenes: imagenesSubidas,
-                        albumId: idAlbum
-                    };
-
-                    console.log(datosParaEnviar);
-
-                    fetch('/save/photos', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(datosParaEnviar)
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('HTTP error ' + response.status);
-                            }
-                            return response.text();
-                        })
-                        .then(data => {
-                            console.log('Respuesta del servidor:', data);
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                })
-                .catch(error => {
-                    console.error('Error en la petición:', error);
-                });
-        }
-        if (result.event === 'close') {
-            location.reload();
-        }
-    }).open();
-}
+// document.getElementById("comprobar-button").addEventListener("click", function(event) {
+//     const dataValue = event.target.getAttribute('data-value');
+//     widgetCloudinary(dataValue);
+// });
+//
+// async function widgetCloudinary(album) {
+//     let imagenesSubidas = [];
+//
+//     cloudinary.createUploadWidget({
+//         cloud_name: 'ddaq4my3n',
+//         upload_preset: 'preset_ShareAlbum'
+//     }, (err, result) => {
+//         if (err) {
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Oops...",
+//                 text: "Error al subir la imagen",
+//             });
+//             console.error('Error al subir la imagen', err);
+//             return;
+//         }
+//
+//         if (result && result.event === 'success') {
+//             console.log('Imagen subida con éxito', result.info);
+//             //imagen.src = result.info.secure_url;
+//             imagenesSubidas.push(result.info.secure_url);
+//
+//             const idSession = obtenerIdDeURL();
+//             console.log(idSession);
+//
+//             fetch(`/obtener/album/${idSession}`)
+//                 .then(response => {
+//                     if (!response.ok) {
+//                         throw new Error('Error al obtener los álbumes');
+//                     }
+//                     return response.json();
+//                 })
+//                 .then(data => {
+//                     const jsonArray = JSON.parse(data);
+//                     const albumsArray = jsonArray.map(album => {
+//                         return {
+//                             id: album.id,
+//                             name: album.name
+//                         };
+//                     });
+//                     console.log(albumsArray);
+//                     console.log(album);
+//
+//                     // Buscar el álbum correspondiente por nombre
+//                     const albumEncontrado = albumsArray.find(a => a.name === album);
+//
+//                     let idAlbum = 0;
+//                     let nameAlbum = null;
+//
+//                     if (albumEncontrado) {
+//                         idAlbum = albumEncontrado.id;
+//                         nameAlbum = albumEncontrado.name;
+//                     } else {
+//                         Swal.fire({
+//                             icon: "error",
+//                             title: "Oops...",
+//                             text: "Álbum no encontrado",
+//                         });
+//                         console.error('Album no encontrado');
+//                     }
+//
+//                     console.log(`idAlbum: ${idAlbum}, nameAlbum: ${nameAlbum}`);
+//
+//                     const datosParaEnviar = {
+//                         imagenes: imagenesSubidas,
+//                         albumId: idAlbum
+//                     };
+//
+//                     console.log(datosParaEnviar);
+//
+//                     fetch('/save/photos', {
+//                         method: 'POST',
+//                         headers: {
+//                             'Content-Type': 'application/json'
+//                         },
+//                         body: JSON.stringify(datosParaEnviar)
+//                     })
+//                         .then(response => {
+//                             if (!response.ok) {
+//                                 throw new Error('HTTP error ' + response.status);
+//                             }
+//                             return response.text();
+//                         })
+//                         .then(data => {
+//                             console.log('Respuesta del servidor:', data);
+//                         })
+//                         .catch(error => {
+//                             console.error('Error:', error);
+//                         });
+//                 })
+//                 .catch(error => {
+//                     console.error('Error en la petición:', error);
+//                 });
+//         }
+//         if (result.event === 'close') {
+//             location.reload();
+//         }
+//     }).open();
+// }
 
 async function obtenerIdAlbum(album) {
     let idSession = obtenerIdDeURL(); // Suponiendo que obtenerIdDeURL() devuelve el ID de sesión

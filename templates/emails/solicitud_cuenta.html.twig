@@ -1,16 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Solicitud de cuenta</title>
+    <style>
+        :root {
+            /*--color-primario: #FF4B2B;*/
+            --color-primario: rgba(9,64,121,1);
+            --color-secundario: #FFFFFF;
+            --color-titulos: #252525;
+            --color-background: #f6f5f7;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            padding: 20px;
+        }
+
+        td {
+            padding: 30px;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin-top: 0;
+            color: #333;
+        }
+
+        p {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .emailContact {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .footer-container {
+            padding: 20px;
+            /* background-color: #f4f4f4; */
+            /* color: #fff; */
+            border-top: 1px solid #2525258a;
+            color: #333;
+            text-align: center;
+            height: fit-content;
+        }
+
+        .footer-container p {
+            margin-bottom: 10px;
+        }
+
+        i {
+            color: #333;
+            height: 50px;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-<h1>Solicitud de cuenta</h1>
-<p>Se ha recibido una nueva solicitud de cuenta con la siguiente información:</p>
-<ul>
-    <li><strong>Nombre:</strong> {{ username }}</li>
-    <li><strong>Email:</strong> {{ useremail }}</li>
-    <li><strong>Teléfono:</strong> {{ usertel }}</li>
-    <li><strong>Servicio:</strong> {{ servicio }}</li>
-</ul>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td align="center" style="background: linear-gradient(to right, rgba(9, 64, 121, 1) 45%, rgba(33, 152, 187, 1) 100%);">
+            <img src="https://res.cloudinary.com/ddaq4my3n/image/upload/v1724499912/zhwmdss2rphiqj861ylb.png" alt="ShareAlbum" style="width: fit-content; height: 70px; display: flex; justify-content: center;">
+        </td>
+    </tr>
+    <tr style="width: 100%;">
+        <td style=" width: 400px; font-family: Arial, sans-serif; font-size: 18px; color: #333; padding: 40px;">
+            <h1>Solicitud de cuenta</h1>
+            <p>Se ha recibido una nueva solicitud de cuenta con la siguiente información:</p>
+            <ul>
+                <li><strong>Nombre:</strong> {{ username }}</li>
+                <li><strong>Email:</strong> {{ useremail }}</li>
+                <li><strong>Teléfono:</strong> {{ usertel }}</li>
+                <li><strong>Servicio:</strong> {{ servicio }}</li>
+            </ul>
+            <p>Acceso rápido desde <a href="{{ path('app_login') }}" target="_blank">aquí</a>.</p>
+        </td>
+    </tr>
+    <tr>
+        <td class="footer-container">
+            {#            <p>Síguenos en nuestra red social y portfolio:</p>#}
+            {#            <a target="_blank" href="https://www.instagram.com/m.moyanofotografia/"><i class="fa-brands fa-instagram"></i></a>#}
+            {#            <a target="_blank" href="https://moyanofotografia.com/"><i class="fa-solid fa-camera"></i></a>#}
+        </td>
+    </tr>
+</table>
 </body>
 </html>

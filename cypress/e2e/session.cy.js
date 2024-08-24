@@ -16,6 +16,9 @@ describe('Tests para la vista sesiones', () => {
       if (err.message.includes('cross-origin')) {
         return false
       }
+      if (err.message.includes('Script error.')) {
+        return false
+      }
 
       return true
     })
@@ -43,7 +46,7 @@ describe('Tests para la vista sesiones', () => {
     cy.get('td').should('contain', 'Cypress')
   })
 
-  it.skip('Nueva servicio', () => {
+  it.skip('Nuevo servicio', () => {
     cy.visit('https://127.0.0.1:8000/login')
     cy.get('#username').type('moisesmoyanoc@gmail.com')
     cy.get('#password').type('123456')

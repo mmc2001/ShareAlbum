@@ -233,7 +233,7 @@ const listUsers = async () => {
                 if (result.isConfirmed) {
                     Swal.fire({
                         title: "Eliminado!",
-                        text: "La sesión ha sido eliminada.",
+                        text: "El usuario ha sido eliminado.",
                         icon: "success",
                         showConfirmButton: false,
                         timer: 2000
@@ -242,7 +242,7 @@ const listUsers = async () => {
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     Swal.fire({
                         title: "Cancelado",
-                        text: "El cliente está a salvo :)",
+                        text: "El usuario está a salvo :)",
                         icon: "error"
                     });
                 }

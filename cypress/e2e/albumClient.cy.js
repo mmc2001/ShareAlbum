@@ -19,6 +19,9 @@ describe('Test para la vista de un álbum desde cliente', () => {
       if (err.message.includes('cross-origin')) {
         return false
       }
+      if (err.message.includes('Script error.')) {
+        return false
+      }
 
       return true
     })

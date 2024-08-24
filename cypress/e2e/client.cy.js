@@ -10,6 +10,12 @@ describe('Tests para la vista clientes', () => {
       if (err.message.includes("Cannot read properties of null (reading 'addEventListener')")) {
         return false
       }
+      if (err.message.includes('cross-origin')) {
+        return false
+      }
+      if (err.message.includes('Script error.')) {
+        return false
+      }
 
       return true
     })

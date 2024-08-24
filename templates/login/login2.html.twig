@@ -12,71 +12,73 @@
 
 {% block body %}
 
-    <div class="container" id="container">
-        <div class="form-container sign-up-container">
-            <form method="post" action="{{ path('app_solicitar_cuenta') }}">
-                <h1>Solicitar Cuenta</h1>
-                <!--<span>Contacta con tu fotógrafo para más información</span>-->
-                <label for="username">Nombre</label>
-                <input type="text" name="_username" class="form-control" autocomplete="name" required autofocus>
-                <label for="useremail">Email</label>
-                <input type="email" name="_useremail" class="form-control" autocomplete="email" required autofocus>
-                <label for="usertel">Teléfono</label>
-                <input type="tel" name="_usertel" class="form-control" autocomplete="tel" required autofocus>
-                <label for="userserive">Servicio</label>
-                <select id="servicios" name="servicios">
-                    <option value=0>Tipo de servicio</option>
-                    <option value="Boda">Boda</option>
-                    <option value="Comunión">Comunión</option>
-                    <option value="Evento">Evento</option>
-                    <option value="Deporte">Deporte</option>
-                    <option value="Otro">Otro</option>
-                </select>
-                <button class="margen">Enviar</button>
-            </form>
-        </div>
-        <div class="form-container sign-in-container">
-            <form method="post">
-                {% if error %}
-                    {#  <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>  COMENTAR ESTA LÍNEA #}
-                    <div class="alert alert-danger" style="color: red; border-radius: 2px; border: 2px solid red; margin-bottom: 10px; padding: 5px 10px 5px 10px; font-weight: bold">Error al hacer el login</div>
-                {% endif %}
+    <div class="login">
+        <div class="container" id="container">
+            <div class="form-container sign-up-container">
+                <form method="post" action="{{ path('app_solicitar_cuenta') }}">
+                    <h1>Solicitar Cuenta</h1>
+                    <!--<span>Contacta con tu fotógrafo para más información</span>-->
+                    <label for="username">Nombre</label>
+                    <input type="text" name="_username" class="form-control" autocomplete="name" required autofocus>
+                    <label for="useremail">Email</label>
+                    <input type="email" name="_useremail" class="form-control" autocomplete="email" required autofocus>
+                    <label for="usertel">Teléfono</label>
+                    <input type="tel" name="_usertel" class="form-control" autocomplete="tel" required autofocus>
+                    <label for="userserive">Servicio</label>
+                    <select id="servicios" name="servicios">
+                        <option value=0>Tipo de servicio</option>
+                        <option value="Boda">Boda</option>
+                        <option value="Comunión">Comunión</option>
+                        <option value="Evento">Evento</option>
+                        <option value="Deporte">Deporte</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <button class="margen">Enviar</button>
+                </form>
+            </div>
+            <div class="form-container sign-in-container">
+                <form method="post">
+                    {% if error %}
+                        {#  <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>  COMENTAR ESTA LÍNEA #}
+                        <div class="alert alert-danger" style="color: red; border-radius: 2px; border: 2px solid red; margin-bottom: 10px; padding: 5px 10px 5px 10px; font-weight: bold">Error al hacer el login</div>
+                    {% endif %}
 
-                {% if app.user %}
-                    <div class="mb-3">
-                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    {% if app.user %}
+                        <div class="mb-3">
+                            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        </div>
+                    {% endif %}
+
+                    <h1>ShareAlbum</h1>
+                    <label for="username">Email</label>
+                    <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+                    <label for="password">Password</label>
+                    <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+
+                    <span>Si es la primera vez por aquí utiliza las credenciales facilicitadas por el fotógrafo.</span>
+
+
+                    <input type="hidden" name="_csrf_token"
+                           value="{{ csrf_token('authenticate') }}"
+                    >
+                    <input type="hidden" name="_target_path" value="{{ path('app_comprobar_caducidad') }}" />
+
+                    <button class="margen" id="login">Login</button>
+                </form>
+            </div>
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1>¡Bienvenido de nuevo!</h1>
+                        <p>Si tienes tus credenciales o las facilitadas por el fotógrafo</p>
+                        <img src="">
+                        <button class="ghost" id="signIn">Login</button>
                     </div>
-                {% endif %}
-
-                <h1>ShareAlbum</h1>
-                <label for="username">Email</label>
-                <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-                <label for="password">Password</label>
-                <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-
-                <span>Si es la primera vez por aquí utiliza las credenciales facilicitadas por el fotógrafo.</span>
-
-
-                <input type="hidden" name="_csrf_token"
-                       value="{{ csrf_token('authenticate') }}"
-                >
-                <input type="hidden" name="_target_path" value="{{ path('app_comprobar_caducidad') }}" />
-
-                <button class="margen" id="login">Login</button>
-            </form>
-        </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>¡Bienvenido de nuevo!</h1>
-                    <p>Si tienes tus credenciales o las facilitadas por el fotógrafo</p>
-                    <img src="">
-                    <button class="ghost" id="signIn">Login</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>¡Bienvenido!</h1>
-                    <p>¿No tienes cuenta? <br/> Contacta con el fotógrado para solicitar tus credenciales</p>
-                    <button class="ghost" id="signUp">Contactar</button>
+                    <div class="overlay-panel overlay-right">
+                        <h1>¡Bienvenido!</h1>
+                        <p>¿No tienes cuenta? <br/> Contacta con el fotógrado para solicitar tus credenciales</p>
+                        <button class="ghost" id="signUp">Contactar</button>
+                    </div>
                 </div>
             </div>
         </div>
