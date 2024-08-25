@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,11 +30,15 @@ class SendEmailController extends AbstractController
         $subject = $data['subject'] ?? null;
         $message = $data['message'] ?? null;
 
-        $email = (new Email())
+        $email = (new TemplatedEmail())
             ->from(new Address($user->getEmail(), $user->getFullName()))
             ->to("mmcfotografia01@gmail.com")
             ->subject($subject)
-            ->text($message);
+            ->htmlTemplate('emails/mensaje.html.twig')
+            ->context([
+                'subject' => $subject,
+                'message' => $message,
+            ]);
 
         $mailer->send($email);
 

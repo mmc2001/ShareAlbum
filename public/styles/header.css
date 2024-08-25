@@ -15,7 +15,7 @@ ul {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     z-index: 1000;
     background: linear-gradient(to right, rgba(9, 64, 121, 1) 45%, rgba(33, 152, 187, 1) 100%);
     background-color: white;

@@ -25,57 +25,62 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(sessions => {
             const sesionesDiv = document.getElementById("sesiones");
-
             sesionesDiv.innerHTML = "";
 
-            sessions.forEach(session => {
-                const sessionCard = document.createElement("div");
-                sessionCard.classList.add("session-card");
+            if (sessions.length === 0) {
+                const noSessionsMessage = document.createElement("p");
+                noSessionsMessage.textContent = "No hay ninguna sesión disponible.";
+                sesionesDiv.appendChild(noSessionsMessage);
+            } else {
+                sessions.forEach(session => {
+                    const sessionCard = document.createElement("div");
+                    sessionCard.classList.add("session-card");
 
-                // const notiglow = document.createElement("div");
-                // notiglow.classList.add("notiglow");
-                // sessionCard.appendChild(notiglow);
-                //
-                // const notiborderglow = document.createElement("div");
-                // notiborderglow.classList.add("notiborderglow");
-                // sessionCard.appendChild(notiborderglow);
+                    // const notiglow = document.createElement("div");
+                    // notiglow.classList.add("notiglow");
+                    // sessionCard.appendChild(notiglow);
+                    //
+                    // const notiborderglow = document.createElement("div");
+                    // notiborderglow.classList.add("notiborderglow");
+                    // sessionCard.appendChild(notiborderglow);
 
-                const sessionName = document.createElement("h3");
-                sessionName.textContent = session.name;
-                sessionCard.appendChild(sessionName);
+                    const sessionName = document.createElement("h3");
+                    sessionName.textContent = session.name;
+                    sessionCard.appendChild(sessionName);
 
-                // const sessionServiceContainer = document.createElement("div");
-                // sessionServiceContainer.classList.add("campos");
-                // sessionServiceContainer.classList.add("session-service-container");
+                    // const sessionServiceContainer = document.createElement("div");
+                    // sessionServiceContainer.classList.add("campos");
+                    // sessionServiceContainer.classList.add("session-service-container");
 
-                const sessionDate = document.createElement("p");
-                const dateString = session.date;
-                const date = new Date(dateString);
-                const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-                sessionDate.textContent = formattedDate;
-                sessionCard.appendChild(sessionDate);
+                    const sessionDate = document.createElement("p");
+                    const dateString = session.date;
+                    const date = new Date(dateString);
+                    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                    sessionDate.textContent = formattedDate;
+                    sessionCard.appendChild(sessionDate);
 
-                const sessionCardFooter = document.createElement("div");
-                sessionCardFooter.classList.add("sessionCardFooter");
-                sessionCard.appendChild(sessionCardFooter);
+                    const sessionCardFooter = document.createElement("div");
+                    sessionCardFooter.classList.add("sessionCardFooter");
+                    sessionCard.appendChild(sessionCardFooter);
 
-                const sessionService = document.createElement("p");
-                sessionService.textContent = session.service;
-                sessionService.classList.add("sombreado");
-                sessionCardFooter.appendChild(sessionService);
+                    const sessionService = document.createElement("p");
+                    sessionService.textContent = session.service;
+                    sessionService.classList.add("sombreado");
+                    sessionCardFooter.appendChild(sessionService);
 
-                const sessionIcon = document.createElement("i");
-                sessionIcon.classList.add("fa-solid", "fa-circle-chevron-right", "icono");
-                sessionCardFooter.appendChild(sessionIcon);
+                    const sessionIcon = document.createElement("i");
+                    sessionIcon.classList.add("fa-solid", "fa-circle-chevron-right", "icono");
+                    sessionCardFooter.appendChild(sessionIcon);
 
-                // sessionCard.appendChild(sessionServiceContainer);
+                    // sessionCard.appendChild(sessionServiceContainer);
 
-                const sessionLink = document.createElement("a");
-                sessionLink.href = `/album/client/${session.id}`;
-                sessionLink.appendChild(sessionCard);
+                    const sessionLink = document.createElement("a");
+                    sessionLink.href = `/album/client/${session.id}`;
+                    sessionLink.appendChild(sessionCard);
 
-                sesionesDiv.appendChild(sessionLink);
-            });
+                    sesionesDiv.appendChild(sessionLink);
+                });
+            }
         })
         .catch(error => {
             console.error("Error:", error);

@@ -6,10 +6,10 @@ function obtenerIdDeURL() {
     return parseInt(id);
 }
 
-let executed = false;
+let executed1 = false;
 document.addEventListener("DOMContentLoaded", function() {
-    if (executed) return;
-    executed = true;
+    if (executed1) return;
+    executed1 = true;
     // Función para obtener las imágenes según el id y la propiedad elegida
     async function obtenerImagenes(id, elegida) {
     //async function obtenerImagenes(elegida) {
@@ -216,12 +216,25 @@ document.addEventListener("DOMContentLoaded", function() {
         ];
 
         // Iterar sobre los contenedores y generar las galerías
+        // contenedores.forEach(({ containerId, jsonId, elegida }) => {
+        //     obtenerImagenes(jsonId, elegida).then(imagenes => {
+        //         console.log("Imagenes: "+imagenes);
+        //     //obtenerImagenes(elegida).then(imagenes => {
+        //         generarGaleria(containerId, imagenes);
+        //         handleDownloadClick(containerId);
+        //     });
+        // });
         contenedores.forEach(({ containerId, jsonId, elegida }) => {
             obtenerImagenes(jsonId, elegida).then(imagenes => {
-                console.log("Imagenes: "+imagenes);
-            //obtenerImagenes(elegida).then(imagenes => {
-                generarGaleria(containerId, imagenes);
-                handleDownloadClick(containerId);
+                console.log("Imagenes: " + imagenes);
+                if (imagenes.length === 0) {
+                    const noImagesMessage = document.createElement("p");
+                    noImagesMessage.textContent = "No hay imágenes disponibles.";
+                    document.getElementById(containerId).appendChild(noImagesMessage);
+                } else {
+                    generarGaleria(containerId, imagenes);
+                    handleDownloadClick(containerId);
+                }
             });
         });
     }) ();
@@ -641,55 +654,62 @@ async function obtenerIdAlbum(album) {
     }
 }
 
-async function generateToken() {
-    const albumId = await obtenerIdAlbum("FE");
-    const album = { id: albumId };
+let executed2 = false;
+document.addEventListener("DOMContentLoaded", function() {
+    if (executed2) return;
+    executed2 = true;
 
-    try {
-        const response = await fetch('/generate/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ album })
-        });
+    async function generateToken() {
+        const albumId = await obtenerIdAlbum("FE");
+        const album = {id: albumId};
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-            const token = result.token;
-            const url = `${window.location.origin}/public/album?token=${token}`;
-            await navigator.clipboard.writeText(url);
-            Swal.fire({
-                title: "Éxito",
-                icon: "success",
-                showConfirmButton: false,
-                timer: 2000,
-                text: "Enlace copiado en el portapapeles",
+        try {
+            const response = await fetch('/generate/token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({album})
             });
-            // alert('URL copiada al portapapeles: ' + url);
-        } else {
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                const token = result.token;
+                const url = `${window.location.origin}/public/album?token=${token}`;
+                await navigator.clipboard.writeText(url);
+                Swal.fire({
+                    title: "Éxito",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Enlace copiado en el portapapeles",
+                });
+                // alert('URL copiada al portapapeles: ' + url);
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Error al generar el token",
+                });
+                // alert('Error al generar el token: ' + result.message);
+            }
+        } catch (error) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
                 text: "Error al generar el token",
             });
-            // alert('Error al generar el token: ' + result.message);
+            console.error('Error:', error);
+            // alert('Error al generar el token');
         }
-    } catch (error) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Error al generar el token",
-        });
-        console.error('Error:', error);
-        // alert('Error al generar el token');
     }
-}
-document.getElementById('generateToken').addEventListener('click', () => {
-    generateToken();
+
+    document.getElementById('generateToken').addEventListener('click', () => {
+        generateToken();
+    });
 });

@@ -53,11 +53,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (i % 2 === 0) {
                     htmlCode += ' class="vertical"';
                 } else if (i % 3 === 0) {
-                    htmlCode += ' class="horizontal"';
+                    htmlCode += ' class="vertical"';
                 } else if (i % 5 === 0) {
-                    htmlCode += ' class="big"';
+                    htmlCode += ' class="vertical"';
                 } else {
-                    htmlCode += ' class=""';
+                    htmlCode += ' class="vertical"';
                 }
                 htmlCode += `><img src="${imagenes[i].url}" />`;
 
@@ -121,11 +121,16 @@ document.addEventListener("DOMContentLoaded", function() {
         // Iterar sobre los contenedores y generar las galerías
         contenedores.forEach(({ containerId, jsonId, elegida }) => {
             obtenerImagenes(jsonId, elegida).then(imagenes => {
-                console.log("Imagenes: "+imagenes);
-                //obtenerImagenes(elegida).then(imagenes => {
-                generarGaleria(containerId, imagenes);
-                containerImg=containerId;
-                //handleDownloadClick();
+                console.log("Imagenes: " + imagenes);
+                if (imagenes.length === 0) {
+                    const noImagesMessage = document.createElement("p");
+                    noImagesMessage.textContent = "No hay imágenes disponibles.";
+                    document.getElementById(containerId).appendChild(noImagesMessage);
+                } else {
+                    generarGaleria(containerId, imagenes);
+                    containerImg = containerId;
+                    //handleDownloadClick(); // Descomentar si se desea habilitar esta función
+                }
             });
         });
     }) ();

@@ -142,9 +142,11 @@ const listUsers = async () => {
                     </div>
                 </td>
                 <td class="text-center">
-                    <button class="btn btn-sm btn-primary verSession" data-id="${session.id}"><i class="fa-solid fa-eye"></i></button>
-                    <button class="btn btn-sm btn-info editarSesion" data-id="${session.id}"><i class="fa-solid fa-pencil"></i></button>
-                    <button class="btn btn-sm btn-danger" data-id="${session.id}"><i class="fa-solid fa-trash-can"></i></button>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-sm btn-primary verSession" data-id="${session.id}"><i class="fa-solid fa-eye"></i></button>
+                        <button class="btn btn-sm btn-info editarSesion" style="margin-left: 5px;" data-id="${session.id}"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-sm btn-danger" style="margin-left: 5px;" data-id="${session.id}"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
                 </td>
             </tr>`;
             });

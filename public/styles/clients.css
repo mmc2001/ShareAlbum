@@ -17,7 +17,7 @@
     justify-items: center;
     align-items:flex-start;
     font-family: 'Montserrat', sans-serif;
-    height: 100vh;
+        height: 100%;
     width: 100%;
 }
 
@@ -36,7 +36,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+        height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999;
 }
@@ -219,7 +219,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+        height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999;
 }
@@ -299,7 +299,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+        height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999;
 }
@@ -791,7 +791,7 @@ table > tbody > tr > td:nth-child(1), table > tbody > tr > td:nth-child(5) {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+        height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999;
 }
