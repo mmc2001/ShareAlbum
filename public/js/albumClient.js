@@ -26,14 +26,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 return imagenes.map(img => ({
                     url: img.photo_url,
                     has_been_selected: img.has_been_selected,
-                    id: img.id
+                    id: img.id,
+                    comment: img.comment
                 }));
             } else {
                 const imagenes = data.filter(img => img.has_been_selected === elegida);
                 return imagenes.map(img => ({
                     url: img.photo_url,
                     has_been_selected: img.has_been_selected,
-                    id: img.id
+                    id: img.id,
+                    comment: img.comment
                 }));
             }
 
@@ -67,8 +69,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 htmlCode += `><img src="${imagenes[i].url}" />`;
 
-                const heartIconClass = imagenes[i].has_been_selected ? 'fa-solid heart-icon2' : 'fa-regular heart-icon';
-                htmlCode += `<i class="${heartIconClass} fa-heart" data-id="${imagenes[i].id}"></i>`;
+                htmlCode += `
+                  <div class="overlay">
+                    <div class="icon-container">
+                      <i class="${imagenes[i].comment ? 'fa-solid fa-comment icon-blue' : 'fa-regular fa-comment'} fa-comment" data-id="${imagenes[i].id}" data-comment="${imagenes[i].comment}"></i>
+                      <i class="${imagenes[i].has_been_selected ? 'fa-solid heart-icon2' : 'fa-regular heart-icon'} fa-heart" data-id="${imagenes[i].id}"></i>
+                    </div>
+                  </div>
+                `;
 
                 htmlCode += `</a>`;
             }
@@ -87,8 +95,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 htmlCode += `><img src="${imagenes[i].url}" />`;
 
-                const heartIconClass = imagenes[i].has_been_selected ? 'fa-solid heart-icon2' : 'fa-regular heart-icon';
-                htmlCode += `<i class="${heartIconClass} fa-heart" data-id="${imagenes[i].id}"></i>`;
+                htmlCode += `
+                  <div class="overlay">
+                    <div class="icon-container">
+                      <i class="${imagenes[i].comment ? 'fa-solid fa-comment icon-blue' : 'fa-regular fa-comment'} fa-comment" data-id="${imagenes[i].id}" data-comment="${imagenes[i].comment}"></i>
+                      <i class="${imagenes[i].has_been_selected ? 'fa-solid heart-icon2' : 'fa-regular heart-icon'} fa-heart" data-id="${imagenes[i].id}"></i>
+                    </div>
+                  </div>
+                `;
 
                 htmlCode += `</a>`;
             }
@@ -112,6 +126,18 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById(containerId).innerHTML = htmlCode;
 
         // Obtener todos los <i> dentro del contenedor y adjuntar el event listener
+
+        var commentIcons = document.querySelectorAll(`#${containerId}_lightgallery i.fa-comment`);
+        commentIcons.forEach(icon => {
+            icon.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const id = event.target.dataset.id;
+                const comment = event.target.dataset.comment;
+                saveComment(id, comment, event.target);
+            });
+        });
+
         var heartIcons = document.querySelectorAll(`#${containerId}_lightgallery i.fa-heart`);
         heartIcons.forEach(icon => {
             icon.addEventListener('click', (event) => {
@@ -214,6 +240,91 @@ document.addEventListener("DOMContentLoaded", function() {
     //     var imagPop = document.getElementById(`${containerId}_lightgallery`);
     //     lightGallery(imagPop);
     // }
+
+    async function saveComment(id, comment, element) {
+        // Mostrar el modal con el textarea
+        const modalComentario = document.getElementById("modalComentario");
+        modalComentario.style.display = "grid";
+
+        const textarea = document.getElementById("textComment");
+        const submitButton = document.getElementById("GuardarComentario");
+
+        if(comment){
+            textarea.value = comment;
+        }
+
+        submitButton.addEventListener("click", () => guardarComentario(id, textarea));
+        async function guardarComentario(id, textarea) {
+            const comentario = textarea.value.trim();
+            if (comentario !== "") {
+                try {
+                    const data = { id, comentario };
+                    const response = await fetch(`/save/comment`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok){
+
+                        // Alternar el icono de corazón
+                        // if (element.classList.contains("fa-regular")) {
+                        //     element.classList.remove("fa-regular");
+                        //     element.classList.remove("comment-icon");
+                        //     element.classList.add("fa-solid");
+                        //     element.classList.add("fa-comment");
+                        // } else {
+                        //     element.classList.remove("fa-solid");
+                        //     element.classList.remove("fa-comment");
+                        //     element.classList.add("fa-regular");
+                        //     element.classList.add("fa-comment");
+                        // }
+
+                        modalComentario.style.display = "none";
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Éxito",
+                            text: "Comentario guardado correctamente",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                    }
+                    else if (!response.ok) {
+                        modalComentario.style.display = "none";
+                        throw new Error('Error al guardar el comentario: ' + response.status);
+                    }
+
+                } catch (error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Error al guardar el comentario",
+                    });
+                    console.error('Error al guardar el comentario:', error);
+                }
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Debes introducir un comentario",
+                });
+            }
+        }
+
+        // Agregar evento para cerrar el modal cuando se pulse el botón de cerrar
+        document.getElementById("CerrarModalComentario").addEventListener("click", () => {
+            modalComentario.style.display = "none";
+        });
+
+        document.getElementById("CerrarComentario").addEventListener("click", () => {
+            modalComentario.style.display = "none";
+        });
+    }
 
     // Define la función selectPhoto en el ámbito global
     async function selectPhoto(id, element) {

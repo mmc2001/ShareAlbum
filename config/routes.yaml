@@ -158,3 +158,8 @@ app_send_email:
     path: /send/email
     controller: App\Controller\SendEmailController::sendEmail
     methods: [ 'POST' ]
+
+app_save_comment:
+    path: /save/comment
+    controller: App\Controller\SavePhotosController::saveComment
+    methods: [ 'POST' ]

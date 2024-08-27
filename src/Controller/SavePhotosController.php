@@ -45,4 +45,32 @@ class SavePhotosController extends AbstractController
 
         return new Response('Imágenes guardadas con éxito', 201);
     }
+
+    #[Route('/save/comment', name: 'app_save_comment')]
+    public function saveComment(Request $request, EntityManagerInterface $entityManager)
+    {
+        $id = json_decode($request->getContent(), true)['id'];
+        $comentario = json_decode($request->getContent(), true)['comentario'];
+
+        if (!$comentario) {
+            return new Response('Comentario de la foto no proporcionado', 400);
+        }
+        if (!$id) {
+            return new Response('ID de la foto no proporcionado', 400);
+        }
+
+        // Buscar la foto por ID
+        $foto = $entityManager->getRepository(Photos::class)->find($id);
+
+        if (!$foto) {
+            return new Response('Foto no encontrada', 404);
+        }
+
+        $foto->setComment($comentario);
+
+        $entityManager->persist($foto);
+        $entityManager->flush();
+
+        return new Response('Comentario guardado con éxito', 201);
+    }
 }

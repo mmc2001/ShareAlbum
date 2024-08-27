@@ -69,6 +69,19 @@
         </div>
     </div>
 
+    <!-- Modal Comentario -->
+    <div class="modalComentario" id="modalComentario">
+        <div class="modalComentario-content" id="modalComentario-content">
+            <span class="cerrarModal" id="CerrarComentario">&times;</span>
+            <h1><i class="fa-solid fa-comments" style="background-color: transparent"></i>&nbsp;Comentario</h1>
+            <textarea id="textComment" placeholder="Deja un comentario ..."></textarea>
+            <div class="botonesModal">
+                <button class="closeComentario" id="CerrarModalComentario">Cerrar</button>
+                <button class="submitComentario" id="GuardarComentario">Guardar</button>
+            </div>
+        </div>
+    </div>
+
     {% block javascripts %}
         {{ parent() }}
         <script src="{{ asset('lightbox/lightgallery.js') }}"></script>

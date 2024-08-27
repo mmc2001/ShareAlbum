@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Album;
 use App\Form\NewPasswordType;
 use App\Form\UserDataType;
 use Cloudinary\Cloudinary;

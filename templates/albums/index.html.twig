@@ -85,8 +85,21 @@
                     <input type="file" id="uploadedimage" accept="image/*" style="display: none;" multiple>
                     <!-- <label for="inputImagenes" id="Añadir">Añadir</button> -->
                     <button type="button" class="closeEditarAlbum" id="comprobar-button" data-value="">Añadir</button>
-                    <button class="submitEditarAlbum" id="GuardarModal">Guardar</button>
+                    <button class="submitEditarAlbum" id="GuardarModal" onsubmit="guardarComentario()">Guardar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Comentario -->
+    <div class="modalComentario" id="modalComentario">
+        <div class="modalComentario-content" id="modalComentario-content">
+            <span class="cerrarModal" id="CerrarComentario">&times;</span>
+            <h1><i class="fa-solid fa-comments" style="background-color: transparent"></i>&nbsp;Comentario</h1>
+            <textarea id="textComment" placeholder="Deja un comentario ..."></textarea>
+            <div class="botonesModal">
+                <button class="closeComentario" id="CerrarModalComentario">Cerrar</button>
+                <button class="submitComentario" id="GuardarComentario">Guardar</button>
             </div>
         </div>
     </div>
@@ -194,6 +207,10 @@
                 //     location.reload();
                 // }
             }).open();
+        }
+
+        function guardarComentario(){
+            console.log("Hola");
         }
     </script>
 
