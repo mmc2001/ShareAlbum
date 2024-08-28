@@ -66,8 +66,10 @@ app_session_data:
     methods: [ 'GET', 'POST' ]
 
 app_albums:
-    path: /albums/{id}
+    path: /albums
     defaults: { _controller: 'App\Controller\AlbumsController::index' }
+    requirements:
+        id: .+
 
 app_upload_image:
     path: /upload/image

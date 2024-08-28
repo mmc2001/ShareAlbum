@@ -124,10 +124,14 @@ const listUsers = async () => {
                     .map(client => `${client.name} ${client.surnames}`)
                     .join(', ');
 
+                const sessionIdEncrypted = CryptoJS.AES.encrypt(String(session.id), '123456Mn.');
+                const urlSafeEncryptedId = CryptoJS.enc.Base64.stringify(sessionIdEncrypted.ciphertext);
+                console.log("ID encriptado: " + urlSafeEncryptedId);
                 content += `
             <tr>
                 <td>${index+1}</td>
-                <td><a href="/albums/${session.id}" class="album">${session.name}</a></td>
+<!--                <td><a href="/albums/${session.id}" class="album">${session.name}</a></td>-->
+                <td><a href="/albums?id=${sessionIdEncrypted}" class="album">${session.name}</a></td>
                 <td>${session.service}</td>
                 <td>${session.extras}</td>
                 <td>${fechaFormateada}</td>
@@ -143,7 +147,7 @@ const listUsers = async () => {
                 </td>
                 <td class="text-center">
                     <div class="d-flex justify-content-center">
-                        <button class="btn btn-sm btn-primary verSession" data-id="${session.id}"><i class="fa-solid fa-eye"></i></button>
+                        <button class="btn btn-sm btn-primary verSession" data-id="${sessionIdEncrypted}"><i class="fa-solid fa-eye"></i></button>
                         <button class="btn btn-sm btn-info editarSesion" style="margin-left: 5px;" data-id="${session.id}"><i class="fa-solid fa-pencil"></i></button>
                         <button class="btn btn-sm btn-danger" style="margin-left: 5px;" data-id="${session.id}"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
@@ -288,7 +292,9 @@ const listUsers = async () => {
             $('.verSession').click(function(event) {
                 event.preventDefault();
                 const idSession = $(this).data('id');
-                window.location.href = `/albums/${idSession}`;
+                // const sessionIdEncrypted = CryptoJS.AES.encrypt(String(idSession), '123456Mn.').toString();
+                window.location.href = `/albums?id=${idSession}`;
+                // window.location.href = `/albums/${idSession}`;
             });
 
             $('#cerrarEditarSesion').click(function (event) {

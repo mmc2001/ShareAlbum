@@ -1,9 +1,25 @@
 // Obtener el ID de la URL
+// function obtenerIdDeURL() {
+//     const path = window.location.pathname;
+//     const pathSegments = path.split('/');
+//     const id = pathSegments[pathSegments.length - 1];
+//     return parseInt(id);
+// }
+
 function obtenerIdDeURL() {
-    const path = window.location.pathname;
-    const pathSegments = path.split('/');
-    const id = pathSegments[pathSegments.length - 1];
-    return parseInt(id);
+    const url = new URL(window.location.href);
+    const sessionIdEncrypted = url.searchParams.get('id').replace(/\s+/g, '+');
+
+    // Parse the encrypted ID as Base64
+    const sessionIdEncryptedBytes = CryptoJS.enc.Base64.parse(sessionIdEncrypted);
+
+    try {
+        const decryptResult = CryptoJS.AES.decrypt(sessionIdEncrypted, '123456Mn.', { format: CryptoJS.format.OpenSSL });
+        const sessionIdDecrypted = decryptResult.toString(CryptoJS.enc.Utf8);
+        return parseInt(sessionIdDecrypted);
+    } catch (error) {
+        console.error("Error decrypting ID: ", error);
+    }
 }
 
 let executed1 = false;

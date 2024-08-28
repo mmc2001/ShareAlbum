@@ -125,7 +125,7 @@ svg {
     overflow-y: auto;
     max-height: 960px;
     padding: 20px;
-    margin: 40px;
+    margin: 20px 40px 0 40px;
 }
 
 .contenedorImagenes::-webkit-scrollbar {
@@ -550,11 +550,13 @@ label {
 }
 .container > a > img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     transition: transform .5s ease;
 }
+
 .container > a > img:hover img {
-    transform: scale(1.1);
+    transform: scale(1);
 }
 .container > a:hover::before {
     content: "";
@@ -563,7 +565,7 @@ label {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    /*background-color: rgba(0, 0, 0, 0.5);*/
     border-radius: 6px;
     opacity: 0;
     transition: opacity .3s ease;
@@ -577,27 +579,29 @@ label {
 }
 
 .overlay {
+    width: 100%;
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    /*background-color: rgba(216, 216, 216, 0.62);*/
-    padding: 5px;
+    bottom: 0;
     border-radius: 5px;
+    background-image: linear-gradient(to top, #0000009c, #f6f5f700);
 }
 
 .icon-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding-right: 14px;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
     gap: 8px;
-    padding: 2px;
 }
 
 .fa-comment, .heart-icon, .heart-icon2 {
     padding: 6px;
-    background-color: rgba(216, 216, 216, 0.62);
+    /*background-color: rgba(216, 216, 216, 0.62);*/
     border-radius: 6px;
-    color: black;
+    color: white;
     cursor: pointer;
 }
 
@@ -605,8 +609,8 @@ label {
     color: red;
 }
 
-.fa-comment:hover {
-    color: rgba(17, 82, 102, 0.5);
+.fa-regular.fa-comment:hover {
+    color: #0e92a9;
 }
 
 .icon-blue {
