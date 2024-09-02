@@ -177,8 +177,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const textarea = document.getElementById("textComment");
         const submitButton = document.getElementById("GuardarComentario");
 
+        textarea.value = "";
+
         if(comment){
             textarea.value = comment;
+        } else {
+            textarea.value = "";
         }
 
         submitButton.addEventListener("click", () => guardarComentario(id, textarea));
@@ -247,10 +251,14 @@ document.addEventListener("DOMContentLoaded", function() {
         // Agregar evento para cerrar el modal cuando se pulse el botón de cerrar
         document.getElementById("CerrarModalComentario").addEventListener("click", () => {
             modalComentario.style.display = "none";
+            const textarea = document.getElementById("textComment");
+            textarea.value = "";
         });
 
         document.getElementById("CerrarComentario").addEventListener("click", () => {
             modalComentario.style.display = "none";
+            const textarea = document.getElementById("textComment");
+            textarea.value = "";
         });
     }
 
