@@ -211,7 +211,7 @@
                 <div class="camposParalelos">
                         <button id="cerrarVerTicket" class="closeVerTicket">Atrás</button>
                         <!--<button id="guardarVerTicket">Guardar</button>-->
-                        <button id="descargarVerTicket" class="submitVerTicket">Descargar</button>
+                        <button id="descargarVerTicket" class="submitVerTicket">Descargar &nbsp; <i class="fa-solid fa-file-arrow-down"></i></button>
                 </div>
             </div>
         </div>
@@ -252,20 +252,48 @@
                         <input type="text" id="sessionUpdate_description" name="sessionUpdate_description" class="padding"/>
                     </div>
                 </form>
-                    <div class="camposParalelos">
-                        <button id="cerrarEditarSesion" class="closeEditarSession">Atrás</button>
-                        <button type="submit" id="guardarEditarSesion" class="submitEditarSession">Guardar</button>
-                    </div>
+                <div id="error-messages" style="width: 100%; color: red; margin-top: 20px;"></div>
+                <div class="camposParalelos">
+                    <button id="cerrarEditarSesion" class="closeEditarSession">Atrás</button>
+                    <button type="submit" id="guardarEditarSesion" class="submitEditarSession">Guardar</button>
+                </div>
             </div>
         </div>
     </div>
+
+    {# SEGUNDA FORMA DE GENERAR PDF #}
+{#    <div class="container" style="visibility: hidden; position: absolute;">}
+{#        <div id="pdfThis">#}
+{#            <h2 style="color: red" id="plan-title"></h2>#}
+{#            <ul id="plan-details">#}
+{#                <li id="retirement-age"></li>#}
+{#                <li id="social-security-age"></li>#}
+{#                <li id="salary-savings"></li>#}
+{#                <li id="monthly-expenses"></li>#}
+{#            </ul>#}
+{#            <h2 id="income-statement-title"></h2>#}
+{#            <table id="table">#}
+{#                <thead>#}
+{#                <th>Income</th>#}
+{#                <th>Expenses</th>#}
+{#                </thead>#}
+{#                <tbody id="table-body">#}
+{#                <!-- dynamically generated table rows -->#}
+{#                </tbody>#}
+{#            </table>#}
+{#            <p>Dinero Total: 50&#8364; &euro;</p>#}
+{#        </div>#}
+{#    </div>#}
 
     <script
 
     {% block javascripts %}
         {{ parent() }}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+{#        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>#}
 {#        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.1.135/jspdf.min.js"></script>#}
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
         <!-- Script para dataTable -->
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -295,47 +323,336 @@
         </script>
 
         <script>
-            document.getElementById('formSession').addEventListener('submit', function(event) {
-                event.preventDefault();
-                document.getElementById("modalSesion").style.display = "none";
-                Swal.fire({
-                    title: "Éxito",
-                    text: "Sesión creada correctamente",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    this.submit();
-                });
+            document.addEventListener('DOMContentLoaded', function() {
+                const formSession = document.getElementById('formSession');
+
+                if (formSession) {
+                    formSession.addEventListener('submit', function(event) {
+                        event.preventDefault();
+
+                        const name = document.getElementById('session_name');
+                        const service = document.getElementById('session_service');
+                        const date = document.getElementById('session_date');
+                        const price = document.getElementById('session_priceSession');
+                        const description = document.getElementById('session_descriptionSession');
+
+                        let isValid = true;
+                        let errorMessages = [];
+
+                        // Validación de campos obligatorios
+                        [name, service, date, price, description].forEach(field => {
+                            if (!field || !field.value.trim()) {
+                                isValid = false;
+                                errorMessages.push(`El campo ${field ? field.name.replace('session_', '') : 'desconocido'} es obligatorio.`);
+                            }
+                        });
+
+                        // Validación del precio
+                        if (price && price.value.trim()) {
+                            const priceValue = parseFloat(price.value.replace(',', '.'));
+                            if (isNaN(priceValue) || priceValue <= 0) {
+                                isValid = false;
+                                errorMessages.push('El precio debe ser un valor numérico.');
+                            } else if (!/^\d+(\.\d{1,2})?$/.test(price.value.replace(',', '.'))) {
+                                isValid = false;
+                                errorMessages.push('El precio debe tener un valor numérico.');
+                            }
+                        }
+
+                        // Validación de la fecha
+                        if (date && date.value.trim()) {
+                            const dateValue = new Date(date.value);
+                            if (isNaN(dateValue.getTime())) {
+                                isValid = false;
+                                errorMessages.push('La fecha debe tener un formato válido.');
+                            }
+                        }
+
+                        if (!isValid) {
+                            showErrors(errorMessages);
+                        } else {
+                            removeErrors();
+                            document.getElementById("modalSesion").style.display = "none";
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Sesión creada correctamente",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                this.submit();
+                            });
+                        }
+                    });
+                }
+
+                function showErrors(messages) {
+                    removeErrors();
+                    const errorContainer = document.createElement('div');
+                    errorContainer.id = 'error-container';
+                    errorContainer.className = 'error-container';
+                    errorContainer.innerHTML = messages.map(msg => `<p class="error-message" style="color: red; margin-top: 20px;">${msg}</p>`).join('');
+
+                    const camposParalelos = formSession.querySelector('.camposParalelosSession');
+                    formSession.insertBefore(errorContainer, camposParalelos);
+                }
+
+                function removeErrors() {
+                    const errorContainer = document.getElementById('error-container');
+                    if (errorContainer) {
+                        errorContainer.remove();
+                    }
+                }
             });
 
-            document.getElementById('formExtras').addEventListener('submit', function(event) {
-                event.preventDefault();
-                document.getElementById("modalExtra").style.display = "none";
-                Swal.fire({
-                    title: "Éxito",
-                    text: "Extra creado correctamente",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    this.submit();
-                });
+            document.addEventListener('DOMContentLoaded', function() {
+                const formExtras = document.getElementById('formExtras');
+                if (formExtras) {
+                    formExtras.addEventListener('submit', function(event) {
+                        event.preventDefault();
+
+                        const name = document.getElementById('extras_name');
+                        const price = document.getElementById('extras_priceExtra');
+
+                        let isValid = true;
+                        let errorMessages = [];
+
+                        // Validación del nombre
+                        if (!name.value.trim()) {
+                            isValid = false;
+                            errorMessages.push('El nombre del extra es obligatorio.');
+                        }
+
+                        // Validación del precio
+                        if (!price.value.trim()) {
+                            isValid = false;
+                            errorMessages.push('El precio del extra es obligatorio.');
+                        } else {
+                            const priceValue = parseFloat(price.value.replace(',', '.'));
+                            if (isNaN(priceValue) || priceValue <= 0) {
+                                isValid = false;
+                                errorMessages.push('El precio debe ser un valor numérico.');
+                            } else if (!/^\d+(\.\d{1,2})?$/.test(price.value.replace(',', '.'))) {
+                                isValid = false;
+                                errorMessages.push('Solo se admite valores numéricos.');
+                            }
+                        }
+
+                        if (!isValid) {
+                            showErrors(errorMessages);
+                        } else {
+                            removeErrors();
+                            document.getElementById("modalExtra").style.display = "none";
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Extra creado correctamente",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                this.submit();
+                            });
+                        }
+                    });
+                }
+
+                function showErrors(messages) {
+                    removeErrors();
+                    const errorContainer = document.createElement('div');
+                    errorContainer.id = 'error-container';
+                    errorContainer.className = 'error-container';
+                    errorContainer.innerHTML = messages.map(msg => `<p class="error-message" style="color: red; margin-top: 20px;">${msg}</p>`).join('');
+
+                    const camposParalelos = formExtras.querySelector('.camposParalelos');
+                    formExtras.insertBefore(errorContainer, camposParalelos);
+                }
+
+                function removeErrors() {
+                    const errorContainer = document.getElementById('error-container');
+                    if (errorContainer) {
+                        errorContainer.remove();
+                    }
+                }
             });
 
-            document.getElementById('formServices').addEventListener('submit', function(event) {
-                event.preventDefault();
-                document.getElementById("modalServicio").style.display = "none";
-                Swal.fire({
-                    title: "Éxito",
-                    text: "Servicio creado correctamente",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    this.submit();
-                });
+            document.addEventListener('DOMContentLoaded', function() {
+                const formServices = document.getElementById('formServices');
+                if (formServices) {
+                    formServices.addEventListener('submit', function(event) {
+                        event.preventDefault();
+
+                        const name = document.getElementById('services_name');
+                        const price = document.getElementById('services_priceService');
+
+                        let isValid = true;
+                        let errorMessages = [];
+
+                        // Validación del nombre
+                        if (!name.value.trim()) {
+                            isValid = false;
+                            errorMessages.push('El nombre del servicio es obligatorio.');
+                        }
+
+                        // Validación del precio
+                        if (!price.value.trim()) {
+                            isValid = false;
+                            errorMessages.push('El precio del servicio es obligatorio.');
+                        } else {
+                            const priceValue = parseFloat(price.value.replace(',', '.'));
+                            if (isNaN(priceValue) || priceValue <= 0) {
+                                isValid = false;
+                                errorMessages.push('El precio debe ser un número positivo.');
+                            } else if (!/^\d+(\.\d{1,2})?$/.test(price.value.replace(',', '.'))) {
+                                isValid = false;
+                                errorMessages.push('Solo se admite valores numéricos.');
+                            }
+                        }
+
+                        if (!isValid) {
+                            showErrors(errorMessages);
+                        } else {
+                            removeErrors();
+                            document.getElementById("modalServicio").style.display = "none";
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Servicio creado correctamente",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                this.submit();
+                            });
+                        }
+                    });
+                }
+
+                function showErrors(messages) {
+                    removeErrors();
+                    const errorContainer = document.createElement('div');
+                    errorContainer.id = 'error-container';
+                    errorContainer.className = 'error-container';
+                    errorContainer.innerHTML = messages.map(msg => `<p class="error-message" style="color: red; margin-top: 20px;">${msg}</p>`).join('');
+
+                    const camposParalelos = formServices.querySelector('.camposParalelos');
+                    formServices.insertBefore(errorContainer, camposParalelos);
+                }
+
+                function removeErrors() {
+                    const errorContainer = document.getElementById('error-container');
+                    if (errorContainer) {
+                        errorContainer.remove();
+                    }
+                }
             });
+        </script>
+
+{#        <script>#}
+{#            function generarPDF() {#}
+{#                const { jsPDF } = window.jspdf;#}
+
+{#                html2canvas(document.body).then(canvas => {#}
+{#                    const imgData = canvas.toDataURL('image/png');#}
+{#                    const pdf = new jsPDF('p', 'mm', 'a4');#}
+{#                    const imgProps = pdf.getImageProperties(imgData);#}
+{#                    const pdfWidth = pdf.internal.pageSize.getWidth();#}
+{#                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;#}
+
+{#                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);#}
+{#                    pdf.save('documento.pdf');#}
+{#                });#}
+{#            }#}
+{#        </script>#}
+
+        <script>
+            // TERCERA FORMA DE GENERAR PDF (CONVIRTIENDO A IMAGEN)
+            // function generarPDF() {
+            //     const { jsPDF } = window.jspdf;
+            //
+            //     const templateHTML = `
+            //         <h1>Ticket de prueba</h1>
+            //       `;
+            //
+            //     // Create a new HTML element to render the template
+            //     const htmlElement = document.createElement('div');
+            //     htmlElement.innerHTML = templateHTML;
+            //
+            //     // Use html2canvas to render the HTML content
+            //     html2canvas(document.body).then(canvas => {
+            //         const imgData = canvas.toDataURL('image/png');
+            //         const pdf = new jsPDF('p', 'mm', 'a4');
+            //         const imgProps = pdf.getImageProperties(imgData);
+            //         const pdfWidth = pdf.internal.pageSize.getWidth();
+            //         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            //
+            //         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            //         pdf.save('documento.pdf');
+            //     });
+            // }
+
+            // SEGUNDA FORMA DE GENERAR PDF
+            // function updateHtmlWithData(data) {
+            //     $('#plan-title').text(data.planTitle);
+            //     $('#retirement-age').text(`Retirement Age: ${data.retirementAge}`);
+            //     $('#social-security-age').text(`Social Security Start Age: ${data.socialSecurityAge}`);
+            //     $('#salary-savings').text(`Percentage of Salary You Save: ${data.salarySavings}`);
+            //     $('#monthly-expenses').text(`Monthly Expenses: ${data.monthlyExpenses}`);
+            //     $('#income-statement-title').text(data.incomeStatementTitle);
+            //
+            //     // generate table rows dynamically
+            //     const tableBody = $('#table-body');
+            //     tableBody.empty();
+            //     data.tableData.forEach((row) => {
+            //         const tableRow = `
+            //               <tr>
+            //                 <td>${row.income}</td>
+            //                 <td>${row.expenses}</td>
+            //               </tr>
+            //             `;
+            //         tableBody.append(tableRow);
+            //     });
+            // }
+            //
+            // function htmlToPdf(data) {
+            //     updateHtmlWithData(data);
+            //     var pdf = new jsPDF('p', 'pt', 'letter', 'UTF-8');
+            //     source = $('#pdfThis')[0];
+            //     specialElementHandlers = {
+            //         '#bypassme': function(element, renderer){
+            //             return true
+            //         }
+            //     }
+            //     margins = {
+            //         top: 50,
+            //         left: 60,
+            //         width: 545
+            //     };
+            //
+            //     var styles = `
+            //         <style>
+            //           li {
+            //             list-style: none;
+            //           }
+            //           table {
+            //             background-color: #f0f0f0;
+            //           }
+            //         </style>
+            //       `;
+            //
+            //     pdf.fromHTML(
+            //         styles + source.outerHTML
+            //         , margins.left // x coord
+            //         , margins.top // y coord
+            //         , {
+            //             'width': margins.width // max width of content on PDF
+            //             , 'elementHandlers': specialElementHandlers
+            //         },
+            //         function (dispose) {
+            //             // dispose: object with X, Y of the last line add to the PDF
+            //             //          this allow the insertion of new lines after html
+            //             pdf.save('HTML2PDF_v2.pdf');
+            //         }
+            //     )
+            // }
         </script>
 
     {% endblock %}

@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
 function logout() {
     fetch('/logout', {
         method: 'POST',
@@ -97,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const camposDiv = document.querySelector('.camposPassword');
     const mostrar = document.querySelector('#mostrar');
-    const formPassword = document.getElementById('formPassword');
+    // const formPassword = document.getElementById('formPassword');
 
     if (mostrar) {
         let mostrando = false;
@@ -117,11 +118,11 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    if (formPassword) {
-        formPassword.addEventListener('submit', function(event) {
-            // Aquí puedes añadir una confirmación si es necesario
-        });
-    }
+    // if (formPassword) {
+    //     formPassword.addEventListener('submit', function(event) {
+    //         // Aquí puedes añadir una confirmación si es necesario
+    //     });
+    // }
 
 // LOADING
 

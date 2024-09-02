@@ -6,18 +6,28 @@ use App\Entity\Extras;
 use App\Entity\Session;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ExtrasType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('priceExtra')
-        ;
+            ->add('name', TextType::class, [
+                'constraints' => [
+                    new NotBlank(['message' => 'El nombre no puede estar vacío']),
+                ],
+            ])
+            ->add('priceExtra', MoneyType::class, [
+                'constraints' => [
+                    new NotBlank(['message' => 'El precio extra no puede estar vacío']),
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

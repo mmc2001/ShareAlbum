@@ -108,32 +108,161 @@
         <script src="{{ asset('js/headerHome.js') }}"></script>
 
         <script>
-            document.getElementById('formPrincipal').addEventListener('submit', function(event) {
-                event.preventDefault();
-                document.getElementById("modalPerfil").style.display = "none";
-                Swal.fire({
-                    title: "Éxito",
-                    text: "Datos personales actualizados",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    this.submit();
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('formPrincipal');
+
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    const name = document.getElementById('user_data_name');
+                    const surnames = document.getElementById('user_data_surnames');
+                    const email = document.getElementById('user_data_email');
+                    const dni = document.getElementById('user_data_dni');
+                    const telephone = document.getElementById('user_data_telephone');
+
+                    let isValid = true;
+                    let errorMessages = [];
+
+                    // Validar que todos los campos estén llenos
+                    [name, surnames, email, dni, telephone].forEach(field => {
+                        if (field.value.trim() === '') {
+                            isValid = false;
+                            errorMessages.push(`El campo ${field.placeholder} es obligatorio`);
+                        }
+                    });
+
+                    // Validar formato de email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email.value)) {
+                        isValid = false;
+                        errorMessages.push('Ingrese un email válido');
+                    }
+
+                    // Validar teléfono (9 dígitos numéricos)
+                    const phoneRegex = /^\d{9}$/;
+                    if (!phoneRegex.test(telephone.value)) {
+                        isValid = false;
+                        errorMessages.push('El teléfono debe tener 9 dígitos numéricos');
+                    }
+
+                    // Validar DNI español
+                    const dniRegex = /^\d{8}[A-HJ-NP-TV-Z]$/;
+                    if (!dniRegex.test(dni.value)) {
+                        isValid = false;
+                        errorMessages.push('Ingrese un DNI válido (8 números y una letra)');
+                    } else {
+                        const dniLetters = "TRWAGMYFPDXBNJZSQVHLCKE";
+                        const letter = dni.value.charAt(8).toUpperCase();
+                        const number = parseInt(dni.value.substr(0, 8));
+                        if (letter !== dniLetters[number % 23]) {
+                            isValid = false;
+                            errorMessages.push('La letra del DNI no es correcta');
+                        }
+                    }
+
+                    // Mostrar errores o enviar el formulario
+                    if (!isValid) {
+                        showErrors(errorMessages);
+                    } else {
+                        removeErrors();
+                        document.getElementById("modalPerfil").style.display = "none";
+                        Swal.fire({
+                            title: "Éxito",
+                            text: "Datos personales actualizados",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            form.submit();
+                        });
+                    }
                 });
+
+                function showErrors(messages) {
+                    removeErrors();
+                    const errorContainer = document.createElement('div');
+                    errorContainer.className = 'error-container';
+                    errorContainer.innerHTML = messages.map(msg => `<p class="error-message" style="color: red; margin-top: 20px;">${msg}</p>`).join('');
+                    form.appendChild(errorContainer);
+                }
+
+                function removeErrors() {
+                    const errorContainer = form.querySelector('.error-container');
+                    if (errorContainer) {
+                        errorContainer.remove();
+                    }
+                }
             });
 
-            document.getElementById('formPassword').addEventListener('submit', function(event) {
-                event.preventDefault();
-                document.getElementById("modalPerfil").style.display = "none";
-                Swal.fire({
-                    title: "Éxito",
-                    text: "Contraseña actualizada",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    this.submit();
-                });
+            document.addEventListener('DOMContentLoaded', function() {
+                const formPassword = document.getElementById('formPassword');
+
+                if (formPassword) {
+                    formPassword.addEventListener('submit', function(event) {
+                        event.preventDefault();
+
+                        const password1 = document.getElementById('new_password_password_first');
+                        const password2 = document.getElementById('new_password_password_second');
+
+                        let isValid = true;
+                        let errorMessages = [];
+
+                        // Verificar que los campos de contraseña existen
+                        if (!password1 || !password2) {
+                            console.error('No se encontraron los campos de contraseña');
+                            return;
+                        }
+
+                        // Criterios de seguridad para la contraseña
+                        const passwordCriteria = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+                        // Validar que ambas contraseñas sean iguales
+                        if (password1.value !== password2.value) {
+                            isValid = false;
+                            errorMessages.push('Las contraseñas no coinciden.');
+                        }
+
+                        // Validar que la contraseña cumpla con los criterios de seguridad
+                        if (!passwordCriteria.test(password1.value)) {
+                            isValid = false;
+                            errorMessages.push('La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula y un número.');
+                        }
+
+                        // Mostrar errores o enviar el formulario
+                        if (!isValid) {
+                            showErrors(errorMessages, formPassword);
+                        } else {
+                            removeErrors(formPassword);
+                            document.getElementById("modalPerfil").style.display = "none";
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Contraseña actualizada",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                formPassword.submit();
+                            });
+                        }
+                    });
+                } else {
+                    console.error('El formulario de cambio de contraseña no se encontró');
+                }
+
+                function showErrors(messages, form) {
+                    removeErrors(form);
+                    const errorContainer = document.createElement('div');
+                    errorContainer.className = 'error-container';
+                    errorContainer.innerHTML = messages.map(msg => `<p class="error-message" style="color: red; margin-top: 20px;">${msg}</p>`).join('');
+                    form.appendChild(errorContainer);
+                }
+
+                function removeErrors(form) {
+                    const errorContainer = form.querySelector('.error-container');
+                    if (errorContainer) {
+                        errorContainer.remove();
+                    }
+                }
             });
         </script>
     {% endblock %}

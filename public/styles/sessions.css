@@ -106,6 +106,7 @@
 }
 .contenedorFormularioSesion > form > .camposSession > div> input[type="text"],
 .contenedorFormularioSesion > form > .camposSession > div> input[type="date"],
+.contenedorFormularioSesion > form > .camposSession > div> textarea,
 .contenedorFormularioSesion > form > .camposSession > div> select {
     margin-top: 8px;
     padding: 12px 15px;
@@ -114,6 +115,7 @@
     background-color: #ffffff;
     border: 2px solid #b8b8b8;
     border-radius: 6px;
+    resize: none;
 }
 
 .modalSesion-content > .contenedorFormularioSesion > form > .camposParalelos > button:hover {
@@ -124,7 +126,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 40px;
+    margin-top: 20px;
     margin-bottom: 20px;
     gap: 10px;
     border-top: 1.5px solid #ddd;

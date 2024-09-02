@@ -87,6 +87,7 @@
                             {{ form_widget(formClient.roles, {'attr': {'class': 'form-control', 'placeholder': 'Rol'}}) }}
                         </div>
                     </div>
+                    <div id="error-container"></div>
                     <div class="camposParalelos">
                         <button class="closeCliente" id="CerrarClienteButton">Atrás</button>
                         <button type="submit" class="submitCliente">Crear</button>
@@ -120,11 +121,11 @@
                         </div>
                         <div>
                             <label class="label">Teléfono</label>
-                            <input type="number" class="padding" id="userUpdate_telephone" name="userUpdate_telephone"/>
+                            <input type="tel" class="padding" id="userUpdate_telephone" name="userUpdate_telephone"/>
                         </div>
                         <div>
                             <label class="label">Correo electrónico</label>
-                            <input type="text" class="padding" id="userUpdate_email" name="userUpdate_email"/>
+                            <input type="email" class="padding" id="userUpdate_email" name="userUpdate_email"/>
                         </div>
                     </div>
 
@@ -133,11 +134,11 @@
                     <div id="passwordFields" class="hidden">
                         <div>
                             <label class="label">Nueva contraseña</label>
-                            <input type="text" class="padding" id="userUpdate_password1" name="userUpdate_password1"/>
+                            <input type="password" class="padding" id="userUpdate_password1" name="userUpdate_password1"/>
                         </div>
                         <div>
                             <label class="label">Repita la contraseña</label>
-                            <input type="text" class="padding" id="userUpdate_password2" name="userUpdate_password2"/>
+                            <input type="password" class="padding" id="userUpdate_password2" name="userUpdate_password2"/>
                         </div>
                     </div>
 
@@ -183,19 +184,85 @@
         </script>
 
         <script>
-            document.getElementById('formClient').addEventListener('submit', function(event) {
-                event.preventDefault();
-                document.getElementById("modalCliente").style.display = "none";
-                Swal.fire({
-                    title: "Éxito",
-                    text: "Nuevo usuario creado",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    this.submit();
-                });
+            document.addEventListener('DOMContentLoaded', function() {
+                const formClient = document.getElementById('formClient');
+
+                if (formClient) {
+                    formClient.addEventListener('submit', function(event) {
+                        event.preventDefault();
+
+                        const name = document.getElementById('registration_form_name');
+                        const surnames = document.getElementById('registration_form_surnames');
+                        const dni = document.getElementById('registration_form_dni');
+                        const telephone = document.getElementById('registration_form_telephone');
+                        const email = document.getElementById('registration_form_email');
+                        const password = document.getElementById('registration_form_plainPassword');
+
+                        let isValid = true;
+                        let errorMessages = [];
+
+                        // Validación de campos obligatorios
+                        [name, surnames, dni, telephone, email, password].forEach(field => {
+                            if (!field.value.trim()) {
+                                isValid = false;
+                                errorMessages.push(`El campo ${field.placeholder} es obligatorio.`);
+                            }
+                        });
+
+                        // Validación de DNI español
+                        const dniRegex = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i;
+                        if (dni.value && !dniRegex.test(dni.value)) {
+                            isValid = false;
+                            errorMessages.push('El DNI debe tener 8 números seguidos de una letra válida.');
+                        }
+
+                        // Validación de teléfono móvil español
+                        const phoneRegex = /^[679]{1}[0-9]{8}$/;
+                        if (telephone.value && !phoneRegex.test(telephone.value)) {
+                            isValid = false;
+                            errorMessages.push('El teléfono debe ser un número móvil español válido (9 dígitos empezando por 6, 7 o 9).');
+                        }
+
+                        // Validación de email
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (email.value && !emailRegex.test(email.value)) {
+                            isValid = false;
+                            errorMessages.push('Por favor, introduce un email válido.');
+                        }
+
+                        if (!isValid) {
+                            showErrors(errorMessages, formClient);
+                        } else {
+                            removeErrors(formClient);
+                            document.getElementById("modalCliente").style.display = "none";
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Nuevo usuario creado",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                formClient.submit();
+                            });
+                        }
+                    });
+                }
+
+                function showErrors(messages) {
+                    removeErrors();
+                    const errorContainer = document.getElementById('error-container');
+                    errorContainer.innerHTML = messages.map(msg => `<p class="error-message" style="color: red; margin-top: 20px;">${msg}</p>`).join('');
+                }
+
+                function removeErrors() {
+                    const errorContainer = document.getElementById('error-container');
+                    if (errorContainer) {
+                        errorContainer.innerHTML = '';
+                    }
+                }
             });
+
+
         </script>
     {% endblock %}
 {% endblock %}

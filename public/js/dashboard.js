@@ -214,8 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         tareaDate.getFullYear() === selectedDate.getFullYear();
                 });
 
-                console.log(tareasDiarias);
-
                 if (Array.isArray(tareasDiarias)) {
                     const htmlTareas = tareasDiarias.map(tarea => `
                         <div class="listado ${tarea.hasbeenmade === true ? '' : 'tachado'}">
@@ -627,7 +625,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("formModalEnvio").addEventListener("submit", function(event) {
         event.preventDefault();
         document.getElementById("formMessage").submit();
-        console.log("Hola 1");
         document.getElementById("modalEnvio").style.display = "none";
     });
 
@@ -679,7 +676,6 @@ document.addEventListener("DOMContentLoaded", function() {
     executed6 = true;
 
     document.getElementById('sendModal').addEventListener('click', () => {
-        console.log("Hola 2");
         const recipient = document.getElementById("recipient").value;
         const subject = document.getElementById("subject").value;
         const fileInput = document.getElementById("fileUrl");
@@ -689,10 +685,6 @@ document.addEventListener("DOMContentLoaded", function() {
         if (!recipient || !subject || !file || !textMessage) {
             console.error('Todos los campos son obligatorios.');
         }
-        console.log(recipient);
-        console.log(subject);
-        console.log(file);
-        console.log(textMessage);
         const formData = new FormData();
         formData.append('recipient', recipient);
         formData.append('subject', subject);
@@ -770,7 +762,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Obtener el div de campos y el botón para mostrarlo
     const camposDiv = document.querySelector('.camposPassword');
     const mostrar = document.querySelector('#mostrar');
-    const formPassword = document.getElementById('formPassword');
+    // const formPassword = document.getElementById('formPassword');
 
     // Estado inicial: ocultar el div de campos
     let mostrando = false;
@@ -791,10 +783,10 @@ document.addEventListener("DOMContentLoaded", function() {
         alternarMostrar();
     });
 
-    formPassword.addEventListener('submit', function(event) {
-        /*if (!confirm('¿Seguro que quieres actualizar la contraseña?')) {
-            //event.preventDefault();
-        }*/
-    });
+    // formPassword.addEventListener('submit', function(event) {
+    //     /*if (!confirm('¿Seguro que quieres actualizar la contraseña?')) {
+    //         //event.preventDefault();
+    //     }*/
+    // });
 });
 

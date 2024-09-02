@@ -124,7 +124,10 @@ const listUsers = async () => {
             $('#modalEditarCliente input[name="userUpdate_surnames"]').val(userSurnames);
             $('#modalEditarCliente input[name="userUpdate_dni"]').val(userDni);
             $('#modalEditarCliente input[name="userUpdate_telephone"]').val(userTelephone);
+            $('#modalEditarCliente input[name="userUpdate_email"]').val("");
             $('#modalEditarCliente input[name="userUpdate_email"]').val(userEmail);
+            $('#modalEditarCliente input[name="userUpdate_password1"]').val("");
+            $('#modalEditarCliente input[name="userUpdate_password2"]').val("");
             $('#modalEditarCliente').css('display', 'grid');
         });
 
@@ -140,30 +143,73 @@ const listUsers = async () => {
         $('#guardarEditarUsuario').click(function (event) {
             event.preventDefault();
 
+            const formClientUpdate = document.getElementById('formClientUpdate');
             const idUser = $(this).data('id-user');
-            console.log("ID del usuario: ", idUser);
 
-            let formData = new FormData($('#formClientUpdate')[0]);
-            formData.append('idUser', idUser);
-            /*
-            const password = $('#userUpdate_password').val();
-            formData.append('userUpdate_password', password);
-            */
-            const password1 = $('#userUpdate_password1').val();
-            const password2 = $('#userUpdate_password2').val();
+            const name = document.getElementById('userUpdate_name');
+            const surnames = document.getElementById('userUpdate_surnames');
+            const dni = document.getElementById('userUpdate_dni');
+            const telephone = document.getElementById('userUpdate_telephone');
+            const email = document.getElementById('userUpdate_email');
+            const password1 = document.getElementById('userUpdate_password1');
+            const password2 = document.getElementById('userUpdate_password2');
 
-            if (password1 !== password2) {
-                alert('Las contraseñas no coinciden');
-            } else {
-                const password = $('#userUpdate_password1').val();
-                formData.append('userUpdate_password', password);
+            let isValid = true;
+            let errorMessages = [];
+
+            // Validación de campos obligatorios
+            [name, surnames, dni, telephone, email].forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    errorMessages.push(`El campo ${field.id.replace('userUpdate_', '')} es obligatorio.`);
+                }
+            });
+
+            // Validación de DNI español
+            const dniRegex = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i;
+            if (dni.value && !dniRegex.test(dni.value)) {
+                isValid = false;
+                errorMessages.push('El DNI debe tener 8 números seguidos de una letra válida.');
             }
 
-            // Validación antes de enviar el formulario usando ID en vez de name
-            if (!$('#userUpdate_name').val() || !$('#userUpdate_surnames').val() || !$('#userUpdate_dni').val() || !$('#userUpdate_telephone').val() || !$('#userUpdate_email').val()) {
-                console.error('Todos los campos son obligatorios.');
+            // Validación de teléfono móvil español
+            const phoneRegex = /^[679]{1}[0-9]{8}$/;
+            if (telephone.value && !phoneRegex.test(telephone.value)) {
+                isValid = false;
+                errorMessages.push('El teléfono debe ser un número móvil español válido (9 dígitos empezando por 6, 7 o 9).');
+            }
+
+            // Validación de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email.value && !emailRegex.test(email.value)) {
+                isValid = false;
+                errorMessages.push('Por favor, introduce un email válido.');
+            }
+
+            // Validación de contraseñas
+            if (password1.value || password2.value) {
+                if (password1.value !== password2.value) {
+                    isValid = false;
+                    errorMessages.push('Las contraseñas no coinciden.');
+                }
+
+                // Validación de seguridad de la contraseña
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (!passwordRegex.test(password1.value)) {
+                    isValid = false;
+                    errorMessages.push('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales.');
+                }
+            }
+
+            if (!isValid) {
+                showErrors(errorMessages);
                 return;
             }
+
+            removeErrors();
+
+            let formData = new FormData(formClientUpdate);
+            formData.append('idUser', idUser);
 
             // Muestra el contenido de formData en la consola
             for (let [key, value] of formData.entries()) {
@@ -201,6 +247,24 @@ const listUsers = async () => {
                     console.error('Error en la petición:', error);
                 });
         });
+
+        function showErrors(messages) {
+            removeErrors();
+            const errorContainer = document.createElement('div');
+            errorContainer.id = 'error-container';
+            errorContainer.className = 'error-container';
+            errorContainer.innerHTML = messages.map(msg => `<p class="error-message" style="color: red; margin-top: 10px;">${msg}</p>`).join('');
+            const formClientUpdate = document.getElementById('formClientUpdate');
+            formClientUpdate.insertBefore(errorContainer, formClientUpdate.querySelector('.botonesEditarCliente'));
+        }
+
+        function removeErrors() {
+            const errorContainer = document.getElementById('error-container');
+            if (errorContainer) {
+                errorContainer.remove();
+            }
+        }
+
 
         $('#cerrarEditarCliente').click(function(client) {
             client.preventDefault();

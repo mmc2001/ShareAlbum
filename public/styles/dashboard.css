@@ -561,6 +561,7 @@ span {
 .camposTarea > input, .camposTarea > select {
     margin-top: 5px;
     width: 250px;
+    height: 50px;
     background-color: #ffffff;
     border: 2px solid #b8b8b8;
     border-radius: 6px;

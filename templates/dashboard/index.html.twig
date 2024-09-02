@@ -3,6 +3,9 @@
 {% block title %}{{parent()}} - Dashboard{% endblock %}
 
 {% block stylesheets %}
+    <!-- Estilos de bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('styles/dashboard.css') }}">
 {% endblock %}
