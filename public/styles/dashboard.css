@@ -825,7 +825,7 @@ textarea {
     position: relative;
     background-color: #ffffff;
     border: none;
-    border-radius: 1px;
+    border-radius: 4px;
 }
 .file-upload .file-select .file-select-button {
     padding: 0 10px;
@@ -1002,7 +1002,7 @@ textarea {
     /*margin-top: 15px;*/
     /*margin-bottom: 10px;*/
     margin-left: 20px;
-    text-align: center;
+    text-align: left;
     max-height: 100px;
     height: fit-content;
 }

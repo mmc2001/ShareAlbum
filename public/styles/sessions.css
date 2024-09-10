@@ -27,7 +27,6 @@
     align-items: center;
 }
 
-
 /* MODAL CREAR SESION */
 .modalSesion {
     display: none;
@@ -161,7 +160,7 @@
     font-size: medium;
 }
 .desplegable {
-    max-height: 100px;
+    height: 100px;
     max-width: 400px;
     overflow-y: auto;
     /*border: 1px solid #ccc; */
@@ -975,8 +974,7 @@ select {
     justify-content: center;
     align-items: center;
 }
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket,
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras {
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket{
     background-color: var(--color-secundario);
     display: grid;
     justify-content: center;
@@ -985,18 +983,30 @@ select {
     gap: 6px;
     height: 100%;
 }
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras {
+    background-color: var(--color-secundario);
+    display: grid;
+}
 .modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > .label,
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras > div > .label {
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras > div > div > .label {
     margin-top: 5px;
     text-align: left;
 }
 .modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > input,
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > select,
-.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras > div > input {
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .camposTicket > div > select{
     margin-top: 8px;
     padding: 12px 15px;
     width: 100%;
     height: 100%;
+    font-size: large;
+    background-color: #ffffff;
+    border: 2px solid #b8b8b8;
+    border-radius: 6px;
+}
+.modalVerTicket-content > .contenedorFormularioVerTicket > form > .botonesExtras > .divExtras > div > div > input {
+    margin-top: 8px;
+    padding: 12px 15px;
+    width: 100%;
     font-size: large;
     background-color: #ffffff;
     border: 2px solid #b8b8b8;

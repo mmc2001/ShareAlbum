@@ -169,8 +169,8 @@ class  DashboardController extends AbstractController
 
         $file = $request->files->get('fileUrl');
 
-        if (!$recipientId || !$subject || !$textMessage || !$file) {
-            return new JsonResponse(['success' => false, 'message' => 'Todos los campos son obligatorios.'], 400);
+        if (!$recipientId || !$subject || !$textMessage) {
+            return new JsonResponse(['success' => false, 'message' => 'Hay campos son obligatorios.'], 400);
         }
 
         $recipient = $entityManager->getRepository(User::class)->find($recipientId);
@@ -184,17 +184,19 @@ class  DashboardController extends AbstractController
         $message->setTextMessage($textMessage);
         $message->setSender($this->getUser());
 
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $newFilename = uniqid().'.'.$file->guessExtension();
+        if ($file) {
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $newFilename = uniqid().'.'.$file->guessExtension();
 
-        try {
-            $file->move(
-                $this->getParameter('files_directory'),
-                $newFilename
-            );
-            $message->setFileUrl($newFilename);
-        } catch (FileException $e) {
-            return new JsonResponse(['success' => false, 'message' => 'Error al subir el archivo.'], 500);
+            try {
+                $file->move(
+                    $this->getParameter('files_directory'),
+                    $newFilename
+                );
+                $message->setFileUrl($newFilename);
+            } catch (FileException $e) {
+                return new JsonResponse(['success' => false, 'message' => 'Error al subir el archivo.'], 500);
+            }
         }
 
         $entityManager->persist($message);
@@ -211,10 +213,12 @@ class  DashboardController extends AbstractController
                 'message' => $textMessage,
             ]);
 
-        $email->attachFromPath(
-            $this->getParameter('files_directory').'/'.$newFilename,
-            $file->getClientOriginalName()
-        );
+        if ($file) {
+            $email->attachFromPath(
+                $this->getParameter('files_directory').'/'.$newFilename,
+                $file->getClientOriginalName()
+            );
+        }
 
         $mailer->send($email);
 

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const checkboxes = document.querySelectorAll('.listado input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function () {
-                const tareaId = this.id; // Obtener el identificador único de la tarea
+                const tareaId = this.id;
                 const label = this.parentNode.querySelector('label');
 
                 // Aplicar estilos de tachado
@@ -19,27 +19,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     label.classList.remove('tachado');
                 }
 
-                // Buscar y marcar/desmarcar el checkbox correspondiente en la otra lista
-                const otroCheckbox = document.querySelector(`#listadoTareasMensuales input[type="checkbox"][id="${tareaId}"]`);
-                if (otroCheckbox) {
-                    otroCheckbox.checked = this.checked;
-                    const otroLabel = otroCheckbox.parentNode.querySelector('label');
+                // Buscar y actualizar el checkbox correspondiente en ambas listas
+                const otroCheckboxMensual = document.querySelector(`#listadoTareasMensuales input[type="checkbox"][id="${tareaId}"]`);
+                const otroCheckboxDiario = document.querySelector(`#listadoTareasDiarias input[type="checkbox"][id="${tareaId}"]`);
+
+                if (otroCheckboxMensual) {
+                    otroCheckboxMensual.checked = this.checked;
+                    const otroLabelMensual = otroCheckboxMensual.parentNode.querySelector('label');
                     if (this.checked) {
-                        otroLabel.classList.add('tachado');
+                        otroLabelMensual.classList.add('tachado');
                     } else {
-                        otroLabel.classList.remove('tachado');
+                        otroLabelMensual.classList.remove('tachado');
                     }
                 }
 
-                // Buscar y marcar/desmarcar el checkbox correspondiente en la otra lista
-                const otroCheckboxDiarias = document.querySelector(`#listadoTareasDiarias input[type="checkbox"][id="${tareaId}"]`);
-                if (otroCheckboxDiarias) {
-                    otroCheckboxDiarias.checked = this.checked;
-                    const otroLabelDiarias = otroCheckboxDiarias.parentNode.querySelector('label');
+                if (otroCheckboxDiario) {
+                    otroCheckboxDiario.checked = this.checked;
+                    const otroLabelDiario = otroCheckboxDiario.parentNode.querySelector('label');
                     if (this.checked) {
-                        otroLabelDiarias.classList.add('tachado');
+                        otroLabelDiario.classList.add('tachado');
                     } else {
-                        otroLabelDiarias.classList.remove('tachado');
+                        otroLabelDiario.classList.remove('tachado');
                     }
                 }
             });
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <input type="checkbox" id="checkboxEvent${tarea.id}" data-id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? '' : 'checked'}>
                             <label for="${tarea.name}">
                                 <div class="checkbox"></div>
-                                ${tarea.name} - ${formatearFecha(tarea.date.date, "a")}
+                                ${tarea.name} - ${formatearFecha(tarea.date.date, "b")}
                             </label>
                             <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
                         </div>
@@ -444,8 +444,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         const fechaFormateada = `${anio}-${mes < 10 ? '0' + mes : mes}-${dia < 10 ? '0' + dia : dia}`;
 
                         // Construir la estructura HTML para la sesión
+                        const sessionIdEncrypted = CryptoJS.AES.encrypt(String(sesion.id), '123456Mn.');
+
                         return `
-                        <a href="/albums/${sesion.id}" class="no-style-link">
+                        <a href="/albums?id=${sessionIdEncrypted}" class="no-style-link">
                             <div class="tarjeta">
                                 <img src="/img/portadaSession.png" alt="Descripción de la imagen" />
                                 <div class="contenido-texto">
@@ -598,19 +600,26 @@ document.addEventListener("DOMContentLoaded", function() {
         const cliente = recipientSelect.options[recipientSelect.selectedIndex].textContent;
         const asunto = document.getElementById("subject").value;
         const fileInput = document.getElementById("fileUrl");
-        const file = fileInput.files[0];
+        // const file = fileInput.files[0];
         const mensaje = document.getElementById("textMessage").value;
 
-        if (!recipientId || !asunto || !file || !mensaje) {
-            console.error('Todos los campos son obligatorios.');
+        if (!recipientId || !asunto || !mensaje) {
+            console.error('Hay campos son obligatorios.');
             return;
         }
 
         // Cargar datos en el modal
         document.getElementById("clienteModal").textContent = cliente;
         document.getElementById("asuntoModal").textContent = asunto;
-        document.getElementById("ficheroModal").textContent = file.name;
+        // document.getElementById("ficheroModal").textContent = file.name;
         document.getElementById("mensajeModal").textContent = mensaje;
+
+        // Manejar el caso del archivo
+        if (fileInput.files.length > 0) {
+            document.getElementById("ficheroModal").textContent = fileInput.files[0].name;
+        } else {
+            document.getElementById("ficheroModal").textContent = "";
+        }
 
         // Mostrar el modal
         document.getElementById("modalEnvio").style.display = "grid";
@@ -637,7 +646,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //     const textMessage = document.getElementById("textMessage").value;
     //
     //     if (!recipient || !subject || !file || !textMessage) {
-    //         console.error('Todos los campos son obligatorios.');
+    //         console.error('Hay campos son obligatorios.');
     //         return;
     //     }
     //     console.log(recipient);
@@ -679,17 +688,22 @@ document.addEventListener("DOMContentLoaded", function() {
         const recipient = document.getElementById("recipient").value;
         const subject = document.getElementById("subject").value;
         const fileInput = document.getElementById("fileUrl");
-        const file = fileInput.files[0];
+        // const file = fileInput.files[0];
         const textMessage = document.getElementById("textMessage").value;
 
-        if (!recipient || !subject || !file || !textMessage) {
-            console.error('Todos los campos son obligatorios.');
+        if (!recipient || !subject || !textMessage) {
+            console.error('Hay campos son obligatorios.');
         }
         const formData = new FormData();
         formData.append('recipient', recipient);
         formData.append('subject', subject);
-        formData.append('fileUrl', file);
+        // formData.append('fileUrl', file);
         formData.append('textMessage', textMessage);
+
+        // Añadir el archivo solo si se ha seleccionado uno
+        if (fileInput.files.length > 0) {
+            formData.append('fileUrl', fileInput.files[0]);
+        }
 
         fetch('/send/message', {
             method: 'POST',

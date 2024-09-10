@@ -407,27 +407,47 @@ const listUsers = async () => {
                                         const extra = arrayExtras[i - 1];
                                         const precio = arrayExtrasFetch.find(e => e.name === extra)?.price || 0;
                                         const divExtras = $('<div>').addClass('divExtras');
-                                        const divAdicionalExtra = $('<div>');
-                                        const divAdicionalCantidad = $('<div>');
-                                        const labelPrice = $('<label>').text(`Extra ${i}: ${extra}`);
-                                        const inputPrice = $('<input>').attr({
+
+                                        // Añadir el label principal del extra en una fila separada
+                                        const labelExtra = $('<label>').text(`Extra ${i}: ${extra}`).css({
+                                            'display': 'block',
+                                            'margin-bottom': '10px'
+                                        });
+                                        divExtras.append(labelExtra);
+
+                                        // Crear div para contener precio y cantidad
+                                        const divPrecioCantidad = $('<div>').css({
+                                            'display': 'flex',
+                                            'justify-content': 'center',
+                                            'gap': '6px'
+                                        });
+
+                                        // Crear div para precio
+                                        const divPrecio = $('<div>');
+                                        const labelPrecio = $('<label class="label">').text("Precio");
+                                        const inputPrecio = $('<input>').attr({
                                             type: 'number',
                                             name: `extra${i}Precio`,
                                             value: precio,
                                             class: "botonesExtras",
                                             'data-index': i,
-                                            style: "margin-top: 10px; margin-bottom: 10px;"
+                                            style: "margin-top: 5px; margin-bottom: 5px;"
                                         });
-                                        const labelCantidad = $('<label>').text("Cantidad");
+                                        divPrecio.append(labelPrecio, '<br>', inputPrecio);
+
+                                        // Crear div para cantidad
+                                        const divCantidad = $('<div>');
+                                        const labelCantidad = $('<label class="label">').text("Cantidad");
                                         const inputCantidad = $('<input>').attr({
                                             type: 'number',
                                             name: `cantidad${i}`,
                                             'data-index': i,
-                                            style: "margin-top: 10px; margin-bottom: 10px;"
+                                            style: "margin-top: 5px; margin-bottom: 5px;"
                                         });
-                                        divAdicionalExtra.append(labelPrice, inputPrice);
-                                        divAdicionalCantidad.append(labelCantidad, inputCantidad);
-                                        divExtras.append(divAdicionalExtra, divAdicionalCantidad);
+                                        divCantidad.append(labelCantidad, '<br>', inputCantidad);
+
+                                        divPrecioCantidad.append(divPrecio, divCantidad);
+                                        divExtras.append(divPrecioCantidad);
                                         extrasContainer.append(divExtras);
                                     }
                                     $('#extrasContainer').css('display', 'block');
@@ -513,6 +533,7 @@ const listUsers = async () => {
                     buttonsStyling: false
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        deleteSession(idSession);
                         Swal.fire({
                             title: "Eliminado!",
                             text: "La sesión ha sido eliminada.",
@@ -520,7 +541,6 @@ const listUsers = async () => {
                             showConfirmButton: false,
                             timer: 2000
                         });
-                        deleteSession(idSession);
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         Swal.fire({
                             title: "Cancelado",
@@ -1027,6 +1047,29 @@ const listUsers = async () => {
             window.location.reload();
         }
     }
+    // function deleteSession(idSession) {
+    //     console.log("ID en la función delete: " + idSession);
+    //     fetch(`/delete/session/${idSession}`, {
+    //         method: 'DELETE',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         }
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 return response.json().then(err => {
+    //                     throw new Error(err.error || 'Error desconocido al eliminar la sesión');
+    //                 });
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             console.log('Sesión eliminada correctamente:', data.message);
+    //             listUsers(); // Actualizar la lista de usuarios
+    //             location.reload();
+    //         })
+    //         .catch(error => console.error('Error al eliminar la sesión:', error));
+    // }
     function deleteSession(idSession) {
         console.log("ID en la función delete: " + idSession);
         fetch(`/delete/session/${idSession}`, {
@@ -1036,19 +1079,20 @@ const listUsers = async () => {
             }
         })
             .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => {
-                        throw new Error(err.error || 'Error desconocido al eliminar la sesión');
-                    });
+                if (response.ok) {
+                    return response.json();
                 }
-                return response.json();
+                // Si la respuesta no es ok, simplemente retornamos sin hacer nada
+                return Promise.reject('Error silencioso');
             })
             .then(data => {
                 console.log('Sesión eliminada correctamente:', data.message);
                 listUsers(); // Actualizar la lista de usuarios
                 location.reload();
             })
-            .catch(error => console.error('Error al eliminar la sesión:', error));
+            .catch(() => {
+                // Capturamos el error pero no hacemos nada con él
+            });
     }
 };
 

@@ -44,7 +44,7 @@ class MessageType extends AbstractType
             ->add('subject')
             ->add('fileUrl', FileType::class, [
                 'label' => 'Elige un fichero',
-                'required' => false, // Si no es obligatorio subir un archivo
+                'required' => false,
             ])
             ->add('textMessage', TextareaType::class, [
                 'label' => 'Mensaje',

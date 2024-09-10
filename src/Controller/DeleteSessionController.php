@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Album;
+use App\Entity\Event;
+use App\Entity\Guest;
 use App\Entity\Session;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +22,20 @@ class DeleteSessionController extends AbstractController
 
         try {
 
+            $events = $entityManager->getRepository(Event::class)->findBy(['session' => $session]);
+            foreach ($events as $event) {
+                $entityManager->remove($event);
+            }
+
             $albums = $entityManager->getRepository(Album::class)->findBy(['session' => $session]);
 
             foreach ($albums as $album) {
+
+                $guests = $entityManager->getRepository(Guest::class)->findBy(['album' => $album]);
+                foreach ($guests as $guest) {
+                    $entityManager->remove($guest);
+                }
+
                 $entityManager->remove($album);
             }
 
