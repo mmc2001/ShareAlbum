@@ -7,6 +7,10 @@
 /public/bundles/
 /var/
 /vendor/
+
+.env
+client_secret_344167336176-52s75kfdes5i97ga71m6hrcal2ipgn69.apps.googleusercontent.com.json
+
 ###< symfony/framework-bundle ###
 
 ###> symfony/webpack-encore-bundle ###
