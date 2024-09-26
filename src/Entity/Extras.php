@@ -19,7 +19,7 @@ class Extras
     private ?string $name = null;
 
     #[ORM\Column]
-    private ?int $priceExtra = null;
+    private ?float $priceExtra = null;
 
     /**
      * @var Collection<int, Session>
@@ -49,12 +49,12 @@ class Extras
         return $this;
     }
 
-    public function getPriceExtra(): ?int
+    public function getPriceExtra(): ?float
     {
         return $this->priceExtra;
     }
 
-    public function setPriceExtra(int $priceExtra): static
+    public function setPriceExtra(float $priceExtra): static
     {
         $this->priceExtra = $priceExtra;
 

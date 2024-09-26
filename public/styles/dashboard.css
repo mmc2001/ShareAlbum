@@ -318,8 +318,9 @@ span {
 .listado label {
     flex: 1;
     margin-left: 10px;
+    margin-bottom: 0;
     white-space: nowrap;
-    overflow: hidden;
+    /*overflow: hidden;*/
     text-overflow: ellipsis;
 }
 .tipoServicio {
@@ -663,7 +664,7 @@ textarea {
 
 .contenido-texto {
     display: grid;
-    justify-items: left;
+    /*justify-items: left;*/
     align-items: center;
     margin-left: 10px;
     white-space: nowrap;
@@ -713,7 +714,11 @@ textarea {
 
 /* Para asegurar que los textos dentro del enlace no cambien de color */
 .no-style-link .tarjeta .contenido-texto h3,
-.no-style-link .tarjeta .contenido-texto p {
+.no-style-link .tarjeta .contenido-texto p,
+.no-style-link .tarjeta .contenido-texto span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: inherit;
     margin: 0;
 }

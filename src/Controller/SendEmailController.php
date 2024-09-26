@@ -38,6 +38,7 @@ class SendEmailController extends AbstractController
             ->context([
                 'subject' => $subject,
                 'message' => $message,
+                'emisor' => $user->getFullName(),
             ]);
 
         $mailer->send($email);

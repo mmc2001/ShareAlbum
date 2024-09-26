@@ -75,7 +75,7 @@
     <div class="modalEditarAlbum" id="modalEditarAlbum">
         <div class="modalEditarAlbum-content" id="modalEditarAlbum-content">
             <span class="cerrarModal" id="CerrarEditarAlbum">&times;</span>
-            <h1>Listado de fotos <i class="fas fa-trash-alt fa-xs" style="cursor: pointer;"></i></h1>
+            <h1>Listado de fotos <i class="fas fa-trash-alt fa-xs" style="cursor: pointer;" id="deletephotos"></i></h1>
             <div class="contenedorImagenesModal" id="contenedorImagenesModal">
                 <div class="galleryModal" id="galleryModal"></div>
             </div>
@@ -122,6 +122,7 @@
 
         async function widgetCloudinary(album) {
             let imagenesSubidas = [];
+            let datosParaEnviar;
             cloudinary.createUploadWidget({
                 cloud_name: 'ddaq4my3n',
                 upload_preset: 'preset_ShareAlbum'
@@ -137,6 +138,7 @@
                     imagenesSubidas.push(result.info.secure_url);
 
                     const idSession = obtenerIdDeURL();
+
                     console.log(idSession);
 
                     fetch(`/obtener/album/${idSession}`)
@@ -172,40 +174,53 @@
 
                             console.log(`idAlbum: ${idAlbum}, nameAlbum: ${nameAlbum}`);
 
-                            const datosParaEnviar = {
+                            datosParaEnviar = {
                                 imagenes: imagenesSubidas,
                                 albumId: idAlbum
                             };
 
                             console.log(datosParaEnviar);
 
-                            fetch('/save/photos', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(datosParaEnviar)
-                            })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error('HTTP error ' + response.status);
-                                    }
-                                    return response.text();
-                                })
-                                .then(data => {
-                                    console.log('Respuesta del servidor:', data);
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                });
+                            // fetch('/save/photos', {
+                            //     method: 'POST',
+                            //     headers: {
+                            //         'Content-Type': 'application/json'
+                            //     },
+                            //     body: JSON.stringify(datosParaEnviar)
+                            // }).then(response => {
+                            //     if (!response.ok) {
+                            //         throw new Error('HTTP error ' + response.status);
+                            //     }
+                            //     return response.text();
+                            // }).then(data => {
+                            //     console.log('Respuesta del servidor:', data);
+                            // }).catch(error => {
+                            //     console.error('Error:', error);
+                            // });
                         })
                         .catch(error => {
                             console.error('Error en la petición:', error);
                         });
                 }
-                // if (result.event === 'close') {
-                //     location.reload();
-                // }
+                if (result.event === 'close') {
+                    fetch('/save/photos', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(datosParaEnviar)
+                    }).then(response => {
+                        if (!response.ok) {
+                            throw new Error('HTTP error ' + response.status);
+                        }
+                        return response.text();
+                    }).then(data => {
+                        console.log('Respuesta del servidor:', data);
+                    }).catch(error => {
+                        console.error('Error:', error);
+                    });
+                    location.reload();
+                }
             }).open();
         }
     </script>

@@ -173,13 +173,14 @@ const listUsers = async () => {
                 const userServiceValue = $('#formSessionUpdate select[name="session[service]"]').val();
 
                 const select = $('#formSessionUpdate select[name="session[service]"]');
-                select.empty();
+                select.find('option').remove();
 
                 fetch('/obtener/services')
                     .then(response => response.json())
                     .then(data => {
                         // Vuelve a llenar el select con las nuevas opciones
                         const select = $('#formSessionUpdate select[name="sessionUpdate_service"]');
+                        select.find('option').remove();
                         data.forEach(servicio => {
                             const option = $('<option>').val(servicio.id).text(servicio.name);
                             select.append(option);
@@ -262,12 +263,10 @@ const listUsers = async () => {
                     isValid = false;
                     errorMessages.push('El nombre de la sesión es obligatorio.');
                 }
-
                 if (!service) {
                     isValid = false;
                     errorMessages.push('Debe seleccionar un servicio.');
                 }
-
                 if (!date) {
                     isValid = false;
                     errorMessages.push('La fecha es obligatoria.');
@@ -278,7 +277,6 @@ const listUsers = async () => {
                         errorMessages.push('El formato de la fecha no es válido.');
                     }
                 }
-
                 if (!price) {
                     isValid = false;
                     errorMessages.push('El precio es obligatorio.');
@@ -286,18 +284,51 @@ const listUsers = async () => {
                     isValid = false;
                     errorMessages.push('El precio debe ser un número positivo.');
                 }
-
                 if (!description) {
                     isValid = false;
                     errorMessages.push('La descripción es obligatoria.');
                 }
-
                 if (!isValid) {
                     showErrors(errorMessages);
                     return;
                 }
-
                 removeErrors();
+
+                console.log("IDSESSION: ", idSession)
+
+                fetch('/update/session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        idSession: idSession,
+                        sessionUpdate_name: name,
+                        sessionUpdate_service: service,
+                        sessionUpdate_date: date,
+                        sessionUpdate_price: price,
+                        sessionUpdate_description: description
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Sesión actualizada exitosamente');
+                            $('#modalEditarSesion').css('display', 'none');
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Sesión actualizada exitosamente",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            console.error('Error:', data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             });
 
             function showErrors(messages) {

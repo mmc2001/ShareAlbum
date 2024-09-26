@@ -143,8 +143,8 @@ body {
 .container {
     display: grid;
     grid-gap: 5px;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    grid-auto-rows: 150px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: 540px;
     grid-auto-flow: dense;
 }
 
@@ -167,7 +167,6 @@ svg {
 }
 
 .buttonCentrado {
-    margin-top: 35px;
     display: flex;
     justify-content: center;
     align-items: center;

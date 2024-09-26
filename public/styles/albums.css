@@ -319,9 +319,9 @@ svg {
     width: 610px;
     margin-top: 20px;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 5px;
     height: 230px;
     overflow: hidden;
     overflow-y: auto;

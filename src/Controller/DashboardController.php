@@ -202,6 +202,8 @@ class  DashboardController extends AbstractController
         $entityManager->persist($message);
         $entityManager->flush();
 
+        $user = $this->security->getUser();
+
         // Enviar correo electrónico
         $email = (new TemplatedEmail())
             ->from(new Address('mmcfotografia01@gmail.com', 'Moyano Fotografia'))
@@ -211,6 +213,7 @@ class  DashboardController extends AbstractController
             ->context([
                 'subject' => $subject,
                 'message' => $textMessage,
+                'emisor' => $user->getFullName(),
             ]);
 
         if ($file) {

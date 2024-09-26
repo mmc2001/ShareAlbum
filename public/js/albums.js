@@ -528,6 +528,11 @@ document.addEventListener("DOMContentLoaded", function() {
         //location.reload();
     });
 
+    document.getElementById("deletephotos").addEventListener("click", function(event) {
+        event.preventDefault();
+        deletePhotos = imagenes.map(imagen => imagen.id);
+    });
+
     //const addButton = document.getElementById('Añadir');
     //const fileInput = document.getElementById('uploadedimage');
 

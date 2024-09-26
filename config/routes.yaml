@@ -53,7 +53,7 @@ app_obtener_all_servicio:
 app_update_event:
     path: /update/event/{id}
     controller: App\Controller\UpdateEventController::updateEvent
-    methods: ['GET']
+    methods: ['GET', 'POST']
 
 app_obtener_clients:
     path: /obtener/clients

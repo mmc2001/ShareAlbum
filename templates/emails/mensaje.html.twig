@@ -99,7 +99,12 @@
     <tr style="width: 100%;">
         <td style=" width: 400px; font-family: Arial, sans-serif; font-size: 18px; color: #333; padding: 40px;">
             <h1>{{ subject }}</h1>
-            <p><strong>Mensaje:</strong> {{ message }}</p>
+            <p>Has recibido el siguiente mensaje:</p>
+            <ul>
+                <li><strong>De:</strong> {{ emisor }}</li>
+                <li><strong>Asunto:</strong> {{ subject }}</li>
+                <li><strong>Mensaje:</strong><br> {{ message }}</li>
+            </ul>
         </td>
     </tr>
     <tr>

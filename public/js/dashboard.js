@@ -5,42 +5,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (executed1) return;
     executed1 = true;
     // Función para aplicar estilos de tachado al hacer clic en los checkboxes
-    function aplicarEstilosTachado() {
+    async function aplicarEstilosTachado() {
         const checkboxes = document.querySelectorAll('.listado input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function () {
-                const tareaId = this.id;
-                const label = this.parentNode.querySelector('label');
+            checkbox.removeEventListener('change', aplicarEstilosTachado); // Remove existing event listener
+            checkbox.addEventListener('change', async function (event) {
+                event.preventDefault(); // Prevenir el comportamiento por defecto
+                const tareaId = this.dataset.id;
+                const isChecked = !this.checked; // Invertir el estado actual
 
-                // Aplicar estilos de tachado
-                if (this.checked) {
-                    label.classList.add('tachado');
-                } else {
-                    label.classList.remove('tachado');
-                }
+                try {
+                    // await updateEvento(tareaId);
 
-                // Buscar y actualizar el checkbox correspondiente en ambas listas
-                const otroCheckboxMensual = document.querySelector(`#listadoTareasMensuales input[type="checkbox"][id="${tareaId}"]`);
-                const otroCheckboxDiario = document.querySelector(`#listadoTareasDiarias input[type="checkbox"][id="${tareaId}"]`);
+                    // Aplicar estilos de tachado
+                    const label = this.parentNode.querySelector('label');
+                    label.classList.toggle('tachado', isChecked);
 
-                if (otroCheckboxMensual) {
-                    otroCheckboxMensual.checked = this.checked;
-                    const otroLabelMensual = otroCheckboxMensual.parentNode.querySelector('label');
-                    if (this.checked) {
-                        otroLabelMensual.classList.add('tachado');
-                    } else {
-                        otroLabelMensual.classList.remove('tachado');
+                    // Actualizar el checkbox correspondiente en la otra lista
+                    const otroCheckboxMensual = document.querySelector(`#listadoTareasMensuales input[type="checkbox"][id="${tareaId}"]`);
+                    const otroCheckboxDiario = document.querySelector(`#listadoTareasDiarias input[type="checkbox"][id="${tareaId}"]`);
+
+                    if (otroCheckboxMensual) {
+                        otroCheckboxMensual.checked = isChecked;
+                        otroCheckboxMensual.parentNode.querySelector('label').classList.toggle('tachado', isChecked);
                     }
-                }
 
-                if (otroCheckboxDiario) {
-                    otroCheckboxDiario.checked = this.checked;
-                    const otroLabelDiario = otroCheckboxDiario.parentNode.querySelector('label');
-                    if (this.checked) {
-                        otroLabelDiario.classList.add('tachado');
-                    } else {
-                        otroLabelDiario.classList.remove('tachado');
+                    if (otroCheckboxDiario) {
+                        otroCheckboxDiario.checked = isChecked;
+                        otroCheckboxDiario.parentNode.querySelector('label').classList.toggle('tachado', isChecked);
                     }
+
+                    // Actualizar el estado del checkbox actual
+                    this.checked = isChecked;
+                } catch (error) {
+                    console.error('Error al actualizar el evento:', error);
+                    // Revertir el cambio si hay un error
+                    this.checked = !isChecked;
                 }
             });
         });
@@ -183,186 +183,251 @@ document.addEventListener('DOMContentLoaded', function() {
         // Dividir la hora en horas y minutos
         const horaMinutos = horaParte.split(':')[0] + ':' + horaParte.split(':')[1];
 
-        // Formar la fecha y la hora en el formato deseado
-        const fechaFormateada = fechaParte + ' ' + horaMinutos;
+        // Formar la fecha en el formato deseado para la opción b
+        const fechaFormateadaB = `${fechaParte.split('-')[2]}/${fechaParte.split('-')[1]}/${fechaParte.split('-')[0]}`;
 
         if (opcion === "a") {
             return horaMinutos;
         } else if (opcion === "b") {
-            return fechaFormateada;
+            return fechaFormateadaB;
         }
-
     }
 
-    function cargarTareasDiarias() {
+    async function cargarTareasDiarias() {
+        try {
+            const response = await fetch('/obtener/events');
+            if (!response.ok) {
+                throw new Error('Error al obtener las tareas');
+            }
+            const data = await response.text(); // Convertir la respuesta a texto
+            const jsonData = JSON.parse(data);
+            const jsonArray = JSON.parse(jsonData);
 
-        fetch('/obtener/events')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al obtener las tareas');
-                }
-                return response.text(); // Convertir la respuesta a texto
-            })
-            .then(data => {
-                const jsonData = JSON.parse(data);
-                const jsonArray = JSON.parse(jsonData);
+            const tareasDiarias = jsonArray.filter(tarea => {
+                const tareaDate = new Date(tarea.date.date);
+                return tareaDate.getDate() === selectedDate.getDate() &&
+                    tareaDate.getMonth() === selectedDate.getMonth() &&
+                    tareaDate.getFullYear() === selectedDate.getFullYear();
+            });
 
-                const tareasDiarias = jsonArray.filter(tarea => {
-                    const tareaDate = new Date(tarea.date.date);
-                    return tareaDate.getDate() === selectedDate.getDate() &&
-                        tareaDate.getMonth() === selectedDate.getMonth() &&
-                        tareaDate.getFullYear() === selectedDate.getFullYear();
+            if (Array.isArray(tareasDiarias)) {
+                const htmlTareas = tareasDiarias.map(tarea => `
+                    <div class="listado ${tarea.hasbeenmade === true ? '' : 'tachado'}">
+                      <input type="checkbox" data-id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? '' : 'checked'}>
+                      <label for="${tarea.name}">
+                        <div class="checkbox"></div>
+                        ${tarea.name} - ${formatearFecha(tarea.date.date, "a")}
+                      </label>
+                      <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
+                    </div>
+                `).join('');
+
+                listadoTareasDiarias.innerHTML = htmlTareas;
+
+                const botonesCheckbox = document.querySelectorAll('.listado input[type="checkbox"]');
+                botonesCheckbox.forEach(boton => {
+                    boton.addEventListener('click', async function () {
+                        const tareaId = this.dataset.id; // Get the ID from the dataset
+                        // await updateEvento(tareaId); // Pass the ID as a number
+                        try {
+                            fetch(`/update/event/${tareaId}`, {
+                                method: 'GET'
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Error al actualizar el evento');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    cargarTareasDiarias()
+                                    cargarTareasMensuales();
+                                })
+                                .catch(error => console.error('Error al actualizar el evento:', error));
+                        } catch (error) {
+                            console.error('Error al actualizar el evento:', error);
+                        }
+                    });
                 });
 
-                if (Array.isArray(tareasDiarias)) {
-                    const htmlTareas = tareasDiarias.map(tarea => `
-                        <div class="listado ${tarea.hasbeenmade === true ? '' : 'tachado'}">
-                            <input type="checkbox" id="checkboxEvent${tarea.id}" data-id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? '' : 'checked'}>
-                            <label for="${tarea.name}">
-                                <div class="checkbox"></div>
-                                ${tarea.name} - ${formatearFecha(tarea.date.date, "b")}
-                            </label>
-                            <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
-                        </div>
-                    `).join('');
-
-                    listadoTareasDiarias.innerHTML = htmlTareas;
-
-                    const botonesCheckbox = document.querySelectorAll('.listado input[type="checkbox"]');
-                    botonesCheckbox.forEach(boton => {
-                        boton.addEventListener('click', function () {
-                            const idEvento = this.dataset.id;
-                            updateEvento(idEvento);
+                // Añadir event listener para los botones de eliminación
+                const botonesEliminar = document.querySelectorAll('.deleteButton');
+                botonesEliminar.forEach(boton => {
+                    boton.addEventListener('click', async function () {
+                        const idEvento = this.dataset.id;
+                        Swal.fire({
+                            title: "¿Estás seguro?",
+                            text: "Vas a eliminar un evento de tu agenda",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Sí, eliminar!",
+                            cancelButtonText: "No, cancelar!",
+                            reverseButtons: false,
+                            customClass: {
+                                confirmButton: "btn btn-success",
+                                cancelButton: "btn btn-danger margen-izquierdo"
+                            },
+                            buttonsStyling: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: "Eliminado!",
+                                    text: "El evento ha sido eliminado",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                deleteEvento(idEvento);
+                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                Swal.fire({
+                                    title: "Cancelado",
+                                    text: "El evento está a salvo :)",
+                                    icon: "error"
+                                });
+                            }
                         });
                     });
-
-                    // Añadir event listener para los botones de eliminación
-                    const botonesEliminar = document.querySelectorAll('.deleteButton');
-                    botonesEliminar.forEach(boton => {
-                        boton.addEventListener('click', function () {
-                            const idEvento = this.dataset.id;
-                            deleteEvento(idEvento);
-                        });
-                    });
-                } else {
-                    console.error('Error al cargar las tareas disponibles: Los datos recibidos no son un array o están vacíos');
-                }
+                });
 
                 // Llamar a la función para aplicar estilos de tachado
-                aplicarEstilosTachado();
-            })
-            .catch(error => console.error('Error al cargar las tareas:', error));
+                await aplicarEstilosTachado();
+            } else {
+                console.error('Error al cargar las tareas disponibles: Los datos recibidos no son un array o están vacíos');
+            }
+        } catch (error) {
+            console.error('Error al cargar las tareas:', error);
+        }
     }
 
     // Función para cargar y mostrar las tareas mensuales
 
-    function cargarTareasMensuales() {
+    async function cargarTareasMensuales() {
         const today = new Date();
         const mesActual = today.getMonth();
 
-        fetch('/obtener/events')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al obtener las tareas');
-                }
-                return response.text(); // Convertir la respuesta a texto
-            })
-            .then(data => {
-                const jsonData = JSON.parse(data);
-                const jsonArray = JSON.parse(jsonData);
+        try {
+            const response = await fetch('/obtener/events');
+            if (!response.ok) {
+                throw new Error('Error al obtener las tareas');
+            }
+            const data = await response.text(); // Convertir la respuesta a texto
+            const jsonData = JSON.parse(data);
+            const jsonArray = JSON.parse(jsonData);
 
-                const tareasMensuales = jsonArray.filter(tarea => {
-                    const tareaDate = new Date(tarea.date.date);
-                    return tareaDate.getMonth() === selectedDate.getMonth();
+            const tareasMensuales = jsonArray.filter(tarea => {
+                const tareaDate = new Date(tarea.date.date);
+                return tareaDate.getMonth() === selectedDate.getMonth();
+            });
+
+            // Verificar si tiene elementos
+            if (Array.isArray(tareasMensuales)) {
+                const htmlTareas = tareasMensuales.map(tarea => `
+                    <div class="listado ${tarea.hasbeenmade === true ? '' : 'tachado'}">
+                      <input type="checkbox" data-id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? '' : 'checked'}>
+                      <label for="${tarea.name}">
+                        <div class="checkbox"></div>
+                        ${tarea.name} - ${formatearFecha(tarea.date.date, "b")}
+                      </label>
+                      <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
+                    </div>
+                `).join('');
+
+                listadoTareasMensuales.innerHTML = htmlTareas;
+
+                const botonesCheckbox = document.querySelectorAll('.listado input[type="checkbox"]');
+                botonesCheckbox.forEach(boton => {
+                    boton.addEventListener('click', async function () {
+                        const tareaId = this.dataset.id; // Get the ID from the dataset
+                        // await updateEvento(tareaId); // Pass the ID as a number
+                        try {
+                            fetch(`/update/event/${tareaId}`, {
+                                method: 'GET'
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Error al actualizar el evento');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    cargarTareasDiarias()
+                                    cargarTareasMensuales();
+                                })
+                                .catch(error => console.error('Error al actualizar el evento:', error));
+                        } catch (error) {
+                            console.error('Error al actualizar el evento:', error);
+                        }
+                    });
                 });
 
-
-                // Verificar si tiene elementos
-                if (Array.isArray(tareasMensuales)) {
-                    const htmlTareas = tareasMensuales.map(tarea => `
-                        <div class="listado ${tarea.hasbeenmade === true ? '' : 'tachado'}">
-                            <input type="checkbox" id="checkboxEvent${tarea.id}" data-id="${tarea.id}" name="${tarea.name}" class="ui-checkbox" ${tarea.hasbeenmade === true ? '' : 'checked'}>
-                            <label for="${tarea.name}">
-                                <div class="checkbox"></div>
-                                ${tarea.name} - ${formatearFecha(tarea.date.date, "b")}
-                            </label>
-                            <img src="/img/trash.svg" class="deleteButton" alt="Eliminar" data-id="${tarea.id}">
-                        </div>
-                    `).join('');
-
-                    listadoTareasMensuales.innerHTML = htmlTareas;
-
-                    const botonesCheckbox = document.querySelectorAll('.listado input[type="checkbox"]');
-                    botonesCheckbox.forEach(boton => {
-                        boton.addEventListener('click', function () {
-                            const idEvento = this.dataset.id;
-                            updateEvento(idEvento);
+                // Añadir event listener para los botones de eliminación
+                const botonesEliminar = document.querySelectorAll('.deleteButton');
+                botonesEliminar.forEach(boton => {
+                    boton.addEventListener('click', async function () {
+                        const idEvento = this.dataset.id;
+                        Swal.fire({
+                            title: "¿Estás seguro?",
+                            text: "Vas a eliminar un evento de tu agenda",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Sí, eliminar!",
+                            cancelButtonText: "No, cancelar!",
+                            reverseButtons: false,
+                            customClass: {
+                                confirmButton: "btn btn-success",
+                                cancelButton: "btn btn-danger margen-izquierdo"
+                            },
+                            buttonsStyling: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: "Eliminado!",
+                                    text: "El evento ha sido eliminado",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                deleteEvento(idEvento);
+                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                Swal.fire({
+                                    title: "Cancelado",
+                                    text: "El evento está a salvo :)",
+                                    icon: "error"
+                                });
+                            }
                         });
                     });
-
-                    // Añadir event listener para los botones de eliminación
-                    const botonesEliminar = document.querySelectorAll('.deleteButton');
-                    botonesEliminar.forEach(boton => {
-                        boton.addEventListener('click', function () {
-                            const idEvento = this.dataset.id;
-                            Swal.fire({
-                                title: "¿Estás seguro?",
-                                text: "Vas a eliminar un evento de tu agenda",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonText: "Sí, eliminar!",
-                                cancelButtonText: "No, cancelar!",
-                                reverseButtons: false,
-                                customClass: {
-                                    confirmButton: "btn btn-success",
-                                    cancelButton: "btn btn-danger margen-izquierdo"
-                                },
-                                buttonsStyling: false
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    Swal.fire({
-                                        title: "Eliminado!",
-                                        text: "El evento ha sido eliminado",
-                                        icon: "success",
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    });
-                                    deleteEvento(idEvento);
-                                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                                    Swal.fire({
-                                        title: "Cancelado",
-                                        text: "El evento está a salvo :)",
-                                        icon: "error"
-                                    });
-                                }
-                            });
-                        });
-                    });
-                } else {
-                    console.error('Error al cargar las tareas disponibles: Los datos recibidos no son un array o están vacíos');
-                }
+                });
 
                 // Llamar a la función para aplicar estilos de tachado
-                aplicarEstilosTachado();
-            })
-            .catch(error => console.error('Error al cargar las tareas:', error));
+                await aplicarEstilosTachado();
+            } else {
+                console.error('Error al cargar las tareas disponibles: Los datos recibidos no son un array o están vacíos');
+            }
+        } catch (error) {
+            console.error('Error al cargar las tareas:', error);
+        }
     }
 
     function updateEvento(idEvento) {
-        fetch(`/update/event/${idEvento}`, {
-            method: 'GET'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al actualizar el evento');
-                }
-                return response.json();
+        // try {
+            fetch(`/update/event/${idEvento}`, {
+                method: 'GET'
             })
-            .then(data => {
-                cargarTareasDiarias()
-                cargarTareasMensuales();
-            })
-            .catch(error => console.error('Error al actualizar el evento:', error));
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al actualizar el evento');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    cargarTareasDiarias()
+                    cargarTareasMensuales();
+                })
+                .catch(error => console.error('Error al actualizar el evento:', error));
+        // } catch (error) {
+        //     console.error('Error al actualizar el evento:', error);
+        // }
     }
 
     function deleteEvento(idEvento) {
